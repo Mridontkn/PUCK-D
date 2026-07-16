@@ -2,12 +2,12 @@ const ARTICLE_DATABASE_URL = './articles.json';
 const DEFAULT_HERO_ID = 'a1';
 
 const TICKER = [
-  "FREE AGENCY WEEK 3 — SIGNINGS TRACKER LIVE",
-  "ARBITRATION FILING DEADLINE THIS FRIDAY",
-  "DEVELOPMENT CAMP ROSTERS NOW POSTED",
-  "CAP CEILING PROJECTIONS UPDATED FOR NEXT SEASON",
-  "PROSPECT RANKINGS: MIDSUMMER UPDATE",
-  "RUMOR MILL: RESTRICTED FREE AGENT OFFER SHEETS"
+  "EXAMPLE TICKER ITEM 1",
+  "EXAMPLE TICKER ITEM 2",
+  "EXAMPLE TICKER ITEM 3",
+  "EXAMPLE TICKER ITEM 4",
+  "EXAMPLE TICKER ITEM 5",
+  "EXAMPLE TICKER ITEM 6"
 ];
 const TRACKER_STATS = [
   { label: 'UFA Signings', stat: '38', unit: 'since July 1', note: '12 term deals, 26 one-year prove-it contracts' },
@@ -66,6 +66,9 @@ async function loadArticlesFromSupabase(){
     .from('article')
     .select('*')
     .order('created_at', { ascending: false });
+
+    console.log(data);
+    console.log(error);
 
   if(error){
     console.error('Failed to load articles from Supabase', error);
@@ -135,12 +138,17 @@ function renderAll(){
     </a>
   `).join('') || '<p style="color:var(--slate); padding:24px 0;">No articles yet — publish one from the admin dashboard.</p>';
 
-  document.getElementById('recentNewsList').innerHTML = recentNews.map(item => `
-    <div class="news-item">
-      <div class="news-date">${escapeHtml(item.date || '')}</div>
-      ${item.url ? `<a href="${escapeHtml(item.url)}">${escapeHtml(item.headline)}</a>` : `<div class="news-headline">${escapeHtml(item.headline)}</div>`}
-    </div>
-  `).join('') || '<p style="color:var(--slate); padding:24px 0;">No recent news yet — edit the JSON to add items.</p>';
+  // render recent news as a simple vertical list (non-clickable)
+  if (recentNews && recentNews.length) {
+    document.getElementById('recentNewsList').innerHTML = recentNews.map(item => `
+      <div class="news-item">
+        <div class="news-date">${escapeHtml(item.date)}</div>
+        <div class="news-headline">${escapeHtml(item.headline)}</div>
+      </div>
+    `).join('');
+  } else {
+    document.getElementById('recentNewsList').innerHTML = '<p style="color:var(--slate); padding:24px 0;">No recent news yet — edit the JSON to add items.</p>';
+  }
 
 
   const tHTML = TICKER.map(t => `<span><b>${escapeHtml(t)}</b></span>`).join('<span class="chev">›</span>');

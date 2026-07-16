@@ -284,6 +284,25 @@ nav.primary a:hover::after{width:100%;}
 }
 .news-item a:hover{color:var(--orange);}
 
+/* Improved recent news compact layout */
+.news-list{padding-top:8px;}
+.news-item{display:flex; flex-direction:column; gap:6px; padding:12px 0;}
+.news-date{font-size:11px; color:var(--slate);}
+.news-headline{font-weight:600; transition:color .15s ease;}
+.news-item:hover .news-headline{color:var(--orange);}
+
+/* News ticker styles (sidebar) */
+.news-ticker{ overflow:hidden; background:transparent; padding:6px 0; }
+.news-ticker-track{ display:inline-flex; align-items:center; gap:28px; padding-left:100%; animation:scrollNews 28s linear infinite; white-space:nowrap; }
+.news-ticker-item{ display:inline-flex; align-items:center; gap:12px; color:var(--ice); font-size:14px; }
+.news-ticker .news-date{ font-size:11px; color:var(--slate); opacity:0.95; }
+.news-ticker .news-text{ font-weight:600; color:var(--ice); }
+.news-ticker .chev{ color:var(--slate); opacity:0.8; }
+@keyframes scrollNews{ 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
+
+/* reduce motion preference */
+@media (prefers-reduced-motion: reduce){ .news-ticker-track{ animation:none; } }
+
 /* ---------- newsletter band ---------- */
 .newsletter{ background:var(--ink-raised); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:52px 0; }
 .newsletter-inner{ display:flex; justify-content:space-between; align-items:center; gap:40px; flex-wrap:wrap; }
@@ -491,3 +510,12 @@ footer{padding:56px 0 36px;}
   font-size:11px; color:var(--slate); text-align:center; margin-top:32px;
 }
 .admin-footer-note a{ color:var(--orange); }
+
+.news-headline{
+    color: var(--text);
+    cursor: default;
+}
+
+.news-headline:hover{
+    color: var(--text);
+}
