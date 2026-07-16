@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUCK'D — Article</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+:root{
+  --ink:#0F1115;
+  --ink-raised:#171A1F;
+  --line:#282C33;
+  --ice:#EEF1F5;
+  --slate:#8A90A0;
+  --pink:#E11D5C;
+  --orange:#E8632C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--ink); color:var(--ice); font-family:'Inter',sans-serif;}
+a{color:inherit; text-decoration:none;}
+.wrap{max-width:880px; margin:0 auto; padding:36px 24px;}
+.brand{display:flex; align-items:center; gap:12px; margin-bottom:24px;}
+.wordmark{font-family:'Anton',sans-serif; font-size:28px; letter-spacing:.02em;}
+.wordmark .apostrophe{color:var(--pink);}
+.article-eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--slate); margin-bottom:18px; display:inline-block;}
+.article-title{font-family:'Anton',sans-serif; font-size:clamp(36px,4vw,56px); line-height:1.02; margin-bottom:18px;}
+.article-dek{font-size:18px; line-height:1.7; color:var(--slate); margin-bottom:24px;}
+.byline{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--slate); margin-bottom:40px;}
+.article-body{font-size:16px; line-height:1.85; color:var(--ice);}
+.article-body p{margin-bottom:24px;}
+.back-link{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--slate); margin-top:40px;}
+.back-link:hover{color:var(--orange);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="puckd (1).html">← Back to homepage</a>
+  <div class="brand">
+    <div class="wordmark">PUCK<span class="apostrophe">'</span>D</div>
+  </div>
+  <div class="article-eyebrow" id="articleTag">Loading…</div>
+  <h1 class="article-title" id="articleTitle">Loading article...</h1>
+  <p class="article-dek" id="articleDek"></p>
+  <div class="byline" id="articleByline"></div>
+  <div class="article-body" id="articleBody">
+    <p>This page is loading the article from JSON data.</p>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str == null ? '' : String(str);
+  return d.innerHTML;
+}
+function getQueryParam(name){
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+function formatDate(iso){
+  if(!iso) return '';
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? String(iso) : d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+}
+function estimateReadTime(html){
+  const text = (html || '').replace(/<[^>]*>/g, ' ');
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.round(words / 200));
+  return `${minutes} MIN READ`;
+}
+async function loadArticle(){
+  const articleId = getQueryParam('id');
+  if(!articleId){
+    document.getElementById('articleTitle').textContent = 'Article not found';
+    document.getElementById('articleBody').innerHTML = '<p style="color:var(--slate);">No article id was given in the URL.</p>';
+    return;
+  }
+  try{
+    const { data: article, error } = await db
+      .from('article')
+      .select('*')
+      .eq('id', articleId)
+      .single();
+
+    if(error || !article){
+      document.getElementById('articleTitle').textContent = 'Article not found';
+      document.getElementById('articleDek').textContent = 'This article may have been removed or the link is wrong.';
+      document.getElementById('articleByline').textContent = '';
+      document.getElementById('articleBody').innerHTML = '<p style="color:var(--slate);">No article matches this ID.</p>';
+      return;
+    }
+
+    document.getElementById('articleTag').textContent = article.category || 'News';
+    document.getElementById('articleTitle').textContent = article.title;
+    document.getElementById('articleDek').textContent = article.summary || '';
+    document.getElementById('articleByline').textContent =
+      `${article.author || ''} · ${estimateReadTime(article.context)} · ${formatDate(article.created_at)}`;
+
+    const heroImg = article.image_url
+      ? `<img src="${escapeHtml(article.image_url)}" alt="${escapeHtml(article.title)}" style="width:100%; border-radius:8px; margin-bottom:24px;">`
+      : '';
+
+    document.getElementById('articleBody').innerHTML = heroImg + (article.context || '');
+  }catch(err){
+    console.error(err);
+    document.getElementById('articleTitle').textContent = 'Unable to load article';
+    document.getElementById('articleDek').textContent = 'There was a problem fetching article data.';
+    document.getElementById('articleBody').innerHTML = '<p style="color:var(--slate);">Check your connection and try again.</p>';
+  }
+}
+loadArticle();
+</script>
+</body>
+</html>

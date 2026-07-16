@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUCK'D — Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="admin-page">
+<div class="admin-shell">
+
+    <div class="admin-header">
+        <div class="brand">
+            <div>
+                <div class="wordmark">PUCK<span class="apostrophe">'</span>D</div>
+                <div class="admin-kicker">Editor Dashboard</div>
+            </div>
+        </div>
+        <div class="admin-status">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusLabel">Signed out</span>
+        </div>
+    </div>
+
+    <div id="loginSection">
+
+        <div class="admin-card admin-card-narrow">
+
+            <span class="admin-eyebrow">Staff Access</span>
+            <h1 class="admin-title">Editor Login</h1>
+            <p class="admin-subtitle">Sign in with your PUCK'D staff account to publish and manage articles.</p>
+
+            <div class="field-group">
+                <label class="field-label" for="email">Email</label>
+                <input
+                    class="admin-input"
+                    type="email"
+                    id="email"
+                    placeholder="you@puckd.com">
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="password">Password</label>
+                <input
+                    class="admin-input"
+                    type="password"
+                    id="password"
+                    placeholder="••••••••">
+            </div>
+
+            <button class="btn btn-primary btn-block" id="loginBtn">
+                Login
+            </button>
+
+        </div>
+
+    </div>
+
+<div id="dashboard" style="display:none;">
+
+    <div class="admin-dashboard-head">
+        <div>
+            <span class="admin-eyebrow">Dashboard</span>
+            <h1 class="admin-title">PUCK'D Newsroom</h1>
+        </div>
+        <div class="btn-row">
+            <button class="btn btn-primary" id="newArticleBtn">
+                + New Article
+            </button>
+            <button class="btn btn-ghost" id="logoutBtn">
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <hr class="admin-divider">
+
+    <div id="editorSection" style="display:none;">
+
+        <div class="admin-card editor-card">
+
+            <span class="admin-eyebrow">Compose</span>
+            <h2 class="admin-title" style="font-size:22px;">New Article</h2>
+
+            <div class="field-group" style="margin-top:24px;">
+                <label class="field-label" for="title">Article Title</label>
+                <input
+                    class="admin-input"
+                    id="title"
+                    placeholder="e.g. Panthers Lock Up Star Winger to 8-Year Extension">
+            </div>
+
+            <div class="field-row">
+                <div class="field-group">
+                    <label class="field-label" for="summary">Summary</label>
+                    <input
+                        class="admin-input"
+                        id="summary"
+                        placeholder="One or two sentence dek">
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" for="category">Category</label>
+                    <select class="admin-select" id="category">
+                        <option>Breaking</option>
+                        <option>News</option>
+                        <option>Prospects</option>
+                        <option>Opinion</option>
+                        <option>Trade</option>
+                    </select>
+                    <div class="field-group">
+    <label class="field-label" for="author">Author</label>
+
+    <input
+        class="admin-input"
+        id="author"
+        placeholder="e.g. Emaad Zaheer">
+</div>
+
+                    <label class="field-label">Hero Image</label>
+
+<input
+    type="file"
+    id="heroImage"
+    accept="image/*">
+
+<br><br>
+
+<img
+    id="heroPreview"
+    style="display:none; width:100%; border-radius:12px;">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label">Body</label>
+                <div class="editor-shell">
+                    <div id="editor"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="publishBtn" style="margin-top:8px;">
+                Publish Article
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <p class="admin-footer-note">PUCK'D Admin &middot; <a href="puckd (1).html">Back to site</a></p>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
