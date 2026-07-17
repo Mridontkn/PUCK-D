@@ -87,29 +87,43 @@
 
     </section>
 
-    <section class="newsletter">
+<section class="newsletter">
 
-        <div class="wrap newsletter-inner">
+    <div class="wrap newsletter-inner">
 
-            <div>
+        <div>
 
-                <h2>The NHL, explained daily.</h2>
+            <h2>The NHL, Explained Daily.</h2>
 
-                <p>
-                    Get instant updates on the latest NHL news and analysis.
-                </p>
-
-            </div>
-
-            <div class="form-row">
-                <input type="email" placeholder="you@email.com">
-                <button>Sign Up</button>
-            </div>
+            <p>
+                Get instant updates on the latest NHL news and analysis.
+            </p>
 
         </div>
 
-    </section>
+        <div class="newsletter-form-wrapper">
 
+            <form id="newsletterForm" class="form-row">
+
+                <input
+                    type="email"
+                    id="newsletterEmail"
+                    placeholder="you@email.com"
+                    required>
+
+                <button type="submit">
+                    Sign Up
+                </button>
+
+            </form>
+
+            <p id="newsletterMessage"></p>
+
+        </div>
+
+    </div>
+
+</section>
     <!-- Shared Footer -->
     <div id="footer"></div>
 
@@ -120,6 +134,8 @@
     <script src="script.js"></script>
 
     <script src="navbar.js"></script>
+
+    <script src="newsletter.js"></script>
 
     <script src="articles.js"></script>
 

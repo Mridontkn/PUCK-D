@@ -1004,3 +1004,14 @@ footer{padding:56px 0 36px;}
     color:var(--slate);
     margin-top:4px;
 }
+
+.newsletter-form-wrapper{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+#newsletterMessage{
+    margin-top:14px;
+    text-align:center;
+}

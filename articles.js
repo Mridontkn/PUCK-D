@@ -6,13 +6,38 @@ async function initArticlesPage() {
 
     allArticles = await loadArticlesFromSupabase();
 
-// Make the search use the same data
+    // Make the search use the same data
+    articles = allArticles;
 
-renderArticles(allArticles);
+    renderArticles(allArticles);
 
-setupTagFilters();
+    setupTagFilters();
+
+    // Read category from URL
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get("category");
+
+    if (category) {
+
+        // Highlight the correct button
+        document.querySelectorAll(".tag").forEach(btn => {
+            btn.classList.remove("active");
+
+            if (btn.textContent.trim().toLowerCase() === category.toLowerCase()) {
+                btn.classList.add("active");
+            }
+        });
+
+        // Show only matching articles
+        renderArticles(
+            allArticles.filter(article =>
+                article.tag.toLowerCase() === category.toLowerCase()
+            )
+        );
+
+    }
+
 }
-
 function renderArticles(articles) {
 
     const container = document.getElementById("articles-list");
@@ -62,6 +87,20 @@ container.innerHTML += `
 
 function setupTagFilters() {
 
+    const params = new URLSearchParams(window.location.search);
+const category = params.get("category");
+
+if (category) {
+
+    const button = [...document.querySelectorAll(".tag")]
+        .find(btn => btn.textContent.trim().toLowerCase() === category.toLowerCase());
+
+    if (button) {
+        button.click();
+    }
+
+}
+
     const buttons = document.querySelectorAll(".tag");
 
     buttons.forEach(button => {
@@ -85,9 +124,12 @@ function setupTagFilters() {
             );
 
         });
-
+const category = params.get("category");
+console.log(category);
     });
+
 
 }
 
 console.log("articles.js loaded");
+
