@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUCK'D — Hockey Lives Here</title>
+<link rel="stylesheet" href="styles.css"></head>
+
+<body>
+
+<div class="ticker-bar"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<header>
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand">
+      <img class="mark" src="logo.png" alt="PUCK'D">
+      <div>
+        <div class="wordmark">PUCK<span class="apostrophe">'</span>D</div>
+        <div class="brand-sub">Hockey Lives Here</div>
+      </div>
+    </a>
+    <nav class="primary">
+      <a href="index.html">Home</a>
+      <a href="articles.html">Articles</a>
+      <a href="about.html">About Us</a>
+      <a href="newsletter.html">Newsletter</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="icon-btn" aria-label="Search" tabindex="0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <a class="admin-link" href="admin.html">Admin</a>
+      <a class="subscribe-btn" href="newsletter.html">Subscribe</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-eyebrow-row">
+        <span class="offseason-dot"></span>
+        <span class="eyebrow" id="heroEyebrow">Offseason — Free Agency Week 3</span>
+      </div>
+      <h1 id="heroTitle">Loading headline…</h1>
+      <p class="dek" id="heroDek"></p>
+      <div class="byline" id="heroByline"></div>
+    </div>
+<div class="hero-art">
+    <a id="heroLink" href="#">
+        <img id="heroImage" src="" alt="">
+    </a>
+</div>
+  </div>
+</section>
+
+
+<section class="content">
+  <div class="wrap content-grid">
+    <div>
+      <div class="tracker-head">
+        <div class="section-title">Latest Stories</div>
+        <span class="see-all">Articles written by PUCK'D Writers.</span>
+      </div>
+      <div class="article-list" id="articleList"></div>
+    </div>
+
+    <aside>
+      <div class="sidebar-block">
+        <div class="tracker-head" style="margin-bottom:0;">
+          <div class="section-title" style="font-size:17px;">Recent News</div>
+        </div>
+        <div class="news-list" id="recentNewsList"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="newsletter">
+  <div class="wrap newsletter-inner">
+    <div>
+      <h2>The NHL, explained daily.</h2>
+      <p>Get instant updates on the latest NHL news and analysis.</p>
+    </div>
+    <div class="form-row">
+      <input type="email" placeholder="you@email.com">
+      <button>Sign Up</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="wordmark">PUCK<span class="apostrophe">'</span>D</div>
+        <p>Independent NHL coverage — signings, cap analysis, and the stories the transaction log leaves out.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Articles</h5>
+        <a href="#">Latest</a>
+        <a href="#">Breaking</a>
+        <a href="#">Prospects</a>
+        <a href="#">Opinion</a>
+      </div>
+      <div class="foot-col">
+        <h5>Puck'd</h5>
+        <a href="#">Our Team</a>
+        <a href="#">News Letter</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 PUCK'D MEDIA. ALL RIGHTS RESERVED.</span>
+      <div class="socials">
+        <a href="#">X</a><a href="#">IG</a><a href="#">YT</a><a href="#">RSS</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+<script src="articles.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter | PUCK'D</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+
+<header>
+    <div class="wrap nav-row">
+
+<a href="index.html" class="brand">
+    <img class="mark" src="logo.png" alt="PUCK'D">
+    <div>
+        <div class="wordmark">PUCK'D</div>
+        <div class="brand-sub">Hockey Lives Here</div>
+    </div>
+</a>
+
+        <nav class="primary">
+            <a href="index.html">Home</a>
+            <a href="articles.html">Articles</a>
+            <a href="about.html">About Us</a>
+            <a href="newsletter.html">Newsletter</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="icon-btn" aria-label="Search" tabindex="0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <a class="admin-link" href="admin.html">Admin</a>
+      <a class="subscribe-btn" href="newsletter.html">Subscribe</a>
+    </div>
+
+    </div>
+</header>
+
+<main class="wrap">
+
+<section class="newsletter-page">
+
+    <p class="eyebrow">JOIN THE COMMUNITY</p>
+
+    <h1>The Inbox Every Hockey Fan Deserves.</h1>
+
+    <p class="newsletter-copy">
+        Breaking news. Trades. Prospect updates.
+        Game analysis.
+        No spam. Just hockey.
+    </p>
+
+    <form id="newsletterForm" class="newsletter-form">
+
+        <input
+            type="email"
+            id="newsletterEmail"
+            placeholder="Enter your email..."
+            required>
+
+        <button type="submit">
+            Subscribe
+        </button>
+
+    </form>
+
+    <p id="newsletterMessage"></p>
+
+</section>
+
+<section class="newsletter-features">
+
+    <div class="feature-card">
+        📰
+        <h3>Breaking News</h3>
+        <p>Be the first to know about signings, trades and league news.</p>
+    </div>
+
+    <div class="feature-card">
+        📈
+        <h3>Analysis</h3>
+        <p>Salary cap breakdowns, prospect reports and game analysis.</p>
+    </div>
+
+    <div class="feature-card">
+        🚨
+        <h3>No Spam</h3>
+        <p>Only the stories worth reading. Unsubscribe whenever you want.</p>
+    </div>
+
+</section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="newsletter.js"></script>
+</body>
+</html>

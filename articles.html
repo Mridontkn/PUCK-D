@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles | PUCK'D</title>
+
+    <link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+<script src="api.js"></script>
+<script src="articles.js"></script>
+</head>
+
+<body>
+
+<header>
+    <div class="wrap nav-row">
+
+<a href="index.html" class="brand">
+    <img class="mark" src="logo.png" alt="PUCK'D">
+    <div>
+        <div class="wordmark">PUCK'D</div>
+        <div class="brand-sub">Hockey Lives Here</div>
+    </div>
+</a>
+
+        <nav class="primary">
+            <a href="index.html">Home</a>
+            <a href="articles.html">Articles</a>
+            <a href="about.html">About Us</a>
+            <a href="newsletter.html">Newsletter</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="icon-btn" aria-label="Search" tabindex="0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <a class="admin-link" href="admin.html">Admin</a>
+            <button class="subscribe-btn">Subscribe</button>
+        </div>
+
+    </div>
+</header>
+
+<main class="wrap">
+
+    <section class="articles-hero">
+
+        <p class="eyebrow">PUCK'D NEWSROOM</p>
+
+        <h1>Articles</h1>
+
+        <p class="hero-copy">
+            Browse every story published by PUCK'D. Filter by category to
+            quickly find the news you're looking for.
+        </p>
+
+    </section>
+
+
+    <section class="tag-bar">
+
+        <button class="tag active">All</button>
+        <button class="tag">Breaking</button>
+        <button class="tag">News</button>
+        <button class="tag">Trades</button>
+        <button class="tag">Prospects</button>
+        <button class="tag">Opinion</button>
+        <button class="tag">Features</button>
+
+    </section>
+
+
+    <section id="articles-list" class="articles-list">
+
+        <!-- JavaScript inserts articles here -->
+
+        <article class="article-row">
+
+            <img src="https://placehold.co/220x140" alt="">
+
+            <div>
+
+                <span class="article-tag">BREAKING</span>
+
+                <h2>Trevor Zegras Signs Eight-Year Extension</h2>
+
+                <div class="meta">
+                    Ethan James • July 17, 2026
+                </div>
+
+                <p>
+                    The Philadelphia Flyers have signed Trevor Zegras
+                    to an eight-year contract extension...
+                </p>
+
+                <a href="#">Read Story →</a>
+
+            </div>
+
+        </article>
+
+    </section>
+
+</main>
+
+</body>
+</html>

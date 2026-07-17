@@ -116,8 +116,18 @@ function renderAll(){
     document.getElementById('heroTitle').textContent = hero.title;
     document.getElementById('heroDek').textContent = hero.dek;
     document.getElementById('heroEyebrow').textContent = hero.tag + ' — Lead Story';
-    document.getElementById('heroByline').innerHTML =
-      `<b>${escapeHtml(hero.author)}</b> <span>·</span> <span>${escapeHtml(hero.readTime)}</span> <span>·</span> <span>${escapeHtml(hero.date)}</span>`;
+    const heroImage = document.getElementById("heroImage");
+const heroLink = document.getElementById("heroLink");
+
+heroLink.href = formatArticleLink(hero);
+
+if (hero.imageUrl) {
+    heroImage.src = hero.imageUrl;
+    heroImage.alt = hero.title;
+    heroImage.style.display = "block";
+} else {
+    heroImage.style.display = "none";
+}
   } else {
     document.getElementById('heroTitle').textContent = 'No article available';
     document.getElementById('heroDek').textContent = 'Publish your first article from the admin dashboard.';
@@ -125,19 +135,39 @@ function renderAll(){
     document.getElementById('heroByline').textContent = '';
   }
 
-  const rest = hero ? articles.filter(a => a.id !== hero.id) : articles;
-  document.getElementById('articleList').innerHTML = rest.map(a => `
-    <a class="article-row" href="${formatArticleLink(a)}">
-      <div class="thumb"><svg viewBox="0 0 200 150" preserveAspectRatio="none"><rect width="200" height="150" fill="#1E2127"/>${THUMB_SHAPES[a.thumb] || THUMB_SHAPES[1]}</svg></div>
-      <div class="article-body">
-        <span class="tag">${escapeHtml(a.tag)}</span>
-        <h3>${escapeHtml(a.title)}</h3>
-        <p>${escapeHtml(a.dek)}</p>
-        <div class="meta-row"><span>${escapeHtml(a.author)}</span><span class="dot-sep">·</span><span>${escapeHtml(a.readTime)}</span><span class="dot-sep">·</span><span>${escapeHtml(a.date)}</span></div>
-      </div>
-    </a>
-  `).join('') || '<p style="color:var(--slate); padding:24px 0;">No articles yet — publish one from the admin dashboard.</p>';
+const rest = (hero ? articles.filter(a => a.id !== hero.id) : articles).slice(0, 3);
+document.getElementById('articleList').innerHTML = rest.map(a => `
+<a class="article-row" href="${formatArticleLink(a)}">
 
+    <div class="thumb">
+        ${
+            a.imageUrl
+                ? `<img src="${escapeHtml(a.imageUrl)}" alt="${escapeHtml(a.title)}">`
+                : `<svg viewBox="0 0 200 150" preserveAspectRatio="none">
+                    <rect width="200" height="150" fill="#1E2127"/>
+                    ${THUMB_SHAPES[a.thumb] || THUMB_SHAPES[1]}
+                  </svg>`
+        }
+    </div>
+
+    <div class="article-body">
+        <span class="tag">${escapeHtml(a.tag)}</span>
+
+        <h3>${escapeHtml(a.title)}</h3>
+
+        <p>${escapeHtml(a.dek)}</p>
+
+        <div class="meta-row">
+            <span>${escapeHtml(a.author)}</span>
+            <span class="dot-sep">·</span>
+            <span>${escapeHtml(a.readTime)}</span>
+            <span class="dot-sep">·</span>
+            <span>${escapeHtml(a.date)}</span>
+        </div>
+    </div>
+
+</a>
+`).join('') || '<p style="color:var(--slate); padding:24px 0;">No articles yet — publish one from the admin dashboard.</p>';
   // render recent news as a simple vertical list (non-clickable)
   if (recentNews && recentNews.length) {
     document.getElementById('recentNewsList').innerHTML = recentNews.map(item => `
@@ -155,8 +185,12 @@ function renderAll(){
   document.getElementById('tickerTrack').innerHTML = tHTML + '<span class="chev">›</span>' + tHTML;
 }
 
-(async function init(){
-  document.getElementById('heroTitle').textContent = 'Loading…';
-  await loadData();
-  renderAll();
-})();
+if (document.getElementById("heroTitle")) {
+
+    (async function init() {
+        document.getElementById("heroTitle").textContent = "Loading...";
+        await loadData();
+        renderAll();
+    })();
+
+}
