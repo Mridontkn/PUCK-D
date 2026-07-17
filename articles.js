@@ -3,11 +3,14 @@ document.addEventListener("DOMContentLoaded", initArticlesPage);
 let allArticles = [];
 
 async function initArticlesPage() {
+
     allArticles = await loadArticlesFromSupabase();
 
-    renderArticles(allArticles);
+// Make the search use the same data
 
-    setupTagFilters();
+renderArticles(allArticles);
+
+setupTagFilters();
 }
 
 function renderArticles(articles) {

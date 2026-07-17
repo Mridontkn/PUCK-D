@@ -4,106 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Team | PUCK'D</title>
+
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-<header>
-    <div class="wrap nav-row">
+    <!-- Shared Components -->
+    <div id="ticker"></div>
 
-        <a href="index.html" class="brand">
-            <img src="logo.png" class="mark" alt="PUCK'D">
-            <div>
-                <div class="wordmark">PUCK<span class="apostrophe">'</span>D</div>
-                <div class="brand-sub">Hockey Lives Here</div>
-            </div>
-        </a>
+    <div id="navbar"></div>
 
-        <nav class="primary">
-            <a href="index.html">Home</a>
-            <a href="articles.html">Articles</a>
-            <a href="about.html">About Us</a>
-            <a href="newsletter.html">Newsletter</a>
-        </nav>
+    <main class="wrap" style="padding:64px 0;">
 
-        <div class="nav-actions">
-            <div class="icon-btn" aria-label="Search" tabindex="0">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </div>
-            <a class="admin-link" href="admin.html">Admin</a>
-            <button class="subscribe-btn">Subscribe</button>
+        <div class="about-intro">
+
+            <div class="eyebrow">OUR TEAM</div>
+
+            <h1 class="page-title">
+                Meet the People Behind PUCK'D
+            </h1>
+
+            <p class="page-dek">
+                We're a group of hockey fans dedicated to bringing fast,
+                reliable, and engaging coverage from around the hockey world.
+                Whether it's breaking news, trade rumours, prospect updates,
+                or in-depth features, we're here because we love the game.
+            </p>
+
         </div>
 
-    </div>
-</header>
+        <section class="team-grid">
 
-<main class="wrap" style="padding:64px 0;">
+            <article class="team-card">
+                <h2 class="team-name">Ethan James</h2>
+                <h4 class="team-role">Founder & Editor-in-Chief</h4>
+                <p class="team-bio">
+                    Oversees all editorial content and ensures every article
+                    published by PUCK'D meets the highest standard.
+                </p>
+            </article>
 
-    <div class="about-intro">
-        <div class="eyebrow">OUR TEAM</div>
+            <article class="team-card">
+                <h2 class="team-name">Emma Carter</h2>
+                <h4 class="team-role">Senior NHL Writer</h4>
+                <p class="team-bio">
+                    Covers league news, breaking stories, player movement,
+                    and everything happening around the NHL.
+                </p>
+            </article>
 
-        <h1 class="page-title">
-            Meet the People Behind PUCK'D
-        </h1>
+            <article class="team-card">
+                <h2 class="team-name">Noah Bennett</h2>
+                <h4 class="team-role">Prospects & Draft Analyst</h4>
+                <p class="team-bio">
+                    Focuses on the NHL Draft, junior hockey, and the next
+                    generation of elite talent.
+                </p>
+            </article>
 
-        <p class="page-dek">
-            We're a group of hockey fans dedicated to bringing fast,
-            reliable, and engaging coverage from around the hockey world.
-            Whether it's breaking news, trade rumours, prospect updates,
-            or in-depth features, we're here because we love the game.
-        </p>
-    </div>
+            <article class="team-card">
+                <h2 class="team-name">Liam Parker</h2>
+                <h4 class="team-role">Features & Opinion</h4>
+                <p class="team-bio">
+                    Writes long-form stories, opinion pieces, and player
+                    spotlights from across the hockey world.
+                </p>
+            </article>
 
-    <section class="team-grid">
+            <article class="team-card">
+                <h2 class="team-name">Maya Reynolds</h2>
+                <h4 class="team-role">Community & Newsletter</h4>
+                <p class="team-bio">
+                    Keeps readers connected through newsletters, social media,
+                    and fan engagement across every platform.
+                </p>
+            </article>
 
-        <article class="team-card">
-            <h2 class="team-name">Ethan James</h2>
-            <h4 class="team-role">Founder & Editor-in-Chief</h4>
-            <p class="team-bio">
-                Oversees all editorial content and ensures every article
-                published by PUCK'D meets the highest standard.
-            </p>
-        </article>
+        </section>
 
-        <article class="team-card">
-            <h2 class="team-name">Emma Carter</h2>
-            <h4 class="team-role">Senior NHL Writer</h4>
-            <p class="team-bio">
-                Covers league news, breaking stories, player movement,
-                and everything happening around the NHL.
-            </p>
-        </article>
+    </main>
 
-        <article class="team-card">
-            <h2 class="team-name">Noah Bennett</h2>
-            <h4 class="team-role">Prospects & Draft Analyst</h4>
-            <p class="team-bio">
-                Focuses on the NHL Draft, junior hockey, and the next
-                generation of elite talent.
-            </p>
-        </article>
+    <!-- Shared Footer -->
+    <div id="footer"></div>
 
-        <article class="team-card">
-            <h2 class="team-name">Liam Parker</h2>
-            <h4 class="team-role">Features & Opinion</h4>
-            <p class="team-bio">
-                Writes long-form stories, opinion pieces, and player
-                spotlights from across the hockey world.
-            </p>
-        </article>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        <article class="team-card">
-            <h2 class="team-name">Maya Reynolds</h2>
-            <h4 class="team-role">Community & Newsletter</h4>
-            <p class="team-bio">
-                Keeps readers connected through newsletters, social media,
-                and fan engagement across every platform.
-            </p>
-        </article>
-
-    </section>
-
-</main>
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
+    <script src="navbar.js"></script>
 
 </body>
 </html>

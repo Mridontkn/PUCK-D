@@ -194,3 +194,97 @@ if (document.getElementById("heroTitle")) {
     })();
 
 }
+async function initSearch() {
+
+    // Load articles if they haven't already been loaded
+    if (!window.articles || window.articles.length === 0) {
+        window.articles = await loadArticlesFromSupabase();
+    }
+
+    const articles = window.articles;
+
+    const searchContainer = document.querySelector(".search-container");
+    const searchButton = document.getElementById("searchButton");
+    const searchInput = document.getElementById("searchInput");
+    const resultsBox = document.getElementById("searchResults");
+
+    if (!searchContainer || !searchButton || !searchInput || !resultsBox) {
+        return;
+    }
+
+    // Expand / collapse search
+    searchButton.addEventListener("click", () => {
+
+        searchContainer.classList.toggle("open");
+
+        if (searchContainer.classList.contains("open")) {
+            searchInput.focus();
+        } else {
+            searchInput.value = "";
+            resultsBox.innerHTML = "";
+            resultsBox.classList.remove("show");
+        }
+
+    });
+
+    // Live search
+    searchInput.addEventListener("input", () => {
+
+        const term = searchInput.value.trim().toLowerCase();
+
+        if (term.length === 0) {
+            resultsBox.classList.remove("show");
+            resultsBox.innerHTML = "";
+            return;
+        }
+
+        const matches = articles.filter(article =>
+            article.title.toLowerCase().includes(term) ||
+            article.dek.toLowerCase().includes(term) ||
+            article.author.toLowerCase().includes(term) ||
+            article.tag.toLowerCase().includes(term)
+        );
+
+        resultsBox.innerHTML = "";
+
+        if (matches.length === 0) {
+            resultsBox.innerHTML = `
+                <div class="search-result">
+                    No articles found.
+                </div>
+            `;
+            resultsBox.classList.add("show");
+            return;
+        }
+
+        matches.slice(0, 8).forEach(article => {
+
+            resultsBox.innerHTML += `
+                <a class="search-result" href="${formatArticleLink(article)}">
+
+                    <div class="search-result-title">
+                        ${article.title}
+                    </div>
+
+                    <div class="search-result-meta">
+                        ${article.author} • ${article.tag}
+                    </div>
+
+                </a>
+            `;
+
+        });
+
+        resultsBox.classList.add("show");
+
+    });
+
+    document.addEventListener("click", (e) => {
+
+        if (!searchContainer.contains(e.target)) {
+            resultsBox.classList.remove("show");
+        }
+
+    });
+
+}
