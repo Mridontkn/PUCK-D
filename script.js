@@ -2,12 +2,12 @@ const ARTICLE_DATABASE_URL = './articles.json';
 const DEFAULT_HERO_ID = 'a1';
 
 const TICKER = [
-  "EXAMPLE TICKER ITEM 1",
-  "EXAMPLE TICKER ITEM 2",
-  "EXAMPLE TICKER ITEM 3",
-  "EXAMPLE TICKER ITEM 4",
-  "EXAMPLE TICKER ITEM 5",
-  "EXAMPLE TICKER ITEM 6"
+  "NHL OFFSEASON",
+  "NHL OFFSEASON",
+  "NHL OFFSEASON",
+  "NHL OFFSEASON",
+  "NHL OFFSEASON",
+  "NHL OFFSEASON"
 ];
 const TRACKER_STATS = [
   { label: 'UFA Signings', stat: '38', unit: 'since July 1', note: '12 term deals, 26 one-year prove-it contracts' },
