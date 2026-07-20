@@ -52,12 +52,13 @@ function renderArticles(articles) {
     articles.forEach(article => {
 
 container.innerHTML += `
+<a class="article-link" href="article.html?id=${article.id}">
+
 <article class="article-row">
 
     <div class="thumb">
-        <img
-            src="${article.imageUrl || "https://placehold.co/220x140"}"
-            alt="${article.title}">
+        <img src="${article.imageUrl || "https://placehold.co/220x140"}"
+             alt="${article.title}">
     </div>
 
     <div class="article-body">
@@ -72,13 +73,15 @@ container.innerHTML += `
 
         <p>${article.dek}</p>
 
-        <a href="article.html?id=${article.id}">
+        <span class="read-story">
             Read Story →
-        </a>
+        </span>
 
     </div>
 
 </article>
+
+</a>
 `;
 
     });
