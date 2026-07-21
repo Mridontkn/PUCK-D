@@ -182,7 +182,7 @@ document.getElementById('articleList').innerHTML = rest.map(a => `
 
 
   const tHTML = TICKER.map(t => `<span><b>${escapeHtml(t)}</b></span>`).join('<span class="chev">›</span>');
-  document.getElementById('tickerTrack').innerHTML = tHTML + '<span class="chev">›</span>' + tHTML;
+  document.getElementById('tickerTrack').innerHTML = tHTML + tHTML;
 }
 
 if (document.getElementById("heroTitle")) {
