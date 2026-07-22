@@ -1,14 +1,5 @@
-const ARTICLE_DATABASE_URL = './articles.json';
 const DEFAULT_HERO_ID = 'a1';
-
-const TICKER = [
-  "NHL OFFSEASON",
-  "NHL OFFSEASON",
-  "NHL OFFSEASON",
-  "NHL OFFSEASON",
-  "NHL OFFSEASON",
-  "NHL OFFSEASON"
-];
+let TICKER = [];
 const TRACKER_STATS = [
   { label: 'UFA Signings', stat: '38', unit: 'since July 1', note: '12 term deals, 26 one-year prove-it contracts' },
   { label: 'Cap Space Remaining', stat: '$412M', unit: 'league-wide', note: 'Down from $540M at open of free agency' },
@@ -61,55 +52,73 @@ function estimateReadTime(html){
 
 // Pulls published articles from the Supabase "article" table and maps
 // them onto the shape the rest of this file expects (camelCase fields).
-async function loadArticlesFromSupabase(){
-  const { data, error } = await db
-    .from('article')
-    .select('*')
-    .order('created_at', { ascending: false });
+// Pulls published articles from the Supabase "article" table
+async function loadArticlesFromSupabase() {
 
-    console.log(data);
-    console.log(error);
+    const { data, error } = await db
+        .from('article')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-  if(error){
-    console.error('Failed to load articles from Supabase', error);
-    return [];
-  }
+    if (error) {
+        console.error('Failed to load articles from Supabase', error);
+        return [];
+    }
 
-  return (data || []).map((row, i) => ({
-    id: row.id,
-    tag: row.category || 'News',
-    title: row.title,
-    dek: row.summary,
-    author: row.author,
-    readTime: estimateReadTime(row.context),
-    date: formatRelativeDate(row.created_at),
-    thumb: (i % 3) + 1,
-    imageUrl: row.image_url || null
-  }));
+    return (data || []).map((row, i) => ({
+        id: row.id,
+        tag: row.category || 'News',
+        title: row.title,
+        dek: row.summary,
+        author: row.author,
+        readTime: estimateReadTime(row.context),
+        date: formatRelativeDate(row.created_at),
+        thumb: (i % 3) + 1,
+        imageUrl: row.image_url || null
+    }));
+
 }
 
-async function loadRecentNews(){
-  try{
-    const response = await fetch(ARTICLE_DATABASE_URL);
-    if(!response.ok) throw new Error('Fetch failed');
-    const data = await response.json();
-    return Array.isArray(data.recentNews) ? data.recentNews : [];
-  }catch(err){
-    console.error('Failed to load recent news', err);
-    return [];
-  }
+// Pulls recent news from Supabase
+async function loadRecentNews() {
+
+    const { data, error } = await db
+        .from('recent_news')
+        .select('*')
+        .order('date', { ascending: false });
+
+    if (error) {
+        console.error('Failed to load recent news', error);
+        return [];
+    }
+
+    return (data || []).map(row => ({
+        headline: row.headline,
+        date: new Date(row.date).toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        }).toUpperCase()
+    }));
+
 }
 
-async function loadData(){
-  const [articleRows, newsRows] = await Promise.all([
+async function loadData() {
+
+const [articleRows, newsRows, tickerRows] = await Promise.all([
     loadArticlesFromSupabase(),
-    loadRecentNews()
-  ]);
-  articles = articleRows;
-  recentNews = newsRows;
-  heroId = articles.length ? articles[0].id : DEFAULT_HERO_ID;
-}
+    loadRecentNews(),
+    loadTicker()
+]);
 
+articles = articleRows;
+recentNews = newsRows;
+TICKER = tickerRows;
+
+
+    heroId = articles.length ? articles[0].id : DEFAULT_HERO_ID;
+
+}
 function renderAll(){
   const hero = articles.find(a => a.id === heroId) || articles[0] || null;
   if(hero){
@@ -169,17 +178,22 @@ document.getElementById('articleList').innerHTML = rest.map(a => `
 </a>
 `).join('') || '<p style="color:var(--slate); padding:24px 0;">No articles yet — publish one from the admin dashboard.</p>';
   // render recent news as a simple vertical list (non-clickable)
-  if (recentNews && recentNews.length) {
-    document.getElementById('recentNewsList').innerHTML = recentNews.map(item => `
-      <div class="news-item">
-        <div class="news-date">${escapeHtml(item.date)}</div>
-        <div class="news-headline">${escapeHtml(item.headline)}</div>
-      </div>
-    `).join('');
-  } else {
-    document.getElementById('recentNewsList').innerHTML = '<p style="color:var(--slate); padding:24px 0;">No recent news yet — edit the JSON to add items.</p>';
-  }
+// Render recent news
+if (recentNews && recentNews.length) {
 
+    document.getElementById('recentNewsList').innerHTML = recentNews.map(item => `
+        <div class="news-item">
+            <div class="news-date">${escapeHtml(item.date)}</div>
+            <div class="news-headline">${escapeHtml(item.headline)}</div>
+        </div>
+    `).join('');
+
+} else {
+
+    document.getElementById('recentNewsList').innerHTML =
+        '<p style="color:var(--slate); padding:24px 0;">No recent news available.</p>';
+
+}
 
   const tHTML = TICKER.map(t => `<span><b>${escapeHtml(t)}</b></span>`).join('<span class="chev">›</span>');
   document.getElementById('tickerTrack').innerHTML = document.getElementById("tickerTrack").innerHTML =
@@ -289,5 +303,21 @@ async function initSearch() {
         }
 
     });
+
+}
+
+async function loadTicker() {
+
+    const { data, error } = await db
+        .from("ticker")
+        .select("*")
+        .order("display_order", { ascending: true });
+
+    if (error) {
+        console.error("Failed to load ticker", error);
+        return [];
+    }
+
+    return data.map(row => row.text);
 
 }
