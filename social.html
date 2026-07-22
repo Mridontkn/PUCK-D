@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUCK'D Social Feed</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Shared Components -->
+    <div id="ticker"></div>
+
+    <div id="navbar"></div>
+
+    <main class="social-page">
+
+        <div class="wrap">
+
+            <section class="articles-hero">
+
+                <p class="eyebrow">LIVE UPDATES</p>
+
+                <h1>Hockey, As It Happens.</h1>
+
+                <p class="page-dek">
+                    This page was made in collaboration between
+                    <strong>PUCK'D</strong> and <strong>IceMetrix</strong>.
+                </p>
+
+            </section>
+
+            <section class="tag-bar">
+
+                <button class="tag active" data-filter="All">All</button>
+
+                <button class="tag" data-filter="PUCK'D Media">PUCK'D Media</button>
+
+                <button class="tag" data-filter="IceMetrix">IceMetrix</button>
+
+            </section>
+
+            <div id="socialFeed">
+                Loading...
+            </div>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- Shared Footer -->
+    <div id="footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+<script src="navbar.js"></script>
+<script src="social.js"></script>
+
+</body>
+
+</html>

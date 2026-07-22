@@ -338,3 +338,18 @@ async function loadTicker() {
     return data.map(row => row.text);
 
 }
+
+async function loadSocialFeed() {
+
+    const { data, error } = await db
+        .from("social_feed")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        return [];
+    }
+
+    return data;
+}
