@@ -1,5 +1,22 @@
 const DEFAULT_HERO_ID = 'a1';
 let TICKER = [];
+
+async function initTicker() {
+
+    TICKER = await loadTicker();
+
+    const tickerTrack = document.getElementById("tickerTrack");
+    if (!tickerTrack) return;
+
+    const tHTML = TICKER
+        .map(t => `<span><b>${escapeHtml(t)}</b></span>`)
+        .join('<span class="chev">›</span>');
+
+    tickerTrack.innerHTML =
+        tHTML +
+        '<span class="chev">›</span>' +
+        tHTML;
+}
 const TRACKER_STATS = [
   { label: 'UFA Signings', stat: '38', unit: 'since July 1', note: '12 term deals, 26 one-year prove-it contracts' },
   { label: 'Cap Space Remaining', stat: '$412M', unit: 'league-wide', note: 'Down from $540M at open of free agency' },

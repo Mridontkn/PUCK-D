@@ -84,7 +84,7 @@ button, input, textarea, select{font-family:inherit;}
 .chev{color:var(--accent); font-weight:700;}
 @keyframes scrollTicker{
 from{
-    transform:translateX(80%);
+    transform:translateX(100%);
 }
 
     to{

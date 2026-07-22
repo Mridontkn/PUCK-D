@@ -8,12 +8,16 @@ async function loadComponent(id, file) {
 
     document.getElementById(id).innerHTML = await response.text();
 }
-
 (async () => {
 
     await loadComponent("ticker", "ticker.html");
     await loadComponent("navbar", "navbar.html");
     await loadComponent("footer", "footer.html");
+
+    // Load ticker on every page
+    if (typeof initTicker === "function") {
+        await initTicker();
+    }
 
     // Initialize search
     if (typeof initSearch === "function") {
