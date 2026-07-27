@@ -41,7 +41,7 @@ function escapeHtml(str){
 }
 
 function formatArticleLink(article){
-  return `article.html?id=${encodeURIComponent(article.id)}`;
+  return `article.html?slug=${encodeURIComponent(article.webLink)}`;
 }
 
 function formatRelativeDate(iso){
@@ -82,18 +82,19 @@ async function loadArticlesFromSupabase() {
         return [];
     }
 
-    return (data || []).map((row, i) => ({
-        id: row.id,
-        tag: row.category || 'News',
-        title: row.title,
-        dek: row.summary,
-        author: row.author,
-        readTime: estimateReadTime(row.context),
-        date: formatRelativeDate(row.created_at),
-        thumb: (i % 3) + 1,
-        imageUrl: row.image_url || null
-    }));
+return (data || []).map((row, i) => ({
+    id: row.id,
+    tag: row.category || 'News',
+    title: row.title,
+    dek: row.summary,
+    author: row.author,
+    readTime: estimateReadTime(row.context),
+    date: formatRelativeDate(row.created_at),
+    thumb: (i % 3) + 1,
+    imageUrl: row.image_url || null,
 
+    webLink: row.web_link   
+}));
 }
 
 // Pulls recent news from Supabase

@@ -73,18 +73,18 @@ function estimateReadTime(html){
   return `${minutes} MIN READ`;
 }
 async function loadArticle(){
-  const articleId = getQueryParam('id');
-  if(!articleId){
+  const slug = getQueryParam('slug');
+  if(!slug){
     document.getElementById('articleTitle').textContent = 'Article not found';
     document.getElementById('articleBody').innerHTML = '<p style="color:var(--slate);">No article id was given in the URL.</p>';
     return;
   }
   try{
-    const { data: article, error } = await db
-      .from('article')
-      .select('*')
-      .eq('id', articleId)
-      .single();
+const { data: article, error } = await db
+  .from('article')
+  .select('*')
+  .eq('web_link', slug)
+  .single();
 
     if(error || !article){
       document.getElementById('articleTitle').textContent = 'Article not found';

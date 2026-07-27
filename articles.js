@@ -52,7 +52,7 @@ function renderArticles(articles) {
     articles.forEach(article => {
 
 container.innerHTML += `
-<a class="article-link" href="article.html?id=${article.id}">
+<a class="article-link" href="article.html?slug=${article.webLink}">
 
 <article class="article-row">
 

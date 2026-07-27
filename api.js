@@ -54,7 +54,8 @@ async function loadArticlesFromSupabase(){
         author:row.author,
         readTime:estimateReadTime(row.context),
         date:formatRelativeDate(row.created_at),
-        imageUrl:row.image_url
+        imageUrl:row.image_url,
+        webLink: row.web_link
 
     }));
 
