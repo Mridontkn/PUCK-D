@@ -70,7 +70,7 @@ button, input, textarea, select{font-family:inherit;}
     align-items:center;
     gap:36px;
     width:max-content;
-    animation:scrollTicker 24s linear infinite;
+    animation:scrollTicker 40s linear infinite;
 }
 .ticker-track span{
   font-family:'IBM Plex Mono',monospace;
