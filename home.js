@@ -20,6 +20,7 @@
         stView: 'div',
         ld: {},
         ldLoading: {},
+        ldError: {},
         ldGroup: 'skaters',
         ldCat: 'points',
         lastVisit: readLastVisit()
@@ -548,11 +549,32 @@
         ).join('');
     }
 
-    function renderLeaders() {
+    // The card + list panel are built once; tab switches only swap what's inside them.
+    function ensureLeaderShell() {
         const grid = $('leadersGrid');
+        if (grid.querySelector('.ld-top')) return;
+        grid.innerHTML = `
+            <article class="ld-top">
+                <div class="ld-top-shot ld-c"></div>
+                <div class="ld-top-body ld-c"></div>
+            </article>
+            <div class="ld-list ld-c"></div>`;
+        reveal([...grid.children]);
+        // after the first entrance, rows no longer slide in on every switch
+        setTimeout(() => grid.classList.add('ld-settled'), 900);
+    }
+
+    function renderLeaders() {
+        ensureLeaderShell();
+        const grid = $('leadersGrid');
+        const shot = grid.querySelector('.ld-top-shot');
+        const body = grid.querySelector('.ld-top-body');
+        const listEl = grid.querySelector('.ld-list');
         const list = ldList();
         if (!list.length) {
-            grid.innerHTML = `<p class="empty-note">${state.ld[state.ldGroup] ? 'No leaders yet this season.' : 'Loading…'}</p>`;
+            shot.innerHTML = '';
+            listEl.innerHTML = '';
+            body.innerHTML = `<p class="ld-note">${state.ld[state.ldGroup] ? 'No leaders yet this season.' : (state.ldError[state.ldGroup] ? 'Couldn’t load these leaders right now.' : 'Loading…')}</p>`;
             return;
         }
         const group = LD_GROUPS[state.ldGroup];
@@ -565,28 +587,21 @@
         const team = p => `<span class="ld-team">${p.logo ? `<img src="${escapeHtml(p.logo)}" alt="" width="22" height="22" loading="lazy">` : ''}${escapeHtml(p.team)}</span>`;
         const top = list[0];
 
-        grid.innerHTML = `
-            <article class="ld-top">
-                <div class="ld-top-shot">${top.headshot ? `<img src="${escapeHtml(top.headshot)}" alt="${escapeHtml(top.first + ' ' + top.last)}" loading="lazy">` : ''}</div>
-                <div class="ld-top-body">
-                    <span class="ld-rank">${escapeHtml(group.label)}</span>
-                    <h3 class="ld-top-name"><span>${escapeHtml(top.first)}</span>${escapeHtml(top.last)}</h3>
-                    ${team(top)}
-                    <div class="ld-top-value">${escapeHtml(String(formatValue(cat, top.value)))}<small>${label}</small></div>
-                </div>
-            </article>
-            <div class="ld-list">
-                ${list.slice(1).map((p, i) => `
-                <div class="ld-row" style="--i:${i}; --pct:${Math.max(0, Math.min(1, pct(Number(p.value) || 0))).toFixed(3)}">
-                    <span class="ld-n">${i + 2}</span>
-                    <span class="ld-shot">${p.headshot ? `<img src="${escapeHtml(p.headshot)}" alt="" loading="lazy">` : ''}</span>
-                    <span class="ld-name">${escapeHtml(p.first + ' ' + p.last)}<small>${escapeHtml(p.pos)}</small></span>
-                    ${team(p)}
-                    <span class="ld-val">${escapeHtml(String(formatValue(cat, p.value)))}</span>
-                    <span class="ld-bar" aria-hidden="true"></span>
-                </div>`).join('')}
-            </div>`;
-        reveal([...grid.children]);
+        shot.innerHTML = top.headshot ? `<img src="${escapeHtml(top.headshot)}" alt="${escapeHtml(top.first + ' ' + top.last)}" loading="lazy">` : '';
+        body.innerHTML = `
+            <span class="ld-rank">${escapeHtml(group.label)}</span>
+            <h3 class="ld-top-name"><span>${escapeHtml(top.first)}</span>${escapeHtml(top.last)}</h3>
+            ${team(top)}
+            <div class="ld-top-value">${escapeHtml(String(formatValue(cat, top.value)))}<small>${label}</small></div>`;
+        listEl.innerHTML = list.slice(1).map((p, i) => `
+            <div class="ld-row" style="--i:${i}; --pct:${Math.max(0, Math.min(1, pct(Number(p.value) || 0))).toFixed(3)}">
+                <span class="ld-n">${i + 2}</span>
+                <span class="ld-shot">${p.headshot ? `<img src="${escapeHtml(p.headshot)}" alt="" loading="lazy">` : ''}</span>
+                <span class="ld-name">${escapeHtml(p.first + ' ' + p.last)}<small>${escapeHtml(p.pos)}</small></span>
+                ${team(p)}
+                <span class="ld-val">${escapeHtml(String(formatValue(cat, p.value)))}</span>
+                <span class="ld-bar" aria-hidden="true"></span>
+            </div>`).join('');
     }
 
     function loadLeaderGroup(group) {
@@ -596,12 +611,15 @@
             .then(data => {
                 state.ld[group] = data;
                 if (group === 'skaters' && (data.points || []).length) $('leaders').classList.add('has-data');
-                if (group === state.ldGroup) renderLeaders();
+                if (group === state.ldGroup) {
+                    group === 'skaters' && !$('leadersGrid').querySelector('.ld-top') ? renderLeaders() : swapLeaders();
+                }
             })
             .catch(err => {
                 console.warn('Leaders unavailable', group, err);
                 state.ldLoading[group] = null;
-                if (group === state.ldGroup && group !== 'skaters') $('leadersGrid').innerHTML = '<p class="empty-note">Couldn’t load these leaders right now.</p>';
+                state.ldError[group] = true;
+                if (group === state.ldGroup && group !== 'skaters') swapLeaders();
             });
         return state.ldLoading[group];
     }
@@ -611,10 +629,17 @@
         loadLeaderGroup('skaters');
     }
 
+    // Fade the contents out, swap, fade back in; the containers never move.
+    let ldSwapTimer = null;
     function swapLeaders() {
         const grid = $('leadersGrid');
-        grid.classList.add('swapping');
-        setTimeout(() => { renderLeaders(); grid.classList.remove('swapping'); }, prefersReducedMotion ? 0 : 150);
+        if (prefersReducedMotion || !grid.querySelector('.ld-top')) { renderLeaders(); return; }
+        grid.classList.add('ld-out');
+        clearTimeout(ldSwapTimer);
+        ldSwapTimer = setTimeout(() => {
+            renderLeaders();
+            requestAnimationFrame(() => requestAnimationFrame(() => grid.classList.remove('ld-out')));
+        }, 180);
     }
 
     document.querySelector('.ld-groups').addEventListener('click', e => {
