@@ -3167,7 +3167,7 @@ body.home .newsletter{ border-bottom:none; }
 }
 .ld-top-shot{
   grid-row:1 / span 2;
-  width:clamp(170px, 20vw, 270px); align-self:end;
+  width:clamp(160px, 17vw, 240px); align-self:end;
   margin-bottom:0;
 }
 .ld-top-shot img{ width:100%; height:auto; display:block; }
@@ -3190,12 +3190,14 @@ body.home .newsletter{ border-bottom:none; }
 }
 .ld-team img{ width:22px; height:22px; }
 .ld-top-value{
-  font-family:'Anton',sans-serif; font-size:clamp(56px, 6vw, 84px); line-height:.9;
-  color:var(--ice); margin-top:14px;
+  font-family:'Anton',sans-serif; font-size:clamp(52px, 5.4vw, 80px); line-height:.9;
+  color:var(--ice); margin-top:14px; white-space:nowrap;
 }
+/* the stat label sits under the number so long values (.945, 2.10) never get clipped */
 .ld-top-value small{
+  display:block; margin-top:8px;
   font-family:var(--font-sub); font-weight:700; font-size:12px; letter-spacing:.12em;
-  color:var(--gold); margin-left:8px; vertical-align:.9em; text-transform:uppercase;
+  line-height:1; color:var(--gold); text-transform:uppercase;
 }
 
 /* #2–10 list */
@@ -3207,7 +3209,7 @@ body.home .newsletter{ border-bottom:none; }
 }
 .ld-row{
   position:relative;
-  display:grid; grid-template-columns:24px 40px minmax(0,1fr) auto 44px;
+  display:grid; grid-template-columns:24px 40px minmax(0,1fr) auto 52px;
   align-items:center; gap:12px;
   padding:0 22px; height:52px;
   font-family:var(--font-sub);
@@ -3240,7 +3242,7 @@ body.home .newsletter{ border-bottom:none; }
   .ld-top{ grid-template-columns:110px minmax(0,1fr); padding:20px 18px 0; gap:4px 14px; }
   .ld-top-shot{ width:110px; }
   .ld-top-body{ padding-bottom:20px; }
-  .ld-row{ grid-template-columns:20px 34px minmax(0,1fr) 38px; padding:0 14px; gap:10px; }
+  .ld-row{ grid-template-columns:20px 34px minmax(0,1fr) 46px; padding:0 14px; gap:10px; }
   .ld-list{ min-height:calc(9 * 52px + 20px); }
   .ld-row .ld-team{ display:none; }
   .ld-row .ld-shot{ width:34px; height:34px; }
