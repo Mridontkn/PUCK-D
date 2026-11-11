@@ -385,7 +385,7 @@ async function loadPowerRankings() {
             const hi = Number(group[group.length - 1].rank);
             const range = lo === hi ? `#${lo}` : `#${lo}–${hi}`;
             const bubble = tier.to === Infinity;
-            if (groups++) board += `<div class="pr-cut${bubble ? " pr-cut--bubble" : ""}" aria-hidden="true"></div>`;
+            groups++;
             board += `<h3 class="pr-sub${bubble ? " pr-sub--bubble" : ""}">${prEsc(tier.name)}<span>${range}</span></h3>`;
             board += `<ol class="pr-list" start="${lo}">${group.map((t) => prRow(t, idx++, maxPts)).join("")}</ol>`;
         });
