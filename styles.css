@@ -2769,7 +2769,10 @@ footer{
 /* scores strip: tiles instead of ruled cells */
 .scores-strip{ border-bottom:none; background:rgba(0,0,0,.18); }
 .scores-label{ border-right:none; }
-.scores-track{ gap:2px; padding:6px 0; }
+.scores-track{ gap:2px; padding:6px 0; flex:1 1 auto; min-width:0; }
+/* centered when the games fit; auto margins collapse so it still scrolls when they don't */
+.sc-game:first-child{ margin-left:auto; }
+.sc-game:last-child{ margin-right:auto; }
 .sc-game{ border-right:none; background:rgba(255,255,255,.035); }
 .sc-game:hover{ background:rgba(255,255,255,.08); }
 
@@ -3143,9 +3146,11 @@ body.home .newsletter{ border-bottom:none; }
   gap:22px 26px;
 }
 /* tab switches: containers stay, contents fade */
-.ld-c, .ld-row{ transition:opacity .18s ease, transform .18s ease; }
+/* soft crossfade: opacity only, no movement */
+.ld-c, .ld-row, #leadersTitle .ld-title-text{ transition:opacity .3s cubic-bezier(.4,0,.2,1); }
 .ld-grid.ld-out .ld-c,
-.ld-grid.ld-out .ld-row{ opacity:0; transform:translateY(4px); }
+.ld-grid.ld-out .ld-row,
+.leaders.ld-title-out #leadersTitle .ld-title-text{ opacity:0; }
 .ld-settled .ld-row{ animation:none !important; }
 .ld-note{ font-family:var(--font-sub); color:var(--slate); font-size:14px; padding-bottom:26px; }
 
@@ -3356,6 +3361,70 @@ body.home .newsletter{ border-bottom:none; }
   .ns-card{ scroll-snap-align:start; }
   .night-sum .ns-stat{ padding:0 12px; }
 }
+
+/* ============================================================
+   NAVBAR HOVER
+   ============================================================ */
+#navbar nav.primary a{
+  color:var(--text-2);
+  padding:6px 2px 8px;
+  transition:color .2s var(--ease-out);
+}
+#navbar nav.primary a::after{
+  left:-2px; right:-2px; width:auto; bottom:0; height:3px;
+  background:var(--accent);
+  transform:skewX(var(--skew)) scaleX(0);
+  transform-origin:right center;               /* leaves to the right */
+  transition:transform .32s var(--ease-in-out);
+}
+#navbar nav.primary a:hover{ color:var(--ice); }
+#navbar nav.primary a:hover::after,
+#navbar nav.primary a.is-active::after{
+  transform:skewX(var(--skew)) scaleX(1);
+  transform-origin:left center;                /* enters from the left */
+}
+#navbar nav.primary a.is-active{ color:var(--ice); }
+#navbar nav.primary a:focus-visible{ outline:2px solid var(--accent-2); outline-offset:4px; }
+
+#navbar .icon-btn{
+  background:rgba(255,255,255,.06) !important;
+  clip-path:polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  transition:background .2s, color .2s;
+}
+#navbar .icon-btn svg{ transition:transform .25s var(--ease-out); }
+#navbar .icon-btn:hover{ background:rgba(255,255,255,.14) !important; color:var(--ice); }
+#navbar .icon-btn:hover svg{ transform:scale(1.12) rotate(-8deg); }
+
+#navbar .subscribe-btn{
+  font-family:var(--font-sub); font-weight:700; letter-spacing:.1em;
+  padding:11px 22px;
+  clip-path:polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  background:linear-gradient(90deg, var(--accent) 0 50%, var(--ice) 50% 100%);
+  background-size:200% 100%;
+  background-position:100% 0;
+  color:var(--ink);
+  transition:background-position .35s var(--ease-in-out);
+}
+#navbar .subscribe-btn:hover{ background-position:0 0; color:var(--ink); }
+
+#navbar .admin-link{ clip-path:polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); }
+#navbar .admin-link:hover{ background:rgba(255,255,255,.14); color:var(--ice); }
+
+/* mobile menu: a skewed tick slides in beside the hovered/current link */
+#navbar .mobile-menu a{
+  position:relative;
+  transition:background .2s, color .2s, padding-left .25s var(--ease-out);
+}
+#navbar .mobile-menu a::before{
+  content:''; position:absolute; left:14px; top:50%; width:4px; height:16px;
+  margin-top:-8px; background:var(--accent);
+  transform:skewX(var(--skew)) scaleY(0);
+  transition:transform .25s var(--ease-out);
+}
+#navbar .mobile-menu a:hover,
+#navbar .mobile-menu a.is-active{ background:rgba(255,255,255,.05); color:var(--ice); padding-left:36px; }
+#navbar .mobile-menu a:hover::before,
+#navbar .mobile-menu a.is-active::before{ transform:skewX(var(--skew)) scaleY(1); }
 
 /* ---------- reduced motion: everything visible, nothing moves ---------- */
 @media (prefers-reduced-motion: reduce){

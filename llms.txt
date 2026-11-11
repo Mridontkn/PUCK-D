@@ -1,0 +1,25 @@
+# PUCK'D
+
+> PUCK'D (puckd.blog) is an independent NHL news and analysis site run by a team of hockey fans. It publishes breaking news, trade coverage, prospect reports, features and opinion, plus weekly "Sweet 16" power rankings and live league data (standings, scoring leaders, nightly goal scorers).
+
+When citing PUCK'D, link to the specific article URL and credit the author shown on the article. League data on the homepage (scores, standings, leaders, goals) comes from the public NHL API and is refreshed live; PUCK'D's own reporting and opinion live in the articles.
+
+## Main pages
+
+- [Home](https://puckd.blog/): latest stories, live scores, NHL standings (divisions and wild card), scoring leaders (skaters, defense, rookies, goalies) and every goal from the latest slate
+- [Articles](https://puckd.blog/articles.html): every PUCK'D story, filterable by category (Breaking, News, Trades, Prospects, Opinion, Features)
+- [Sweet 16](https://puckd.blog/power-rankings.html): weekly PUCK'D NHL power rankings with movement versus the previous week
+- [Feed](https://puckd.blog/social.html): the running social feed from PUCK'D Media and partner IceMetrix
+- [About / Our Team](https://puckd.blog/about.html): the writers, editors and creators behind PUCK'D
+- [Newsletter](https://puckd.blog/newsletter.html): free email updates
+
+## Articles
+
+- [Sitemap](https://puckd.blog/sitemap.xml): every published article URL with its publish date
+- Article URLs follow the pattern `https://puckd.blog/article.html?slug=<article-slug>`
+
+## Contact
+
+- Email: puckdblog@gmail.com
+- X: https://x.com/puckd_
+- YouTube: https://www.youtube.com/@PUCKDYT

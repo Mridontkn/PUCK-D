@@ -14,6 +14,18 @@ async function loadComponent(id, file) {
     await loadComponent("navbar", "navbar.html");
     await loadComponent("footer", "footer.html");
 
+    // Mark the current page's nav link (works with or without ".html" in the URL)
+    const clean = path => (path.split("?")[0].split("#")[0].split("/").pop() || "index").toLowerCase().replace(/\.html$/, "");
+    const page = clean(location.pathname);
+    ["#navbar nav.primary", "#navbar .mobile-menu"].forEach(sel => {
+        const match = [...document.querySelectorAll(`${sel} a`)]
+            .find(a => clean(a.getAttribute("href") || "") === page);
+        if (match) {
+            match.classList.add("is-active");
+            match.setAttribute("aria-current", "page");
+        }
+    });
+
     // Load ticker on every page
     if (typeof initTicker === "function") {
         await initTicker();

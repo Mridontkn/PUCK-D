@@ -6,7 +6,6 @@
 
 const rankingsContainer = document.getElementById("powerRankings");
 const updatedDate = document.getElementById("updatedDate");
-const metaRow = document.getElementById("prMeta");
 const moversBox = document.getElementById("prMovers");
 
 const PR_TIERS = [
@@ -154,67 +153,78 @@ function prGd(gd) {
     return `<span class="pr-gd ${cls}">${gd > 0 ? "+" : ""}${gd}</span>`;
 }
 
+function prStats(live) {
+    if (!live) return "";
+    const cells = [
+        live.pts !== null ? `<div><dt>Pts</dt><dd>${live.pts}</dd></div>` : "",
+        live.l10 ? `<div><dt>L10</dt><dd>${prEsc(live.l10)}</dd></div>` : "",
+        live.streak ? `<div><dt>Strk</dt><dd class="pr-strk pr-strk--${live.streakKind}">${prEsc(live.streak)}</dd></div>` : "",
+        live.gd !== null ? `<div><dt>Diff</dt><dd>${prGd(live.gd)}</dd></div>` : ""
+    ].join("");
+    return cells ? `<dl class="pr-stats">${cells}</dl>` : "";
+}
+
+function prChips(team, rank, mv, live) {
+    return `
+    <div class="pr-chips">
+        ${team.record ? `<span class="pr-chip"><b>${prEsc(team.record)}</b></span>` : ""}
+        <span class="pr-chip">${prEsc(prLastWeek(rank, mv))}</span>
+        ${live && live.division ? `<span class="pr-chip">${prEsc(live.division)}</span>` : ""}
+    </div>`;
+}
+
+// #1 gets the feature card; #2–3 get the compact version of the same card
 function prPodium(team, i) {
     const rank = Number(team.rank) || i + 1;
     const mv = prMove(team.movement);
     const live = team._live;
-    const stats = live ? `
-        <dl class="pr-pod-stats">
-            ${live.pts !== null ? `<div><dt>Pts</dt><dd>${live.pts}</dd></div>` : ""}
-            ${live.l10 ? `<div><dt>L10</dt><dd>${prEsc(live.l10)}</dd></div>` : ""}
-            ${live.streak ? `<div><dt>Strk</dt><dd class="pr-strk pr-strk--${live.streakKind}">${prEsc(live.streak)}</dd></div>` : ""}
-            ${live.gd !== null ? `<div><dt>Diff</dt><dd>${prGd(live.gd)}</dd></div>` : ""}
-        </dl>` : "";
-
+    const lead = i === 0;
     return `
-<li class="pr-pod pr-pod--${rank}" style="--i:${i}">
-    <span class="pr-pod-num" aria-hidden="true">${rank}</span>
-    <span class="pr-sr">Rank ${rank}:</span>
-    <div class="pr-pod-head">
-        ${prLogo(live, "pr-pod-logo")}
-        ${prMoveChip(mv)}
+<li class="pr-card${lead ? " pr-card--lead" : ""}" style="--i:${i}">
+    <div class="pr-card-shot">${prLogo(live, "pr-card-logo")}</div>
+    <div class="pr-card-body">
+        <div class="pr-card-top">
+            <span class="pr-rank${lead ? " pr-rank--gold" : ""}">No. ${rank}</span>
+            ${prMoveChip(mv)}
+        </div>
+        <h2 class="pr-card-name">${prName(team.team, live)}</h2>
+        ${prChips(team, rank, mv, live)}
+        ${prStats(live)}
     </div>
-    <h3 class="pr-pod-name">${prName(team.team, live)}</h3>
-    <div class="pr-pod-chips">
-        ${team.record ? `<span class="pr-chip"><b>${prEsc(team.record)}</b> at ranking</span>` : ""}
-        <span class="pr-chip pr-chip--dim">${prEsc(prLastWeek(rank, mv))}</span>
-        ${live && live.division ? `<span class="pr-chip pr-chip--dim">${prEsc(live.division)}</span>` : ""}
-    </div>
-    ${stats}
 </li>`;
 }
 
-function prRow(team, i) {
+function prRow(team, i, maxPts) {
     const rank = Number(team.rank) || i + 1;
     const mv = prMove(team.movement);
     const live = team._live;
-    const sub = [prLastWeek(rank, mv), live && live.division].filter(Boolean).map(prEsc).join('<i class="pr-slash" aria-hidden="true"></i>');
+    const pts = live && live.pts !== null ? live.pts : null;
+    const pct = pts !== null && maxPts ? Math.max(0, Math.min(1, pts / maxPts)) : 0;
+    const ident = live && live.abbr
+        ? `<span class="pr-abbr">${prEsc(live.abbr)}</span><span class="pr-tname">${prEsc(team.team)}</span>`
+        : `<span class="pr-abbr pr-abbr--full">${prEsc(team.team)}</span>`;
+    const logo = live && live.logo
+        ? `<img src="${prEsc(live.logo)}" alt="" width="26" height="26" loading="lazy" decoding="async">`
+        : `<span class="pr-logo-blank" aria-hidden="true"></span>`;
 
     return `
-<li class="pr-row" style="--i:${i}">
-    <span class="pr-num" aria-hidden="true">${rank}</span>
-    <span class="pr-sr">Rank ${rank}:</span>
-    ${prLogo(live, "pr-logo")}
-    <div class="pr-id">
-        <h3 class="pr-name">${prName(team.team, live)}</h3>
-        <p class="pr-sub">${sub}</p>
-    </div>
-    <div class="pr-cell pr-cell--move">${prMoveChip(mv)}</div>
-    <div class="pr-cell pr-cell--rec"><span class="pr-k">Rec</span><span class="pr-v">${prEsc(team.record || "—")}</span></div>
-    <div class="pr-cell pr-cell--live"><span class="pr-k">Pts</span><span class="pr-v pr-v--big">${live && live.pts !== null ? live.pts : "—"}</span></div>
-    <div class="pr-cell pr-cell--live pr-hide-sm"><span class="pr-k">L10</span><span class="pr-v">${live && live.l10 ? prEsc(live.l10) : "—"}</span></div>
-    <div class="pr-cell pr-cell--live pr-hide-sm"><span class="pr-k">Strk</span><span class="pr-v pr-strk ${live && live.streak ? "pr-strk--" + live.streakKind : ""}">${live && live.streak ? prEsc(live.streak) : "—"}</span></div>
+<li class="pr-row is-${mv.kind}" style="--i:${i};--pct:${pct.toFixed(3)}">
+    <span class="pr-num"><span class="pr-sr">Rank </span>${rank}</span>
+    <span class="pr-team">${logo}${ident}</span>
+    <span class="pr-c pr-c--move">${prMoveChip(mv)}</span>
+    <span class="pr-c pr-rec">${prEsc(team.record || "—")}</span>
+    <span class="pr-c pr-pts pr-hide-sm">${pts !== null ? pts : "—"}</span>
+    <span class="pr-c pr-l10 pr-hide-md">${live && live.l10 ? prEsc(live.l10) : "—"}</span>
+    <span class="pr-c pr-strk pr-hide-md ${live && live.streak ? "pr-strk--" + live.streakKind : ""}">${live && live.streak ? prEsc(live.streak) : "—"}</span>
+    ${pct ? `<i class="pr-bar" aria-hidden="true"></i>` : ""}
 </li>`;
 }
 
-function prTierHead(tier, from, to, idx) {
-    const range = from === to ? `#${from}` : `#${from}–${to}`;
-    return `
-<div class="pr-tier-head" style="--i:${idx}">
-    <h2 class="bc-title bc-title--sm pr-tier-title">${prEsc(tier.name)}</h2>
-    <span class="pr-tier-range">${range}</span>
+const PR_COLS = `
+<div class="pr-cols" aria-hidden="true">
+    <span>#</span><span>Team</span><span>Move</span><span>Rec</span>
+    <span class="pr-hide-sm">Pts</span><span class="pr-hide-md">L10</span><span class="pr-hide-md">Strk</span>
 </div>`;
-}
 
 function prMovers(data) {
     const items = data.map((t) => ({ t, mv: prMove(t.movement) }));
@@ -224,55 +234,51 @@ function prMovers(data) {
     const steady = items.filter((x) => x.mv.kind === "same");
 
     const short = (x) => (x.t._live && x.t._live.common) || x.t.team;
+    const tile = (cls, label, num, team) => `
+        <div class="pr-mv${cls ? " pr-mv--" + cls : ""}">
+            <span class="pr-mv-num">${num}</span>
+            <span class="pr-mv-text">
+                <span class="stat-label">${label}</span>
+                <span class="pr-mv-team">${team}</span>
+            </span>
+        </div>`;
     const tiles = [];
-    if (ups.length) tiles.push(`
-        <div class="pr-mv pr-mv--up">
-            <span class="stat-label">Biggest climb</span>
-            <span class="stat-num"><span class="pr-mv-arrow" aria-hidden="true">▲</span>${ups[0].mv.n}</span>
-            <span class="pr-mv-team">${prEsc(short(ups[0]))} <em>to #${Number(ups[0].t.rank)}</em></span>
-        </div>`);
-    if (downs.length) tiles.push(`
-        <div class="pr-mv pr-mv--down">
-            <span class="stat-label">Biggest slide</span>
-            <span class="stat-num"><span class="pr-mv-arrow" aria-hidden="true">▼</span>${downs[0].mv.n}</span>
-            <span class="pr-mv-team">${prEsc(short(downs[0]))} <em>to #${Number(downs[0].t.rank)}</em></span>
-        </div>`);
-    if (news.length) tiles.push(`
-        <div class="pr-mv pr-mv--new">
-            <span class="stat-label">New to the 16</span>
-            <span class="stat-num">${news.length}</span>
-            <span class="pr-mv-team">${news.map((x) => prEsc(short(x))).join(", ")}</span>
-        </div>`);
-    tiles.push(`
-        <div class="pr-mv">
-            <span class="stat-label">Holding steady</span>
-            <span class="stat-num">${steady.length}</span>
-            <span class="pr-mv-team">of ${data.length} teams unchanged</span>
-        </div>`);
+    if (ups.length) tiles.push(tile("up", "Biggest climb",
+        `<span class="pr-mv-arrow" aria-hidden="true">▲</span>${ups[0].mv.n}`,
+        `${prEsc(short(ups[0]))} <em>#${Number(ups[0].t.rank)}</em>`));
+    if (downs.length) tiles.push(tile("down", "Biggest slide",
+        `<span class="pr-mv-arrow" aria-hidden="true">▼</span>${downs[0].mv.n}`,
+        `${prEsc(short(downs[0]))} <em>#${Number(downs[0].t.rank)}</em>`));
+    if (news.length) tiles.push(tile("new", "New to the 16", news.length,
+        news.map((x) => prEsc(short(x))).join(", ")));
+    tiles.push(tile("", "Holding steady", steady.length, `<em>of ${data.length}</em>`));
     return tiles.join("");
 }
 
 function prSkeleton() {
-    const pods = [0, 1, 2].map(() => `
-        <li class="pr-pod pr-pod--sk" aria-hidden="true">
-            <span class="sk" style="width:64px;height:64px"></span>
-            <span class="sk" style="width:70%;height:34px;margin-top:22px"></span>
-            <span class="sk" style="width:46%;height:14px;margin-top:14px"></span>
-            <span class="sk" style="width:100%;height:40px;margin-top:26px"></span>
-        </li>`).join("");
-    const rows = Array.from({ length: 6 }, () => `
+    const card = (lead) => `
+        <li class="pr-card${lead ? " pr-card--lead" : ""} pr-card--sk" aria-hidden="true">
+            <div class="pr-card-shot"><span class="sk pr-sk-logo"></span></div>
+            <div class="pr-card-body">
+                <span class="sk" style="width:64px;height:18px"></span>
+                <span class="sk" style="width:${lead ? 46 : 70}%;height:${lead ? 54 : 30}px;margin-top:16px"></span>
+                <span class="sk" style="width:${lead ? 50 : 80}%;height:20px;margin-top:14px"></span>
+            </div>
+        </li>`;
+    const rows = Array.from({ length: 8 }, (_, i) => `
         <li class="pr-row pr-row--sk" aria-hidden="true">
-            <span class="sk" style="width:44px;height:44px"></span>
-            <span class="sk" style="width:36px;height:36px"></span>
-            <span class="pr-id"><span class="sk" style="width:58%;height:18px"></span><span class="sk" style="width:30%;height:11px;margin-top:9px"></span></span>
+            <span class="sk" style="width:14px;height:16px;margin:auto"></span>
+            <span class="pr-team"><span class="sk" style="width:26px;height:26px"></span><span class="sk" style="width:${44 + (i % 3) * 12}%;height:13px"></span></span>
         </li>`).join("");
-    rankingsContainer.innerHTML = `<ol class="pr-podium">${pods}</ol><ol class="pr-list">${rows}</ol>`;
+    rankingsContainer.innerHTML = `
+<ol class="pr-podium">${card(true)}${card(false)}${card(false)}</ol>
+<div class="pr-st">${PR_COLS}<ol class="pr-list">${rows}</ol></div>`;
 }
 
 function prMessage(title, text) {
     rankingsContainer.setAttribute("aria-busy", "false");
     rankingsContainer.innerHTML = `
-<div class="pr-empty surface">
+<div class="pr-empty">
     <p class="pr-empty-title">${prEsc(title)}</p>
     <p class="pr-empty-text">${prEsc(text)}</p>
 </div>`;
@@ -281,7 +287,7 @@ function prMessage(title, text) {
 /* ---------- reveal: quick, early, staggered ---------- */
 
 function prReveal() {
-    const targets = rankingsContainer.querySelectorAll(".pr-pod, .pr-row, .pr-tier-head");
+    const targets = rankingsContainer.querySelectorAll(".pr-card, .pr-st");
     if (prReduced || !("IntersectionObserver" in window)) {
         targets.forEach((el) => el.classList.add("in"));
         return;
@@ -329,48 +335,45 @@ async function loadPowerRankings() {
         : "Latest board";
 
     const standings = await standingsPromise;
-    let matched = 0;
     data.forEach((team) => {
         team._live = prLive(prMatch(standings, team.team));
-        if (team._live) matched++;
     });
 
-    if (matched) {
-        metaRow.insertAdjacentHTML("beforeend",
-            `<span class="pb-chip pb-chip--gold">Live NHL stats</span>`);
-    }
-
-    // podium (#1–3) + tiered list
+    // podium (#1–3) + one tiered board (#4–16)
     const podium = data.filter((t) => Number(t.rank) <= 3);
     const rest = data.filter((t) => !(Number(t.rank) <= 3));
+    const maxPts = Math.max(0, ...data.map((t) => (t._live && t._live.pts) || 0));
 
     let html = "";
     if (podium.length) {
-        html += prTierHead(PR_TIERS[0], 1, Math.max(...podium.map((t) => Number(t.rank) || 1)), 0);
         html += `<ol class="pr-podium">${podium.map(prPodium).join("")}</ol>`;
     }
 
-    let from = 4;
-    PR_TIERS.slice(1).forEach((tier, ti) => {
-        const group = rest.filter((t) => {
-            const r = Number(t.rank);
-            return r >= from && r <= tier.to;
+    if (rest.length) {
+        let board = "";
+        let from = 4;
+        let idx = 0;
+        let groups = 0;
+        PR_TIERS.slice(1).forEach((tier) => {
+            const group = rest.filter((t) => {
+                const r = Number(t.rank);
+                return r >= from && r <= tier.to;
+            });
+            const lo = from;
+            from = tier.to + 1;
+            if (!group.length) return;
+            const hi = Number(group[group.length - 1].rank);
+            const range = lo === hi ? `#${lo}` : `#${lo}–${hi}`;
+            const bubble = tier.to === Infinity;
+            if (groups++) board += `<div class="pr-cut${bubble ? " pr-cut--bubble" : ""}" aria-hidden="true"></div>`;
+            board += `<h3 class="pr-sub${bubble ? " pr-sub--bubble" : ""}">${prEsc(tier.name)}<span>${range}</span></h3>`;
+            board += `<ol class="pr-list" start="${lo}">${group.map((t) => prRow(t, idx++, maxPts)).join("")}</ol>`;
         });
-        const lo = from;
-        from = tier.to + 1;
-        if (!group.length) return;
-        const hi = Number(group[group.length - 1].rank);
-        if (ti > 0) html += `<div class="pr-cut${tier.to === Infinity ? " pr-cut--bubble" : ""}" aria-hidden="true"></div>`;
-        html += prTierHead(tier, lo, hi, 0);
-        if (ti === 0) {
-            html += `
-<div class="pr-cols" aria-hidden="true">
-    <span></span><span></span><span>Team</span><span>Move</span><span>Rec</span>
-    <span class="pr-cols-live">Pts</span><span class="pr-cols-live pr-hide-sm">L10</span><span class="pr-cols-live pr-hide-sm">Strk</span>
-</div>`;
-        }
-        html += `<ol class="pr-list" start="${lo}">${group.map(prRow).join("")}</ol>`;
-    });
+        // anything ranked outside the tiers (e.g. missing rank) still shows
+        const stray = rest.filter((t) => !(Number(t.rank) >= 4));
+        if (stray.length) board += `<ol class="pr-list">${stray.map((t) => prRow(t, idx++, maxPts)).join("")}</ol>`;
+        html += `<section class="pr-st" aria-label="Ranks 4 to 16">${PR_COLS}${board}</section>`;
+    }
 
     rankingsContainer.innerHTML = html;
     rankingsContainer.setAttribute("aria-busy", "false");

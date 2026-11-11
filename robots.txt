@@ -1,0 +1,7 @@
+# PUCK'D — puckd.blog
+# Search engines and AI assistants are welcome to read and cite the site.
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+Sitemap: https://puckd.blog/sitemap.xml

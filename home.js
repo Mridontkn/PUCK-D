@@ -497,10 +497,10 @@
     const darkLogo = url => nhlAsset(url).replace('_light.svg', '_dark.svg');
 
     const LD_GROUPS = {
-        skaters: { feed: 'leaders', label: 'League leader', cats: [['points', 'Points', 'PTS'], ['goals', 'Goals', 'G'], ['assists', 'Assists', 'A']] },
-        defense: { feed: 'defense', label: 'Top defenseman', cats: [['points', 'Points', 'PTS'], ['goals', 'Goals', 'G'], ['assists', 'Assists', 'A']] },
-        rookies: { feed: 'rookies', label: 'Top rookie', cats: [['points', 'Points', 'PTS'], ['goals', 'Goals', 'G'], ['assists', 'Assists', 'A']] },
-        goalies: { feed: 'goalies', label: 'League leader', cats: [['wins', 'Wins', 'W'], ['savePctg', 'Save %', 'SV%'], ['goalsAgainstAverage', 'GAA', 'GAA'], ['shutouts', 'Shutouts', 'SO']] }
+        skaters: { feed: 'leaders', title: 'Scoring Leaders', label: 'League leader', cats: [['points', 'Points', 'PTS'], ['goals', 'Goals', 'G'], ['assists', 'Assists', 'A']] },
+        defense: { feed: 'defense', title: 'Defense Leaders', label: 'Top defenseman', cats: [['points', 'Points', 'PTS'], ['goals', 'Goals', 'G'], ['assists', 'Assists', 'A']] },
+        rookies: { feed: 'rookies', title: 'Rookie Leaders', label: 'Top rookie', cats: [['points', 'Points', 'PTS'], ['goals', 'Goals', 'G'], ['assists', 'Assists', 'A']] },
+        goalies: { feed: 'goalies', title: 'Goalie Leaders', label: 'League leader', cats: [['wins', 'Wins', 'W'], ['savePctg', 'Save %', 'SV%'], ['goalsAgainstAverage', 'GAA', 'GAA'], ['shutouts', 'Shutouts', 'SO']] }
     };
     const LOWER_IS_BETTER = { goalsAgainstAverage: true };
 
@@ -633,6 +633,30 @@
         loadLeaderGroup('skaters');
     }
 
+    // After the next paint (so new content starts hidden), with a timer fallback
+    // for background tabs where animation frames are paused.
+    function afterPaint(fn) {
+        let done = false;
+        const run = () => { if (!done) { done = true; fn(); } };
+        requestAnimationFrame(() => requestAnimationFrame(run));
+        setTimeout(run, 80);
+    }
+
+    let ldTitleTimer = null;
+    function swapLeaderTitle() {
+        const section = $('leaders');
+        const text = document.querySelector('#leadersTitle .ld-title-text');
+        const next = LD_GROUPS[state.ldGroup].title;
+        if (!text || text.textContent === next) return;
+        if (prefersReducedMotion) { text.textContent = next; return; }
+        section.classList.add('ld-title-out');
+        clearTimeout(ldTitleTimer);
+        ldTitleTimer = setTimeout(() => {
+            text.textContent = LD_GROUPS[state.ldGroup].title;
+            afterPaint(() => section.classList.remove('ld-title-out'));
+        }, 300);
+    }
+
     // Fade the contents out, swap, fade back in; the card and panel never move.
     // If a tab's data is still in flight, stay faded until it lands (no "Loading…" flash).
     let ldSwapTimer = null;
@@ -642,7 +666,7 @@
         const grid = $('leadersGrid');
         state.ldWaiting = false;
         renderLeaders();
-        requestAnimationFrame(() => requestAnimationFrame(() => grid.classList.remove('ld-out')));
+        afterPaint(() => grid.classList.remove('ld-out'));
     }
 
     function swapLeaders() {
@@ -657,7 +681,7 @@
         ldSwapTimer = setTimeout(() => {
             if (ldReady()) fadeInLeaders();
             else state.ldWaiting = true;
-        }, 180);
+        }, 300);
     }
 
     document.querySelector('.ld-groups').addEventListener('click', e => {
@@ -670,6 +694,7 @@
             b.setAttribute('aria-selected', b === btn);
         });
         renderLdCats();
+        swapLeaderTitle();
         swapLeaders();
         loadLeaderGroup(state.ldGroup);
     });
