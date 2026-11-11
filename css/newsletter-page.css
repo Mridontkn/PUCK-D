@@ -30,7 +30,7 @@
 /* headline: calm page head */
 .nlp .nlp-dek{
   margin-top:16px; max-width:46ch;
-  color:#CDD2DB;
+  color:var(--text-2);
 }
 .nlp-dek strong{ color:var(--ice); font-weight:700; }
 
@@ -250,7 +250,7 @@
 .nlp-card p{
   margin-top:12px;
   font-family:var(--font-sub); font-weight:500; font-size:15.5px; line-height:1.55;
-  color:#C3C8D2;
+  color:var(--text-2);
 }
 .nlp-card-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:22px; }
 .nlp-card-tags li{

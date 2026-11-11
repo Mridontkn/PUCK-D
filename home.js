@@ -21,6 +21,7 @@
         ld: {},
         ldLoading: {},
         ldError: {},
+        ldWaiting: false,
         ldGroup: 'skaters',
         ldCat: 'points',
         lastVisit: readLastVisit()
@@ -558,7 +559,7 @@
                 <div class="ld-top-shot ld-c"></div>
                 <div class="ld-top-body ld-c"></div>
             </article>
-            <div class="ld-list ld-c"></div>`;
+            <div class="ld-list"></div>`;
         reveal([...grid.children]);
         // after the first entrance, rows no longer slide in on every switch
         setTimeout(() => grid.classList.add('ld-settled'), 900);
@@ -574,7 +575,7 @@
         if (!list.length) {
             shot.innerHTML = '';
             listEl.innerHTML = '';
-            body.innerHTML = `<p class="ld-note">${state.ld[state.ldGroup] ? 'No leaders yet this season.' : (state.ldError[state.ldGroup] ? 'Couldn’t load these leaders right now.' : 'Loading…')}</p>`;
+            body.innerHTML = `<p class="ld-note">${state.ldError[state.ldGroup] ? 'Couldn’t load these leaders right now.' : 'No leaders yet this season.'}</p>`;
             return;
         }
         const group = LD_GROUPS[state.ldGroup];
@@ -612,14 +613,17 @@
                 state.ld[group] = data;
                 if (group === 'skaters' && (data.points || []).length) $('leaders').classList.add('has-data');
                 if (group === state.ldGroup) {
-                    group === 'skaters' && !$('leadersGrid').querySelector('.ld-top') ? renderLeaders() : swapLeaders();
+                    if (!$('leadersGrid').querySelector('.ld-top')) renderLeaders();
+                    else if (state.ldWaiting) fadeInLeaders();
                 }
+                // preload the other tabs so switching is instant
+                if (group === 'skaters') setTimeout(() => ['defense', 'rookies', 'goalies'].forEach(loadLeaderGroup), 600);
             })
             .catch(err => {
                 console.warn('Leaders unavailable', group, err);
                 state.ldLoading[group] = null;
                 state.ldError[group] = true;
-                if (group === state.ldGroup && group !== 'skaters') swapLeaders();
+                if (group === state.ldGroup && state.ldWaiting) fadeInLeaders();
             });
         return state.ldLoading[group];
     }
@@ -629,16 +633,30 @@
         loadLeaderGroup('skaters');
     }
 
-    // Fade the contents out, swap, fade back in; the containers never move.
+    // Fade the contents out, swap, fade back in; the card and panel never move.
+    // If a tab's data is still in flight, stay faded until it lands (no "Loading…" flash).
     let ldSwapTimer = null;
+    const ldReady = () => !!(state.ld[state.ldGroup] || state.ldError[state.ldGroup]);
+
+    function fadeInLeaders() {
+        const grid = $('leadersGrid');
+        state.ldWaiting = false;
+        renderLeaders();
+        requestAnimationFrame(() => requestAnimationFrame(() => grid.classList.remove('ld-out')));
+    }
+
     function swapLeaders() {
         const grid = $('leadersGrid');
-        if (prefersReducedMotion || !grid.querySelector('.ld-top')) { renderLeaders(); return; }
+        if (!grid.querySelector('.ld-top')) { if (ldReady()) renderLeaders(); return; }
+        if (prefersReducedMotion) {
+            if (ldReady()) renderLeaders(); else { state.ldWaiting = true; grid.classList.add('ld-out'); }
+            return;
+        }
         grid.classList.add('ld-out');
         clearTimeout(ldSwapTimer);
         ldSwapTimer = setTimeout(() => {
-            renderLeaders();
-            requestAnimationFrame(() => requestAnimationFrame(() => grid.classList.remove('ld-out')));
+            if (ldReady()) fadeInLeaders();
+            else state.ldWaiting = true;
         }, 180);
     }
 

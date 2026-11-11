@@ -266,7 +266,7 @@
 /* ---------- empty / error ---------- */
 .pr-empty{ padding:44px 36px; margin-top:20px; }
 .pr-empty-title{ font-family:'Anton',sans-serif; font-size:32px; text-transform:uppercase; line-height:1; }
-.pr-empty-text{ font-family:var(--font-sub); color:var(--slate); margin-top:12px; font-size:16px; }
+.pr-empty-text{ font-family:var(--font-sub); color:var(--text-2); margin-top:12px; font-size:16px; }
 
 /* ---------- motion: quick and early ---------- */
 .pr-anim .pr-pod:not(.in),

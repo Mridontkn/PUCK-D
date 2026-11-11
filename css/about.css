@@ -95,14 +95,6 @@
   overflow-wrap:anywhere;
 }
 
-/* captain's "C" */
-.rc-cap{
-  display:inline-grid; place-items:center;
-  width:1.05em; height:1.05em; font-size:.62em;
-  color:#1A1405; background:var(--gold);
-  clip-path:polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-}
-
 /* role chips (press box) */
 .rc-role{ display:flex; flex-wrap:wrap; gap:6px; margin:0; }
 .rc-role .pb-chip{ font-size:10px; padding:6px 10px 6px 8px; background:rgba(255,255,255,.075); }
@@ -114,7 +106,7 @@
 .rc-bio{
   font-family:var(--font-sub); font-weight:500;
   font-size:15px; line-height:1.6;
-  color:#C3C8D2; max-width:46ch; margin:0;
+  color:var(--text-2); max-width:46ch; margin:0;
 }
 
 /* ---------- captain card: full-width feature ---------- */
