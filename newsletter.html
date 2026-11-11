@@ -6,63 +6,132 @@
     <title>Newsletter | PUCK'D</title>
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/newsletter-page.css">
 </head>
 
-<body>
+<body class="nlp">
 
 <div id="ticker"></div>
 <div id="navbar"></div>
 
-<main class="wrap">
+<main>
 
-<section class="newsletter-page">
+<!-- ============ Hero: headline + signup ============ -->
+<section class="nlp-hero" aria-labelledby="nlpTitle">
 
-    <p class="eyebrow">JOIN THE COMMUNITY</p>
+    <div class="wrap nlp-hero-grid">
 
-    <h1>The Inbox Every Hockey Fan Deserves.</h1>
+        <div class="nlp-hero-main">
+            <h1 id="nlpTitle" class="page-head-title nlp-title">The Inbox Every Hockey Fan Deserves.</h1>
 
-    <p class="newsletter-copy">
-        Breaking news. Trades. Prospect updates.
-        Game analysis.
-        No spam. Just hockey.
-    </p>
+            <p class="page-head-dek nlp-dek">
+                Breaking news. Trades. Prospect updates. Game analysis.
+                <strong>No spam. Just hockey.</strong>
+            </p>
 
-    <form id="newsletterForm" class="newsletter-form">
+            <form id="newsletterForm" class="nlp-form">
+                <label class="nlp-label" for="newsletterEmail">Email address</label>
+                <div class="nlp-form-row">
+                    <span class="nlp-field">
+                        <input
+                            type="email"
+                            id="newsletterEmail"
+                            name="email"
+                            placeholder="you@email.com"
+                            autocomplete="email"
+                            inputmode="email"
+                            spellcheck="false"
+                            aria-describedby="nlpFine newsletterMessage"
+                            required>
+                    </span>
+                    <button type="submit" class="btn-skew nlp-submit">Subscribe</button>
+                </div>
+            </form>
 
-        <input
-            type="email"
-            id="newsletterEmail"
-            placeholder="Enter your email..."
-            required>
+            <p id="newsletterMessage" class="nlp-message" role="status" aria-live="polite"></p>
 
-        <button type="submit">
-            Subscribe
-        </button>
+            <ul id="nlpFine" class="nlp-fine">
+                <li>Free</li>
+                <li>No spam</li>
+                <li>Unsubscribe anytime</li>
+            </ul>
+        </div>
 
-    </form>
+        <!-- Fun detail: what an issue looks like -->
+        <aside class="nlp-issue" aria-label="Sample issue preview">
+            <div class="nlp-issue-head">
+                <span class="nlp-issue-logo" aria-hidden="true">P</span>
+                <div class="nlp-issue-from">
+                    <strong>PUCK'D</strong>
+                    <span>to&nbsp;you</span>
+                </div>
+                <span class="pb-chip pb-chip--gold nlp-issue-chip">Sample</span>
+            </div>
+            <p class="nlp-issue-subject">This week on the ice</p>
+            <ol class="nlp-issue-list">
+                <li style="--i:0"><span class="nlp-issue-tag">Trades</span>Deadline moves, graded</li>
+                <li style="--i:1"><span class="nlp-issue-tag">Prospects</span>Risers to watch before the draft</li>
+                <li style="--i:2"><span class="nlp-issue-tag">Cap</span>Who has room this summer</li>
+                <li style="--i:3"><span class="nlp-issue-tag">Analysis</span>What the numbers say about last night</li>
+            </ol>
+            <div class="nlp-issue-foot" aria-hidden="true">
+                <span class="nlp-issue-bar"></span>
+                <span class="nlp-issue-bar nlp-issue-bar--short"></span>
+            </div>
+        </aside>
 
-    <p id="newsletterMessage"></p>
-
+    </div>
 </section>
 
-<section class="newsletter-features">
+<!-- ============ What you get ============ -->
+<section class="nlp-lineup wrap" aria-labelledby="nlpLineupTitle">
 
-    <div class="feature-card">
-        📰
-        <h3>Breaking News</h3>
-        <p>Be the first to know about signings, trades and league news.</p>
+    <div class="nlp-lineup-head">
+        <h2 id="nlpLineupTitle" class="bc-title nlp-reveal">What You Get</h2>
+        <div class="slash-rule nlp-lineup-rule" aria-hidden="true"></div>
     </div>
 
-    <div class="feature-card">
-        📈
-        <h3>Analysis</h3>
-        <p>Salary cap breakdowns, prospect reports and game analysis.</p>
-    </div>
+    <ol class="nlp-cards">
+        <li class="nlp-card nlp-reveal" style="--i:0">
+            <h3>Breaking News</h3>
+            <p>Be the first to know about signings, trades and league news.</p>
+            <ul class="nlp-card-tags" aria-label="Covers">
+                <li>Signings</li><li>Trades</li><li>League</li>
+            </ul>
+        </li>
+        <li class="nlp-card nlp-reveal" style="--i:1">
+            <h3>Analysis</h3>
+            <p>Salary cap breakdowns, prospect reports and game analysis.</p>
+            <ul class="nlp-card-tags" aria-label="Covers">
+                <li>Cap</li><li>Prospects</li><li>Games</li>
+            </ul>
+        </li>
+        <li class="nlp-card nlp-reveal" style="--i:2">
+            <h3>No Spam</h3>
+            <p>Only the stories worth reading. Unsubscribe whenever you want.</p>
+            <ul class="nlp-card-tags" aria-label="Promise">
+                <li>Signal only</li><li>One-click out</li>
+            </ul>
+        </li>
+    </ol>
 
-    <div class="feature-card">
-        🚨
-        <h3>No Spam</h3>
-        <p>Only the stories worth reading. Unsubscribe whenever you want.</p>
+    <!-- Fun detail: the scoreboard of promises -->
+    <div class="nlp-stats nlp-reveal" style="--i:3">
+        <dl class="nlp-stats-list">
+        <div class="nlp-stat">
+            <dt class="stat-label">To subscribe</dt>
+            <dd class="stat-num">$0</dd>
+        </div>
+        <div class="nlp-stat">
+            <dt class="stat-label">Spam, ever</dt>
+            <dd class="stat-num">0</dd>
+        </div>
+        <div class="nlp-stat">
+            <dt class="stat-label">Click to leave</dt>
+            <dd class="stat-num">1</dd>
+        </div>
+        </dl>
+        <a class="btn-skew nlp-stats-cta" href="#newsletterEmail">Sign up free</a>
     </div>
 
 </section>
@@ -78,6 +147,7 @@
 <script src="navbar.js"></script>
 
 <script src="newsletter.js"></script>
+<script src="js/newsletter-page.js"></script>
 
 </body>
 </html>

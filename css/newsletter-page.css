@@ -1,0 +1,331 @@
+/* ============================================================
+   NEWSLETTER PAGE (newsletter.html) — scoped under body.nlp
+   Full-page, elevated take on the homepage "Never Miss A Shift." band:
+   broadcast hero + big signup, Press Box lineup, issue preview, promise strip.
+   ============================================================ */
+
+.nlp main{ display:block; }
+
+/* ---------- Hero band ---------- */
+.nlp .nlp-hero{
+  position:relative;
+  padding:clamp(48px, 6vw, 80px) 0 clamp(56px, 7vw, 88px);
+  background:
+    /* cyan top rule: solid slab that fades out across the band */
+    linear-gradient(90deg, var(--accent) 0 160px, rgba(34,195,232,.35) 160px, rgba(34,195,232,0) 70%) top left / 100% 3px no-repeat,
+    /* faint diagonal stripes (homepage band pattern) */
+    repeating-linear-gradient(-45deg, transparent 0 14px, rgba(34,195,232,.035) 14px 15px),
+    radial-gradient(820px 420px at 8% 0%, rgba(255,255,255,.06), transparent 65%),
+    radial-gradient(700px 520px at 92% 30%, rgba(34,195,232,.07), transparent 70%),
+    linear-gradient(180deg, #1D2530 0%, var(--ink-raised) 55%, var(--ink) 100%);
+}
+
+.nlp-hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(320px, 410px);
+  gap:clamp(40px, 6vw, 88px);
+  align-items:center;
+}
+
+/* headline: calm page head */
+.nlp .nlp-dek{
+  margin-top:16px; max-width:46ch;
+  color:#CDD2DB;
+}
+.nlp-dek strong{ color:var(--ice); font-weight:700; }
+
+/* ---------- Signup form ---------- */
+.nlp-form{ margin-top:clamp(28px, 3.4vw, 40px); max-width:620px; }
+.nlp-form.shake{ animation:shake .45s ease both; }
+
+.nlp-label{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-sub); font-weight:700; font-size:11px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--slate);
+  margin-bottom:10px;
+  transition:color .2s;
+}
+.nlp-label::before{
+  content:''; width:3px; height:10px; background:var(--slate);
+  transform:skewX(var(--skew)); transition:background .2s;
+}
+.nlp-form:focus-within .nlp-label{ color:var(--ice); }
+.nlp-form:focus-within .nlp-label::before{ background:var(--accent); }
+
+.nlp-form-row{ display:flex; align-items:stretch; }
+
+.nlp-field{
+  position:relative; flex:1; min-width:0; display:block;
+  background:rgba(255,255,255,.065);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  transition:background .2s;
+}
+.nlp-field:hover{ background:rgba(255,255,255,.09); }
+.nlp-field:focus-within{ background:rgba(255,255,255,.11); }
+/* focus slab: grows from the left along the bottom edge */
+.nlp-field::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:3px;
+  background:var(--accent);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .3s var(--ease-out);
+}
+.nlp-field:focus-within::after{ transform:scaleX(1); }
+
+.nlp-field input{
+  display:block; width:100%; height:68px;
+  padding:0 22px;
+  background:transparent; border:none; outline:none;
+  color:var(--ice);
+  font-family:var(--font-sub); font-weight:500; font-size:19px;
+  letter-spacing:.01em;
+}
+.nlp-field input::placeholder{ color:rgba(168,174,187,.75); }
+/* the autofill tint would otherwise paint a pale box */
+.nlp-field input:-webkit-autofill{
+  -webkit-text-fill-color:var(--ice);
+  -webkit-box-shadow:0 0 0 100px #2A323D inset;
+  caret-color:var(--ice);
+}
+
+.nlp .nlp-submit{
+  position:relative; z-index:1;
+  margin-left:-10px;               /* slanted edge bites into the field */
+  min-width:184px; height:68px;
+  padding:0 40px;
+  font-size:14px; letter-spacing:.14em;
+  clip-path:polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+.nlp .nlp-submit:focus-visible{
+  outline:none;
+  background:var(--accent);
+  box-shadow:inset 0 -4px 0 var(--ink);
+}
+.nlp .nlp-submit:disabled{ cursor:progress; }
+.nlp .nlp-submit.is-success{ background:var(--accent-2); color:var(--ink); }
+.nlp .nlp-submit .btn-spinner{
+  border-color:rgba(19,25,34,.25); border-top-color:var(--ink);
+}
+
+.nlp #newsletterMessage{
+  margin-top:14px; min-height:1.4em;
+  text-align:left;
+  font-family:var(--font-sub); font-weight:600; font-size:14.5px;
+}
+.nlp #newsletterMessage:empty{ margin-top:0; min-height:0; }
+
+.nlp-fine{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px;
+  margin-top:18px;
+  font-family:var(--font-sub); font-weight:600; font-size:13px;
+  color:var(--slate);
+}
+.nlp-fine li{ display:inline-flex; align-items:center; gap:16px; }
+.nlp-fine li + li::before{
+  content:''; width:1px; height:12px;
+  background:rgba(238,241,245,.28); transform:skewX(var(--skew));
+}
+
+/* ---------- Issue preview (sample email) ---------- */
+.nlp-issue{
+  position:relative; isolation:isolate;
+  padding:22px 24px 24px;
+  transform:rotate(1.2deg);
+  transition:transform .3s var(--ease-out);
+}
+.nlp-issue:hover{ transform:rotate(0deg) translateY(-4px); }
+/* the card face: notched tonal panel */
+.nlp-issue::after{
+  content:''; position:absolute; inset:0; z-index:-1;
+  background:var(--sheen), var(--ink-raised-2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+  clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+}
+/* an older issue peeking out underneath */
+.nlp-issue::before{
+  content:''; position:absolute; inset:0; z-index:-2;
+  background:var(--ink-raised);
+  transform:translate(14px, 14px) rotate(-3deg);
+  clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+  opacity:.85;
+}
+
+.nlp-issue-head{ display:flex; align-items:center; gap:12px; }
+.nlp-issue-logo{
+  flex:0 0 auto; display:grid; place-items:center;
+  width:36px; height:36px;
+  font-family:'Anton',sans-serif; font-size:20px; line-height:1;
+  color:var(--ink); background:var(--ice);
+  clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+.nlp-issue-from{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.nlp-issue-from strong{ font-family:var(--font-sub); font-weight:700; font-size:14px; color:var(--ice); letter-spacing:.02em; }
+.nlp-issue-from span{ font-family:var(--font-sub); font-size:12px; color:var(--slate); }
+.nlp-issue-chip{ margin-left:auto; }
+
+.nlp-issue-subject{
+  margin-top:20px;
+  font-family:'Anton',sans-serif; font-size:30px; line-height:1;
+  text-transform:uppercase; color:var(--ice); letter-spacing:.01em;
+}
+
+.nlp-issue-list{ margin-top:16px; counter-reset:iss; }
+.nlp-issue-list li{
+  counter-increment:iss;
+  position:relative;
+  display:flex; flex-direction:column; gap:4px;
+  padding:12px 12px 12px 44px;
+  font-family:var(--font-sub); font-weight:600; font-size:15px; line-height:1.3;
+  color:var(--ice);
+  animation:rowIn .3s var(--ease-out) backwards;
+  animation-delay:calc(var(--i, 0) * 35ms + 260ms);
+}
+.nlp-issue-list li:nth-child(odd){ background:rgba(255,255,255,.03); }
+.nlp-issue-list li::before{
+  content:counter(iss, decimal-leading-zero);
+  position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  font-family:'Anton',sans-serif; font-size:20px; line-height:1;
+  color:transparent; -webkit-text-stroke:1px rgba(238,241,245,.4);
+}
+.nlp-issue-tag{
+  font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:10px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--gold);
+}
+.nlp-issue-foot{ margin-top:16px; display:grid; gap:8px; padding-left:44px; }
+.nlp-issue-bar{ height:6px; background:rgba(238,241,245,.08); }
+.nlp-issue-bar--short{ width:58%; }
+
+/* ---------- hero entrance ---------- */
+.nlp-hero-main > *,
+.nlp-issue{
+  animation:riseIn .32s var(--ease-out) backwards;
+}
+.nlp-hero-main > :nth-child(2){ animation-delay:35ms; }
+.nlp-hero-main > :nth-child(3){ animation-delay:70ms; }
+.nlp-hero-main > :nth-child(4){ animation-delay:105ms; }
+.nlp-hero-main > :nth-child(5){ animation-delay:105ms; }
+.nlp-issue{ animation-delay:140ms; }
+.nlp-form.shake{ animation:shake .45s ease both; }
+
+/* ---------- What you get ---------- */
+.nlp-lineup{ padding-top:clamp(40px, 5vw, 64px); padding-bottom:clamp(72px, 8vw, 112px); }
+
+.nlp-lineup-head{ display:flex; align-items:center; gap:24px; margin-bottom:28px; }
+.nlp-lineup-head .bc-title{ flex:0 0 auto; }
+.nlp-lineup-rule{ flex:1; }
+
+.nlp-cards{
+  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:14px;
+  counter-reset:nlp;
+}
+.nlp-card{
+  counter-increment:nlp;
+  position:relative;
+  display:flex; flex-direction:column;
+  padding:84px 28px 28px;
+  background:var(--sheen), var(--ink-raised);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  clip-path:polygon(0 0, calc(100% - var(--notch)) 0, 100% var(--notch), 100% 100%, 0 100%);
+  transition:background .2s;
+}
+.nlp-card:hover{ background:var(--sheen), var(--ink-raised-2); }
+.nlp-card::before{
+  content:counter(nlp, decimal-leading-zero);
+  position:absolute; left:24px; top:18px;
+  font-family:'Anton',sans-serif; font-size:60px; line-height:1;
+  color:transparent; -webkit-text-stroke:1px rgba(238,241,245,.3);
+  transition:color .2s, -webkit-text-stroke-color .2s;
+}
+.nlp-card:hover::before{ color:var(--accent); -webkit-text-stroke-color:transparent; }
+/* light beam across the top-right */
+.nlp-card::after{
+  content:''; position:absolute; top:-40%; right:18%; width:56px; height:180%;
+  background:linear-gradient(180deg, rgba(255,255,255,.045), transparent 60%);
+  transform:skewX(var(--skew)); pointer-events:none;
+}
+.nlp-card h3{
+  font-family:'Anton',sans-serif; font-weight:400; font-size:30px; line-height:1;
+  text-transform:uppercase; letter-spacing:.01em; color:var(--ice);
+}
+.nlp-card p{
+  margin-top:12px;
+  font-family:var(--font-sub); font-weight:500; font-size:15.5px; line-height:1.55;
+  color:#C3C8D2;
+}
+.nlp-card-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:22px; }
+.nlp-card-tags li{
+  font-family:var(--font-sub); font-weight:700; font-size:10.5px;
+  letter-spacing:.12em; text-transform:uppercase; line-height:1;
+  color:var(--ice); background:rgba(255,255,255,.07);
+  padding:6px 11px;
+  clip-path:polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+}
+
+/* promise strip */
+.nlp-stats{
+  position:relative; overflow:hidden;
+  margin-top:14px;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  padding:26px 28px;
+  background:
+    repeating-linear-gradient(110deg, transparent 0 7px, rgba(238,241,245,.035) 7px 9px),
+    var(--ink-raised);
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--notch)), calc(100% - var(--notch)) 100%, 0 100%);
+}
+.nlp-stats-list{ display:flex; align-items:center; gap:clamp(24px, 4vw, 56px); }
+.nlp-stat{ display:flex; flex-direction:column-reverse; gap:8px; position:relative; }
+.nlp-stat + .nlp-stat::before{
+  content:''; position:absolute; left:calc(clamp(24px, 4vw, 56px) / -2); top:4px; bottom:4px; width:1px;
+  background:rgba(238,241,245,.18); transform:skewX(var(--skew));
+}
+.nlp-stat dd{ margin:0; }
+.nlp-stat .stat-num{ font-size:clamp(36px, 3.6vw, 50px); }
+.nlp-stat:first-child .stat-num{ color:var(--gold); }
+.nlp-stats-cta{ flex:0 0 auto; }
+
+/* ---------- scroll reveal (only when JS is running) ---------- */
+.nlp-js .nlp-reveal{ opacity:0; }
+.nlp-js .nlp-reveal.in{
+  opacity:1;
+  animation:riseIn .32s var(--ease-out) backwards;
+  animation-delay:calc(var(--i, 0) * 35ms);
+}
+.nlp-js .nlp-reveal.in.bc-title::before{ animation:nlpSlab .45s var(--ease-in-out) both; }
+/* growY alone would drop the slab's skew while it runs */
+@keyframes nlpSlab{ from{ transform:skewX(var(--skew)) scaleY(0); } to{ transform:skewX(var(--skew)) scaleY(1); } }
+
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+  .nlp-hero-grid{ grid-template-columns:1fr; }
+  .nlp-issue{ max-width:460px; transform:rotate(.8deg); margin-right:14px; }
+  .nlp-cards{ grid-template-columns:1fr; }
+  .nlp-card{ padding:26px 24px 24px 104px; min-height:0; }
+  .nlp-card::before{ top:22px; font-size:52px; }
+}
+@media (max-width:720px){
+  .nlp-stats{ flex-direction:column; align-items:stretch; }
+  .nlp-stats-list{ justify-content:space-between; }
+  .nlp-stats-cta{ align-self:flex-start; }
+}
+@media (max-width:560px){
+  .nlp-form-row{ flex-direction:column; gap:10px; }
+  .nlp-field input{ height:60px; font-size:17px; padding:0 18px; }
+  .nlp .nlp-submit{ margin-left:0; height:58px; width:100%; }
+  .nlp-issue{ padding:18px 18px 20px; }
+  .nlp-issue-subject{ font-size:26px; }
+  .nlp-issue-list li{ padding-left:40px; font-size:14.5px; }
+  .nlp-issue-foot{ padding-left:40px; }
+  .nlp-lineup-head{ gap:16px; }
+  .nlp-card{ padding:76px 22px 22px; }
+  .nlp-card::before{ top:16px; left:22px; font-size:48px; }
+  .nlp-stats{ padding:22px 20px; }
+  .nlp-stats-list{ gap:16px; }
+  .nlp-stat + .nlp-stat::before{ left:-8px; }
+  .nlp-stats-cta{ align-self:stretch; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .nlp-js .nlp-reveal{ opacity:1; }
+  .nlp-issue, .nlp-issue:hover{ transform:none; }
+  .nlp-hero-main > *, .nlp-issue, .nlp-issue-list li{ animation:none; }
+}

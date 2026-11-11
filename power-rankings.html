@@ -12,50 +12,50 @@
 
     <link rel="stylesheet" href="styles.css">
 
+    <link rel="stylesheet" href="css/power-rankings.css">
+
 </head>
 
-<body>
+<body class="pr-page">
 
 <div id="ticker"></div>
 
 <div id="navbar"></div>
 
-<section class="hero">
+<header class="page-head pr-hero">
 
     <div class="wrap">
 
-        <div class="hero-eyebrow-row">
+        <h1 class="page-head-title pr-title">PUCK'D Sweet 16</h1>
 
-            <span class="offseason-dot"></span>
-
-            <span class="eyebrow">
-                PUCK'D SWEET 16
-            </span>
-
-        </div>
-
-        <h1>PUCK'D SWEET 16</h1>
-
-        <p class="dek" id="updatedDate">
-            Loading...
+        <p class="page-head-dek pr-dek">
+            The PUCK'D desk ranks the league's best sixteen every week.
+            Arrows track movement against last week's board.
         </p>
 
+        <div class="pr-meta" id="prMeta" aria-live="polite">
+            <span class="pb-chip" id="updatedDate">Loading board</span>
+        </div>
+
     </div>
 
-</section>
+</header>
 
-<section class="content">
+<main class="pr-main">
 
     <div class="wrap">
 
-        <div class="power-rankings"
-             id="powerRankings">
+        <section class="pr-movers" id="prMovers" aria-label="Biggest moves this week" hidden></section>
+
+        <div class="power-rankings pr-board"
+             id="powerRankings"
+             aria-busy="true">
 
         </div>
 
     </div>
 
-</section>
+</main>
 
 <div id="footer"></div>
 

@@ -41,7 +41,6 @@ async function initArticlesPage() {
 function renderArticles(articles) {
 
     const container = document.getElementById("articles-list");
-
     container.innerHTML = "";
 
     if (!articles.length) {
@@ -49,42 +48,37 @@ function renderArticles(articles) {
         return;
     }
 
-    articles.forEach(article => {
+    var first = articles[0];
+    var featuredHtml = '<a class="article-featured" href="article.html?slug='
+        + encodeURIComponent(first.webLink) + '">'
+        + '<div class="article-featured-image">'
+        + '<img src="' + (first.imageUrl || 'https://placehold.co/600x400') + '" alt="' + first.title + '">'
+        + '</div>'
+        + '<div class="article-featured-body">'
+        + '<span class="article-tag">' + first.tag + '</span>'
+        + '<h2>' + first.title + '</h2>'
+        + '<div class="meta">' + first.author + ' · ' + first.date + ' · ' + first.readTime + '</div>'
+        + '<p>' + first.dek + '</p>'
+        + '<span class="read-story">Read Story →</span>'
+        + '</div></a>';
 
-container.innerHTML += `
-<a class="article-link" href="article.html?slug=${article.webLink}">
+    var restHtml = articles.slice(1).map(function(article) {
+        return '<a class="article-link" href="article.html?slug='
+            + encodeURIComponent(article.webLink) + '">'
+            + '<article class="article-row">'
+            + '<div class="thumb">'
+            + '<img src="' + (article.imageUrl || 'https://placehold.co/220x140') + '" alt="' + article.title + '">'
+            + '</div>'
+            + '<div class="article-body">'
+            + '<span class="article-tag">' + article.tag + '</span>'
+            + '<h2>' + article.title + '</h2>'
+            + '<div class="meta">' + article.author + ' · ' + article.date + '</div>'
+            + '<p>' + article.dek + '</p>'
+            + '<span class="read-story">Read Story →</span>'
+            + '</div></article></a>';
+    }).join('');
 
-<article class="article-row">
-
-    <div class="thumb">
-        <img src="${article.imageUrl || "https://placehold.co/220x140"}"
-             alt="${article.title}">
-    </div>
-
-    <div class="article-body">
-
-        <span class="article-tag">${article.tag}</span>
-
-        <h2>${article.title}</h2>
-
-        <div class="meta">
-            ${article.author} • ${article.date}
-        </div>
-
-        <p>${article.dek}</p>
-
-        <span class="read-story">
-            Read Story →
-        </span>
-
-    </div>
-
-</article>
-
-</a>
-`;
-
-    });
+    container.innerHTML = featuredHtml + restHtml;
 
 }
 

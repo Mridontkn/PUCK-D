@@ -3,115 +3,216 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PUCK'D — Article</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-:root{
-  --ink:#0F1115;
-  --ink-raised:#171A1F;
-  --line:#282C33;
-  --ice:#EEF1F5;
-  --slate:#8A90A0;
-  --pink:#E11D5C;
-  --orange:#E8632C;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--ink); color:var(--ice); font-family:'Inter',sans-serif;}
-a{color:inherit; text-decoration:none;}
-.wrap{max-width:880px; margin:0 auto; padding:36px 24px;}
-.brand{display:flex; align-items:center; gap:12px; margin-bottom:24px;}
-.wordmark{font-family:'Anton',sans-serif; font-size:28px; letter-spacing:.02em;}
-.wordmark .apostrophe{color:var(--pink);}
-.article-eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--slate); margin-bottom:18px; display:inline-block;}
-.article-title{font-family:'Anton',sans-serif; font-size:clamp(36px,4vw,56px); line-height:1.02; margin-bottom:18px;}
-.article-dek{font-size:18px; line-height:1.7; color:var(--slate); margin-bottom:24px;}
-.byline{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--slate); margin-bottom:40px;}
-.article-body{font-size:16px; line-height:1.85; color:var(--ice);}
-.article-body p{margin-bottom:24px;}
-.back-link{display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--slate); margin-top:40px;}
-.back-link:hover{color:var(--orange);}
-</style>
+<title>PUCK'D | Article</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="wrap">
-  <a class="back-link" href="index.html">← Back to homepage</a>
-  <div class="brand">
-    <div class="wordmark">PUCK<span class="apostrophe">'</span>D</div>
-  </div>
-  <div class="article-eyebrow" id="articleTag">Loading…</div>
-  <h1 class="article-title" id="articleTitle">Loading article...</h1>
-  <p class="article-dek" id="articleDek"></p>
-  <div class="byline" id="articleByline"></div>
-  <div class="article-body" id="articleBody">
-    <p>This page is loading the article from JSON data.</p>
-  </div>
-</div>
+
+<div class="reading-progress" id="readingProgress"></div>
+
+<div id="ticker"></div>
+<div id="navbar"></div>
+
+<section class="article-hero" id="articleHero">
+    <div class="article-hero-bg" id="articleHeroBg"></div>
+    <div class="article-hero-overlay">
+        <div class="wrap">
+            <a href="articles.html" class="article-hero-back">← All Articles</a>
+            <span class="article-hero-tag" id="articleTag"></span>
+            <h1 class="article-hero-title" id="articleTitle">Loading article...</h1>
+            <p class="article-hero-dek" id="articleDek"></p>
+            <div class="article-hero-meta">
+                <span id="articleAuthor"></span>
+                <span class="meta-sep">·</span>
+                <span id="articleReadTime"></span>
+                <span class="meta-sep">·</span>
+                <span id="articleDate"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<article class="article-content">
+    <div class="article-wrap">
+        <div class="article-prose" id="articleBody">
+            <p>Loading...</p>
+        </div>
+        <div class="article-end">
+            <div class="article-author-card" id="authorCard" style="display:none">
+                <div class="article-author-avatar" id="authorAvatar"></div>
+                <div class="article-author-info">
+                    <div class="article-author-name" id="authorName"></div>
+                    <div class="article-author-role">PUCK'D Staff</div>
+                </div>
+            </div>
+            <div class="article-dinkus">···</div>
+            <div class="article-end-row">
+                <a href="articles.html" class="article-end-link">← All Articles</a>
+                <a id="shareLink" href="#" target="_blank" rel="noopener" class="article-end-link">Share on X →</a>
+            </div>
+        </div>
+    </div>
+</article>
+
+<section class="related-section" id="relatedSection" style="display:none;">
+    <div class="wrap">
+        <div class="tracker-head">
+            <div class="section-title">More from PUCK'D</div>
+        </div>
+        <div class="related-grid" id="relatedGrid"></div>
+    </div>
+</section>
+
+<section class="newsletter">
+    <div class="wrap newsletter-inner">
+        <div>
+            <h2>Never Miss A Shift.</h2>
+            <p>Get instant updates on the latest NHL news and analysis.</p>
+        </div>
+        <div class="newsletter-form-wrapper">
+            <form id="newsletterForm" class="form-row">
+                <input type="email" id="newsletterEmail" placeholder="you@email.com" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <p id="newsletterMessage"></p>
+        </div>
+    </div>
+</section>
+
+<div id="footer"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="supabase.js"></script>
-<script src="api.js"></script>
-<script src="articles.js"></script>
+<script src="script.js"></script>
+<script src="navbar.js"></script>
+<script src="newsletter.js"></script>
+
 <script>
-function escapeHtml(str){
-  const d = document.createElement('div');
-  d.textContent = str == null ? '' : String(str);
-  return d.innerHTML;
-}
-function getQueryParam(name){
-  const params = new URLSearchParams(window.location.search);
-  return params.get(name);
-}
-function formatDate(iso){
-  if(!iso) return '';
-  const d = new Date(iso);
-  return isNaN(d.getTime()) ? String(iso) : d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
-}
-function estimateReadTime(html){
-  const text = (html || '').replace(/<[^>]*>/g, ' ');
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-  const minutes = Math.max(1, Math.round(words / 200));
-  return `${minutes} MIN READ`;
-}
-async function loadArticle(){
-  const slug = getQueryParam('slug');
-  if(!slug){
-    document.getElementById('articleTitle').textContent = 'Article not found';
-    document.getElementById('articleBody').innerHTML = '<p style="color:var(--slate);">No article id was given in the URL.</p>';
-    return;
-  }
-  try{
-const { data: article, error } = await db
-  .from('article')
-  .select('*')
-  .eq('web_link', slug)
-  .single();
+function getQueryParam(n){return new URLSearchParams(window.location.search).get(n)}
 
-    if(error || !article){
-      document.getElementById('articleTitle').textContent = 'Article not found';
-      document.getElementById('articleDek').textContent = 'This article may have been removed or the link is wrong.';
-      document.getElementById('articleByline').textContent = '';
-      document.getElementById('articleBody').innerHTML = '<p style="color:var(--slate);">No article matches this ID.</p>';
-      return;
+function formatFullDate(iso){
+    if(!iso) return '';
+    var d=new Date(iso);
+    if(isNaN(d.getTime())) return String(iso);
+    return d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+}
+
+function articleReadTime(html){
+    var text=(html||'').replace(/<[^>]*>/g,' ');
+    var words=text.trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(1,Math.round(words/200))+' min read';
+}
+
+var _raf=false;
+window.addEventListener('scroll',function(){
+    if(!_raf){
+        requestAnimationFrame(function(){
+            var bar=document.getElementById('readingProgress');
+            var content=document.querySelector('.article-content');
+            if(bar&&content){
+                var rect=content.getBoundingClientRect();
+                var scrolled=Math.max(0,-rect.top);
+                var total=content.offsetHeight-window.innerHeight;
+                var pct=total<=0?1:Math.min(1,Math.max(0,scrolled/total));
+                bar.style.transform='scaleX('+pct+')';
+            }
+            _raf=false;
+        });
+        _raf=true;
     }
+},{passive:true});
 
-    document.getElementById('articleTag').textContent = article.category || 'News';
-    document.getElementById('articleTitle').textContent = article.title;
-    document.getElementById('articleDek').textContent = article.summary || '';
-    document.getElementById('articleByline').textContent =
-      `${article.author || ''} · ${estimateReadTime(article.context)} · ${formatDate(article.created_at)}`;
+async function loadArticle(){
+    var slug=getQueryParam('slug');
+    if(!slug){
+        document.getElementById('articleTitle').textContent='Article not found';
+        document.getElementById('articleBody').innerHTML='<p>No article slug was provided.</p>';
+        return;
+    }
+    try{
+        var result=await db.from('article').select('*').eq('web_link',slug).single();
+        var article=result.data;
+        if(result.error||!article){
+            document.getElementById('articleTitle').textContent='Article not found';
+            document.getElementById('articleDek').textContent='This article may have been removed or the URL is incorrect.';
+            document.getElementById('articleBody').innerHTML='';
+            return;
+        }
 
-    const heroImg = article.image_url
-      ? `<img src="${escapeHtml(article.image_url)}" alt="${escapeHtml(article.title)}" style="width:100%; border-radius:8px; margin-bottom:24px;">`
-      : '';
+        document.title=article.title+' | PUCK\'D';
 
-    document.getElementById('articleBody').innerHTML = heroImg + (article.context || '');
-  }catch(err){
-    console.error(err);
-    document.getElementById('articleTitle').textContent = 'Unable to load article';
-    document.getElementById('articleDek').textContent = 'There was a problem fetching article data.';
-    document.getElementById('articleBody').innerHTML = '<p style="color:var(--slate);">Check your connection and try again.</p>';
-  }
+        var heroBg=document.getElementById('articleHeroBg');
+        var heroSection=document.getElementById('articleHero');
+        if(article.image_url){
+            heroBg.style.backgroundImage='url('+article.image_url+')';
+            heroSection.classList.add('has-image');
+        }
+
+        document.getElementById('articleTag').textContent=article.category||'News';
+        document.getElementById('articleTitle').textContent=article.title;
+
+        var dekEl=document.getElementById('articleDek');
+        if(article.summary){dekEl.textContent=article.summary}
+        else{dekEl.style.display='none'}
+
+        document.getElementById('articleAuthor').textContent=article.author||'';
+        document.getElementById('articleReadTime').textContent=articleReadTime(article.context);
+        document.getElementById('articleDate').textContent=formatFullDate(article.created_at);
+
+        document.getElementById('articleBody').innerHTML=article.context||'';
+
+        document.getElementById('articleTag').dataset.cat=(article.category||'news').toLowerCase();
+
+        var authorCard=document.getElementById('authorCard');
+        if(article.author){
+            document.getElementById('authorAvatar').textContent=article.author.charAt(0).toUpperCase();
+            document.getElementById('authorName').textContent=article.author;
+            authorCard.style.display='';
+        }
+
+        var shareUrl=encodeURIComponent(window.location.href);
+        var shareText=encodeURIComponent(article.title+' | PUCK\'D');
+        document.getElementById('shareLink').href='https://x.com/intent/tweet?url='+shareUrl+'&text='+shareText;
+
+        loadRelated(article.category,slug);
+    }catch(err){
+        console.error(err);
+        document.getElementById('articleTitle').textContent='Unable to load article';
+        document.getElementById('articleBody').innerHTML='<p>Check your connection and try again.</p>';
+    }
 }
+
+async function loadRelated(category,currentSlug){
+    try{
+        var result=await db
+            .from('article')
+            .select('*')
+            .neq('web_link',currentSlug)
+            .order('created_at',{ascending:false})
+            .limit(3);
+
+        if(result.error||!result.data||!result.data.length) return;
+
+        var grid=document.getElementById('relatedGrid');
+        grid.innerHTML=result.data.map(function(a){
+            var img=a.image_url
+                ? '<img class="related-card-image" src="'+escapeHtml(a.image_url)+'" alt="'+escapeHtml(a.title)+'">'
+                : '<div class="related-card-image related-card-no-image"></div>';
+            return '<a class="related-card" href="article.html?slug='+encodeURIComponent(a.web_link)+'">'
+                +img
+                +'<div class="related-card-body">'
+                +'<span class="article-tag">'+escapeHtml(a.category||'News')+'</span>'
+                +'<h3 class="related-card-title">'+escapeHtml(a.title)+'</h3>'
+                +'<div class="related-card-meta">'+escapeHtml(a.author||'')+' · '+formatFullDate(a.created_at)+'</div>'
+                +'</div></a>';
+        }).join('');
+
+        document.getElementById('relatedSection').style.display='';
+    }catch(err){
+        console.error('Failed to load related articles',err);
+    }
+}
+
 loadArticle();
 </script>
 </body>

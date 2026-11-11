@@ -4,47 +4,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUCK'D — Hockey Lives Here</title>
+    <title>PUCK'D | Hockey Lives Here</title>
+    <meta name="description" content="Independent NHL coverage. Signings, cap analysis, standings, and the stories the transaction log leaves out.">
+    <meta name="theme-color" content="#0F1115">
+    <link rel="canonical" href="https://puckd.blog/">
 
+    <!-- Share previews (X, Discord, iMessage, Slack) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PUCK'D">
+    <meta property="og:title" content="PUCK'D | Hockey Lives Here">
+    <meta property="og:description" content="Independent NHL coverage. Signings, cap analysis, standings, and the stories the transaction log leaves out.">
+    <meta property="og:url" content="https://puckd.blog/">
+    <meta property="og:image" content="https://puckd.blog/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@puckd_">
+
+    <link rel="preconnect" href="https://otnnyxtttsiypjskrshw.supabase.co" crossorigin>
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="variant-a home">
+<script>
+/* Pick the layout before first paint: ?variant=a|b, else the saved choice (default Broadcast). */
+(function(){
+    var v = new URLSearchParams(location.search).get('variant');
+    try { v = v || localStorage.getItem('puckd-layout'); } catch(e) {}
+    if (v === 'a' || v === 'b') document.body.className = 'variant-' + v + ' home';
+})();
+</script>
 
     <!-- Shared Components -->
     <div id="ticker"></div>
 
     <div id="navbar"></div>
 
+    <!-- Tonight's games (hidden when there are none) -->
+    <section class="scores-strip" id="scoresStrip" hidden aria-label="NHL scores">
+        <div class="wrap scores-inner">
+            <span class="scores-label" id="scoresLabel">Scores</span>
+            <div class="scores-track" id="scoresTrack"></div>
+        </div>
+    </section>
+
     <!-- Page Content -->
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="wrap hero-grid">
 
-            <div>
+            <div class="hero-copy-col">
 
-                <div class="hero-eyebrow-row">
+                <div class="hero-eyebrow-row anim-item" style="--i:0">
                     <span class="offseason-dot"></span>
-
-                    <span class="eyebrow" id="heroEyebrow">
-                        Offseason — Free Agency Week 3
-                    </span>
-
+                    <span class="eyebrow" id="heroEyebrow"><span class="sk sk-eyebrow"></span></span>
                 </div>
 
-                <h1 id="heroTitle">Loading headline…</h1>
+                <h1 id="heroTitle" class="anim-item" style="--i:1">
+                    <span class="sk sk-title"></span><span class="sk sk-title short"></span>
+                </h1>
 
-                <p class="dek" id="heroDek"></p>
+                <p class="dek anim-item" id="heroDek" style="--i:2">
+                    <span class="sk sk-text"></span><span class="sk sk-text short"></span>
+                </p>
 
-                <div class="byline" id="heroByline"></div>
+                <div class="byline anim-item" id="heroByline" style="--i:3"></div>
+
+                <a class="hero-cta anim-item" id="heroCta" href="#" style="--i:4" hidden>
+                    Read the story <span aria-hidden="true">→</span>
+                </a>
 
             </div>
 
-            <div class="hero-art">
-
-                <a id="heroLink" href="#">
-                    <img id="heroImage" src="" alt="">
+            <div class="hero-art" id="heroArt">
+                <a id="heroLink" href="#" tabindex="-1" aria-hidden="true">
+                    <img id="heroImage" src="" alt="" width="1600" height="900" fetchpriority="high" decoding="async">
                 </a>
-
             </div>
 
         </div>
@@ -56,14 +88,22 @@
 
             <div>
 
-                <div class="tracker-head">
-                    <div class="section-title">Latest Stories</div>
-                    <span class="see-all">
-                        Articles written by PUCK'D Writers.
-                    </span>
+                <div class="tracker-head stories-head">
+                    <h2 class="section-title bc-title">Latest Stories</h2>
+                    <div class="cat-tabs" id="catTabs" role="tablist" aria-label="Filter stories by category"></div>
                 </div>
 
-                <div class="article-list" id="articleList"></div>
+                <div class="article-list" id="articleList" aria-live="polite">
+                    <div class="article-row skeleton"><div class="thumb sk"></div><div class="article-body"><span class="sk sk-tag"></span><span class="sk sk-h"></span><span class="sk sk-text"></span><span class="sk sk-text short"></span></div></div>
+                    <div class="article-row skeleton"><div class="thumb sk"></div><div class="article-body"><span class="sk sk-tag"></span><span class="sk sk-h"></span><span class="sk sk-text"></span><span class="sk sk-text short"></span></div></div>
+                    <div class="article-row skeleton"><div class="thumb sk"></div><div class="article-body"><span class="sk sk-tag"></span><span class="sk sk-h"></span><span class="sk sk-text"></span><span class="sk sk-text short"></span></div></div>
+                </div>
+
+                <div class="load-more-row">
+                    <button class="load-more" id="loadMore" type="button" hidden>
+                        More stories <span class="load-more-count" id="loadMoreCount"></span>
+                    </button>
+                </div>
 
             </div>
 
@@ -71,13 +111,17 @@
 
                 <div class="sidebar-block">
 
-                    <div class="tracker-head" style="margin-bottom:0;">
-                        <div class="section-title" style="font-size:17px;">
-                            Recent News
-                        </div>
+                    <div class="tracker-head">
+                        <h2 class="section-title bc-title bc-title--sm">Recent News</h2>
                     </div>
 
-                    <div class="news-list" id="recentNewsList"></div>
+                    <div class="news-list pb-list" id="recentNewsList">
+                        <div class="news-item"><span class="sk sk-eyebrow"></span><span class="sk sk-text"></span></div>
+                        <div class="news-item"><span class="sk sk-eyebrow"></span><span class="sk sk-text"></span></div>
+                        <div class="news-item"><span class="sk sk-eyebrow"></span><span class="sk sk-text"></span></div>
+                    </div>
+
+                    <button class="news-toggle" id="newsToggle" type="button" hidden aria-expanded="false"></button>
 
                 </div>
 
@@ -87,13 +131,64 @@
 
     </section>
 
+    <!-- Standings (Broadcast + Press Box): divisions or wild card race -->
+    <section class="standings" id="standings" aria-labelledby="standingsTitle">
+        <div class="wrap">
+            <div class="standings-head">
+                <h2 class="bc-title bc-title--lg" id="standingsTitle">Standings</h2>
+                <div class="standings-tools">
+                    <div class="st-legend" aria-hidden="true">
+                        <span class="lg-seed">Division seed</span>
+                        <span class="lg-wc">Wild card</span>
+                        <span class="lg-out">Outside</span>
+                    </div>
+                    <div class="st-views" role="tablist" aria-label="Standings view">
+                        <button type="button" class="st-view active" data-view="div" role="tab" aria-selected="true">Divisions</button>
+                        <button type="button" class="st-view" data-view="wc" role="tab" aria-selected="false">Wild Card</button>
+                    </div>
+                </div>
+            </div>
+            <div class="st-grid" id="standingsGrid"></div>
+        </div>
+    </section>
+
+<!-- Scoring leaders (NHL skater leaders) -->
+    <section class="leaders" id="leaders" aria-labelledby="leadersTitle">
+        <div class="wrap">
+            <div class="leaders-head">
+                <h2 class="bc-title" id="leadersTitle">Scoring Leaders</h2>
+                <div class="st-views ld-groups" role="tablist" aria-label="Leader group">
+                    <button type="button" class="st-view active" data-group="skaters" role="tab" aria-selected="true">Skaters</button>
+                    <button type="button" class="st-view" data-group="defense" role="tab" aria-selected="false">Defense</button>
+                    <button type="button" class="st-view" data-group="rookies" role="tab" aria-selected="false">Rookies</button>
+                    <button type="button" class="st-view" data-group="goalies" role="tab" aria-selected="false">Goalies</button>
+                </div>
+            </div>
+            <div class="ld-cats" id="ldCats" role="tablist" aria-label="Stat"></div>
+            <div class="ld-grid" id="leadersGrid"></div>
+        </div>
+    </section>
+
+<!-- Lamp Lighters: every goal from the latest finished slate -->
+    <section class="night" id="night" aria-labelledby="nightTitle">
+        <div class="wrap">
+            <div class="night-head">
+                <h2 class="bc-title" id="nightTitle">Lamp Lighters</h2>
+                <span class="pb-chip" id="nightDate"></span>
+            </div>
+            <div class="night-sum" id="nightSummary"></div>
+            <div class="night-stars" id="nightStars"></div>
+            <div class="night-games" id="nightGames"></div>
+        </div>
+    </section>
+
 <section class="newsletter">
 
     <div class="wrap newsletter-inner">
 
         <div>
 
-            <h2>The NHL, Explained Daily.</h2>
+            <h2>Never Miss A Shift.</h2>
 
             <p>
                 Get instant updates on the latest NHL news and analysis.
@@ -109,6 +204,7 @@
                     type="email"
                     id="newsletterEmail"
                     placeholder="you@email.com"
+                    aria-label="Email address"
                     required>
 
                 <button type="submit">
@@ -117,7 +213,7 @@
 
             </form>
 
-            <p id="newsletterMessage"></p>
+            <p id="newsletterMessage" role="status"></p>
 
         </div>
 
@@ -126,6 +222,12 @@
 </section>
     <!-- Shared Footer -->
     <div id="footer"></div>
+
+    <!-- Layout switcher -->
+    <div class="variant-selector" role="group" aria-label="Homepage layout">
+        <button class="variant-btn" data-variant="a">Broadcast</button>
+        <button class="variant-btn" data-variant="b">Press Box</button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -137,7 +239,7 @@
 
     <script src="newsletter.js"></script>
 
-    <script src="articles.js"></script>
+    <script src="home.js"></script>
 
 </body>
 

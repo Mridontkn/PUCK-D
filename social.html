@@ -4,48 +4,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUCK'D Social Feed</title>
+    <title>PUCK'D Feed · Hockey, As It Happens</title>
+    <meta name="description" content="The running wire from PUCK'D and IceMetrix: signings, lineups and hot takes, straight from the feed.">
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/social.css">
 </head>
 
-<body>
+<body class="feed-body">
 
     <!-- Shared Components -->
     <div id="ticker"></div>
 
     <div id="navbar"></div>
 
-    <main class="social-page">
+    <main class="social-page feed-page">
 
-        <div class="wrap">
+        <section class="page-head feed-hero" aria-labelledby="feedTitle">
 
-            <section class="articles-hero">
+            <div class="wrap feed-hero-grid">
+                <div class="feed-hero-copy">
+                    <h1 class="page-head-title" id="feedTitle">Hockey, As It Happens.</h1>
 
-                <p class="eyebrow">LIVE UPDATES</p>
+                    <p class="page-head-dek">
+                        Signings, lineups and hot takes, straight from the feed.
+                        The running wire from two accounts that never log off.
+                    </p>
 
-                <h1>Hockey, As It Happens.</h1>
+                    <div class="collab-lockup" aria-label="Made in collaboration between PUCK'D and IceMetrix">
+                        <span class="collab-logo collab-logo--puckd"><img src="logo.png" alt="" width="40" height="40"></span>
+                        <span class="collab-x" aria-hidden="true">&times;</span>
+                        <span class="collab-logo collab-logo--icx"><img src="IceMetrix.jpg" alt="" width="40" height="40"></span>
+                        <span class="collab-text">
+                            <strong>PUCK'D <span aria-hidden="true">&times;</span><span class="sr-only">and</span> IceMetrix</strong>
+                            <span>Made in collaboration</span>
+                        </span>
+                    </div>
+                </div>
 
-                <p class="page-dek">
-                    This page was made in collaboration between
-                    <strong>PUCK'D</strong> and <strong>IceMetrix</strong>.
-                </p>
-
-            </section>
-
-            <section class="tag-bar">
-
-                <button class="tag active" data-filter="All">All</button>
-
-                <button class="tag" data-filter="PUCK'D Media">PUCK'D Media</button>
-
-                <button class="tag" data-filter="IceMetrix">IceMetrix</button>
-
-            </section>
-
-            <div id="socialFeed">
-                Loading...
+                <dl class="feed-stats" id="feedStats" aria-live="polite">
+                    <div class="feed-stat">
+                        <dt class="stat-label">Posts</dt>
+                        <dd class="stat-num" id="statPosts"><span class="sk sk-num"></span></dd>
+                    </div>
+                    <div class="feed-stat">
+                        <dt class="stat-label">Last post</dt>
+                        <dd class="stat-num" id="statLast"><span class="sk sk-num"></span></dd>
+                    </div>
+                </dl>
             </div>
+        </section>
+
+        <div class="wrap feed-layout">
+
+            <div class="feed-main">
+
+                <div class="feed-toolbar">
+                    <div class="feed-tabs" role="group" aria-label="Filter posts by account">
+                        <button class="feed-tab active" type="button" data-filter="All" aria-pressed="true">
+                            All <span class="feed-tab-count" data-count="All"></span>
+                        </button>
+                        <button class="feed-tab" type="button" data-filter="PUCK'D Media" aria-pressed="false">
+                            PUCK'D Media <span class="feed-tab-count" data-count="PUCK'D Media"></span>
+                        </button>
+                        <button class="feed-tab" type="button" data-filter="IceMetrix" aria-pressed="false">
+                            IceMetrix <span class="feed-tab-count" data-count="IceMetrix"></span>
+                        </button>
+                    </div>
+                    <p class="feed-new-note" id="feedNewNote" hidden></p>
+                </div>
+
+                <p class="sr-only" id="feedAnnounce" aria-live="polite"></p>
+
+                <div id="socialFeed" class="timeline" aria-busy="true">
+                    <!-- skeleton timeline, replaced by social.js -->
+                    <div class="tl-day" aria-hidden="true">
+                        <div class="tl-day-head"><span class="sk sk-day"></span></div>
+                        <div class="tl-post tl-post--sk">
+                            <span class="tl-marker"></span>
+                            <div class="post surface">
+                                <div class="post-head">
+                                    <span class="sk sk-avatar"></span>
+                                    <div class="sk-lines"><span class="sk sk-text short"></span><span class="sk sk-text sk-handle"></span></div>
+                                </div>
+                                <div class="post-body">
+                                    <span class="sk sk-text"></span><span class="sk sk-text"></span><span class="sk sk-text short"></span>
+                                    <span class="sk sk-media"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tl-post tl-post--sk">
+                            <span class="tl-marker"></span>
+                            <div class="post surface">
+                                <div class="post-head">
+                                    <span class="sk sk-avatar"></span>
+                                    <div class="sk-lines"><span class="sk sk-text short"></span><span class="sk sk-text sk-handle"></span></div>
+                                </div>
+                                <div class="post-body">
+                                    <span class="sk sk-text"></span><span class="sk sk-text short"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="sr-only">Loading posts…</span>
+                </div>
+
+            </div>
+
+            <aside class="feed-side" aria-labelledby="accountsTitle">
+                <div class="side-panel surface">
+                    <h2 class="bc-title bc-title--sm" id="accountsTitle">On the Wire</h2>
+                    <ul class="acct-list" id="acctList">
+                        <li class="acct acct--puckd">
+                            <span class="acct-logo"><img src="logo.png" alt="" width="44" height="44"></span>
+                            <div class="acct-info">
+                                <span class="acct-name">PUCK'D Media</span>
+                                <span class="acct-handle">@PUCKD_</span>
+                            </div>
+                            <span class="acct-count" data-acct-count="PUCK'D Media"></span>
+                        </li>
+                        <li class="acct acct--icx">
+                            <span class="acct-logo"><img src="IceMetrix.jpg" alt="" width="44" height="44"></span>
+                            <div class="acct-info">
+                                <span class="acct-name">IceMetrix</span>
+                                <span class="acct-handle">@IceMetrix</span>
+                            </div>
+                            <span class="acct-count" data-acct-count="IceMetrix"></span>
+                        </li>
+                    </ul>
+                    <div class="slash-rule" aria-hidden="true"></div>
+                    <div class="side-follow">
+                        <a class="btn-skew btn-skew--ghost" href="https://x.com/PUCKD_" target="_blank" rel="noopener noreferrer">Follow PUCK'D <span aria-hidden="true">↗</span></a>
+                        <a class="btn-skew btn-skew--ghost" href="https://x.com/IceMetrix" target="_blank" rel="noopener noreferrer">Follow IceMetrix <span aria-hidden="true">↗</span></a>
+                    </div>
+                </div>
+            </aside>
 
         </div>
 

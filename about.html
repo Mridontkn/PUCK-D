@@ -6,6 +6,7 @@
     <title>Our Team | PUCK'D</title>
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/about.css">
 </head>
 
 <body>
@@ -15,108 +16,136 @@
 
     <div id="navbar"></div>
 
-    <main class="wrap" style="padding:64px 0;">
+    <main class="about-page">
 
-        <div class="about-intro">
+        <section class="page-head about-hero" aria-labelledby="about-title">
+            <div class="wrap">
 
-            <div class="eyebrow">OUR TEAM</div>
+                <h1 class="page-head-title" id="about-title">Meet the People Behind PUCK'D</h1>
 
-            <h1 class="page-title">
-                Meet the People Behind PUCK'D
-            </h1>
-
-            <p class="page-dek">
-                We're a group of hockey fans dedicated to bringing fast,
-                reliable, and engaging coverage from around the hockey world.
-                Whether it's breaking news, trade rumours, prospect updates,
-                or in-depth features, we're here because we love the game.
-            </p>
-
-        </div>
-
-        <section class="team-grid">
-
-            <article class="team-card">
-                <h2 class="team-name">Emaad Zaheer</h2>
-                <h4 class="team-role">Founder and Writer</h4>
-                <p class="team-bio">
-                    Founded PUCK'D with a group of passionate hockey fans to write about the game we love. 
-
+                <p class="page-head-dek">
+                    We're a group of hockey fans dedicated to bringing fast,
+                    reliable, and engaging coverage from around the hockey world.
+                    Whether it's breaking news, trade rumours, prospect updates,
+                    or in-depth features, we're here because we love the game.
                 </p>
-            </article>
 
-            <article class="team-card">
-                <h2 class="team-name">R3vampDev</h2>
-                <h4 class="team-role">NHL Writer and Graphics Coordinator</h4>
-                <p class="team-bio">
-Hey, im R3vampDev! An Alberta based writer looking to provide brand new takes to hockey!
-                </p>
-            </article>
+                <dl class="about-stats">
+                    <div class="about-stat"><dt class="stat-label">On the roster</dt><dd class="stat-num" data-count="all">10</dd></div>
+                    <div class="about-stat"><dt class="stat-label">Writers</dt><dd class="stat-num" data-count="writer">8</dd></div>
+                    <div class="about-stat"><dt class="stat-label">Social</dt><dd class="stat-num" data-count="social">5</dd></div>
+                    <div class="about-stat"><dt class="stat-label">Graphics</dt><dd class="stat-num" data-count="graphics">2</dd></div>
+                </dl>
 
-            <article class="team-card">
-                <h2 class="team-name">Ismail</h2>
-                <h4 class="team-role">NHL Writer and Social Media Manager</h4>
-                <p class="team-bio">
-Just a guy who’s watched hockey his whole life. I grew up loving the game, and now I spend my time writing about the NHL. 
-                </p>
-            </article>
+            </div>
+        </section>
 
-            <article class="team-card">
-                <h2 class="team-name">Mike</h2>
-                <h4 class="team-role">Editor and Pitcher</h4>
-                <p class="team-bio">
-I’m from Milwaukee and Have been watching Hockey since I can remember, I mainly help pitch articles but help with most things Puck’d
-                </p>
-            </article>
+        <section class="lineup" aria-labelledby="lineup-title">
+            <div class="wrap">
 
-            <article class="team-card">
-                <h2 class="team-name">Ty</h2>
-                <h4 class="team-role">NHL Writer</h4>
-                <p class="team-bio">
+                <div class="lineup-head">
+                    <h2 class="bc-title" id="lineup-title">The Lineup</h2>
+                    <div class="lineup-filter" role="group" aria-label="Highlight by role">
+                        <button type="button" class="lf-btn active" data-filter="all" aria-pressed="true">All</button>
+                        <button type="button" class="lf-btn" data-filter="writer" aria-pressed="false">Writers</button>
+                        <button type="button" class="lf-btn" data-filter="social" aria-pressed="false">Social</button>
+                        <button type="button" class="lf-btn" data-filter="graphics" aria-pressed="false">Graphics</button>
+                    </div>
+                </div>
 
-I’m from California and grew up loving the game of hockey, and I’m excited to bring more NHL news and articles to you!                </p>
-            </article>
-            <article class="team-card">
-                <h2 class="team-name">Matteo</h2>
-                <h4 class="team-role">NHL Writer and Graphics Coordinator</h4>
-                <p class="team-bio">
-                    Hi, I'm Matteo. I love hockey and I love writing about it. I hope you enjoy my work!
-                </p>
-            </article>
+                <div class="roster">
+                    <article class="roster-card roster-card--captain" data-tags="writer founder" style="--i:0">
+                        <span class="rc-mono" aria-hidden="true">EZ</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">Emaad Zaheer</span><span class="rc-cap" aria-hidden="true" title="Captain">C</span></h3>
+                            <p class="rc-role"><span class="pb-chip pb-chip--gold">Founder</span><span class="rc-and"> and </span><span class="pb-chip">Writer</span></p>
+                            <p class="rc-bio">Founded PUCK'D with a group of passionate hockey fans to write about the game we love.</p>
+                        </div>
+                    </article>
 
-                        <article class="team-card">
-                <h2 class="team-name">NYR Louie</h2>
-                <h4 class="team-role">NHL Writer and Social Media Engagement</h4>
-                <p class="team-bio">
-                    Hi, I'm NYR Louie. I love hockey and I love writing about it. I hope you enjoy my work!
-                </p>
-            </article>
+                    <article class="roster-card" data-tags="writer graphics" style="--i:1">
+                        <span class="rc-mono" aria-hidden="true">R3</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">R3vampDev</span></h3>
+                            <p class="rc-role"><span class="pb-chip">NHL Writer</span><span class="rc-and"> and </span><span class="pb-chip pb-chip--gold">Graphics Coordinator</span></p>
+                            <p class="rc-bio">Hey, im R3vampDev! An Alberta based writer looking to provide brand new takes to hockey!</p>
+                        </div>
+                    </article>
 
-                                    <article class="team-card">
-                <h2 class="team-name">Springer4MVP</h2>
-                <h4 class="team-role">Social Media Engagement</h4>
-                <p class="team-bio">
-                    Hi, I'm Springer4MVP. I love hockey and I love writing about it. I hope you enjoy my work!
-                </p>
-            </article>
+                    <article class="roster-card" data-tags="writer social" style="--i:2">
+                        <span class="rc-mono" aria-hidden="true">IS</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">Ismail</span></h3>
+                            <p class="rc-role"><span class="pb-chip">NHL Writer</span><span class="rc-and"> and </span><span class="pb-chip pb-chip--gold">Social Media Manager</span></p>
+                            <p class="rc-bio">Just a guy who’s watched hockey his whole life. I grew up loving the game, and now I spend my time writing about the NHL.</p>
+                        </div>
+                    </article>
 
-                        <article class="team-card">
-                <h2 class="team-name">Kreider4Hart</h2>
-                <h4 class="team-role">NHL Writer and Social Media Engagement Officer</h4>
-                <p class="team-bio">
-Hey it’s Kreider4Hart! Grew up watching hockey and could never take my eye off it. Excited for what’s ahead!
-                </p>
-            </article>
+                    <article class="roster-card" data-tags="editorial" style="--i:3">
+                        <span class="rc-mono" aria-hidden="true">MI</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">Mike</span></h3>
+                            <p class="rc-role"><span class="pb-chip pb-chip--gold">Editor</span><span class="rc-and"> and </span><span class="pb-chip pb-chip--gold">Pitcher</span></p>
+                            <p class="rc-bio">I’m from Milwaukee and Have been watching Hockey since I can remember, I mainly help pitch articles but help with most things Puck’d</p>
+                        </div>
+                    </article>
 
-                                    <article class="team-card">
-                <h2 class="team-name">Jayden</h2>
-                <h4 class="team-role">NHL Writer and Social Media Engagement</h4>
-                <p class="team-bio">
-                    Hi, I'm Jayden. I love hockey and I love writing about it. I hope you enjoy my work!
-                </p>
-            </article>
+                    <article class="roster-card" data-tags="writer" style="--i:4">
+                        <span class="rc-mono" aria-hidden="true">TY</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">Ty</span></h3>
+                            <p class="rc-role"><span class="pb-chip">NHL Writer</span></p>
+                            <p class="rc-bio">I’m from California and grew up loving the game of hockey, and I’m excited to bring more NHL news and articles to you!</p>
+                        </div>
+                    </article>
 
+                    <article class="roster-card" data-tags="writer graphics" style="--i:5">
+                        <span class="rc-mono" aria-hidden="true">MA</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">Matteo</span></h3>
+                            <p class="rc-role"><span class="pb-chip">NHL Writer</span><span class="rc-and"> and </span><span class="pb-chip pb-chip--gold">Graphics Coordinator</span></p>
+                            <p class="rc-bio">Hi, I'm Matteo. I love hockey and I love writing about it. I hope you enjoy my work!</p>
+                        </div>
+                    </article>
 
+                    <article class="roster-card" data-tags="writer social" style="--i:6">
+                        <span class="rc-mono" aria-hidden="true">NL</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">NYR Louie</span></h3>
+                            <p class="rc-role"><span class="pb-chip">NHL Writer</span><span class="rc-and"> and </span><span class="pb-chip pb-chip--gold">Social Media Engagement</span></p>
+                            <p class="rc-bio">Hi, I'm NYR Louie. I love hockey and I love writing about it. I hope you enjoy my work!</p>
+                        </div>
+                    </article>
+
+                    <article class="roster-card" data-tags="social" style="--i:7">
+                        <span class="rc-mono" aria-hidden="true">S4</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">Springer4MVP</span></h3>
+                            <p class="rc-role"><span class="pb-chip pb-chip--gold">Social Media Engagement</span></p>
+                            <p class="rc-bio">Hi, I'm Springer4MVP. I love hockey and I love writing about it. I hope you enjoy my work!</p>
+                        </div>
+                    </article>
+
+                    <article class="roster-card" data-tags="writer social" style="--i:8">
+                        <span class="rc-mono" aria-hidden="true">K4</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">Kreider4Hart</span></h3>
+                            <p class="rc-role"><span class="pb-chip">NHL Writer</span><span class="rc-and"> and </span><span class="pb-chip pb-chip--gold">Social Media Engagement Officer</span></p>
+                            <p class="rc-bio">Hey it’s Kreider4Hart! Grew up watching hockey and could never take my eye off it. Excited for what’s ahead!</p>
+                        </div>
+                    </article>
+
+                    <article class="roster-card" data-tags="writer social" style="--i:9">
+                        <span class="rc-mono" aria-hidden="true">JA</span>
+                        <div class="rc-body">
+                            <h3 class="rc-name"><span class="rc-name-text">Jayden</span></h3>
+                            <p class="rc-role"><span class="pb-chip">NHL Writer</span><span class="rc-and"> and </span><span class="pb-chip pb-chip--gold">Social Media Engagement</span></p>
+                            <p class="rc-bio">Hi, I'm Jayden. I love hockey and I love writing about it. I hope you enjoy my work!</p>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
         </section>
 
     </main>
@@ -129,6 +158,7 @@ Hey it’s Kreider4Hart! Grew up watching hockey and could never take my eye off
     <script src="supabase.js"></script>
     <script src="script.js"></script>
     <script src="navbar.js"></script>
+    <script src="js/about.js"></script>
 
 </body>
 </html>
