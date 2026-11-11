@@ -22,6 +22,7 @@
         ldLoading: {},
         ldError: {},
         ldWaiting: false,
+        scoresReady: false,
         ldGroup: 'skaters',
         ldCat: 'points',
         lastVisit: readLastVisit()
@@ -323,7 +324,8 @@
             $('scoresLabel').hidden = !anyLive;
 
             const strip = $('scoresStrip');
-            if (strip.hidden) {
+            if (!state.scoresReady) {
+                state.scoresReady = true;
                 strip.hidden = false;
                 const track = $('scoresTrack');
                 const fade = () => track.classList.toggle('overflowing', track.scrollWidth > track.clientWidth + 4);

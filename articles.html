@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>/* fade the page in once the header and fonts are ready (failsafe: 1.5s) */document.documentElement.classList.add('is-loading');setTimeout(function(){document.documentElement.classList.remove('is-loading')},1500);</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
     <title>Articles | PUCK'D</title>
     <!-- seo:start -->
     <meta name="description" content="Every PUCK'D story: breaking NHL news, trades, prospects, features and opinion.">
@@ -57,34 +61,16 @@
 
         </section>
 
-        <section id="articles-list" class="articles-list">
+        <section id="articles-list" class="articles-list" aria-busy="true">
 
-            <!-- JavaScript inserts articles here -->
-
-            <article class="article-row">
-
-                <img src="https://placehold.co/220x140" alt="">
-
-                <div>
-
-                    <span class="article-tag">BREAKING</span>
-
-                    <h2>Trevor Zegras Signs Eight-Year Extension</h2>
-
-                    <div class="meta">
-                        Ethan James • July 17, 2026
-                    </div>
-
-                    <p>
-                        The Philadelphia Flyers have signed Trevor Zegras
-                        to an eight-year contract extension...
-                    </p>
-
-                    <a href="#">Read Story →</a>
-
-                </div>
-
-            </article>
+            <!-- Loading placeholders; articles.js replaces these -->
+            <div class="article-featured al-sk" aria-hidden="true">
+                <div class="article-featured-image sk"></div>
+                <div class="article-featured-body"><span class="sk sk-tag"></span><span class="sk sk-h"></span><span class="sk sk-h" style="width:60%"></span><span class="sk sk-text"></span><span class="sk sk-text short"></span></div>
+            </div>
+            <div class="article-link al-sk" aria-hidden="true"><article class="article-row"><div class="thumb sk"></div><div class="article-body"><span class="sk sk-tag"></span><span class="sk sk-h"></span><span class="sk sk-text"></span><span class="sk sk-text short"></span></div></article></div>
+            <div class="article-link al-sk" aria-hidden="true"><article class="article-row"><div class="thumb sk"></div><div class="article-body"><span class="sk sk-tag"></span><span class="sk sk-h"></span><span class="sk sk-text"></span><span class="sk sk-text short"></span></div></article></div>
+            <div class="article-link al-sk" aria-hidden="true"><article class="article-row"><div class="thumb sk"></div><div class="article-body"><span class="sk sk-tag"></span><span class="sk sk-h"></span><span class="sk sk-text"></span><span class="sk sk-text short"></span></div></article></div>
 
         </section>
 

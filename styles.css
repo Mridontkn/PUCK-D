@@ -24,6 +24,9 @@ body{
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
 }
+/* page reveal: hidden until header + fonts are ready (see navbar.js), then fades in */
+html.is-loading body{ opacity:0; }
+body{ transition:opacity .2s ease; }
 a{color:inherit; text-decoration:none;}
 ul{list-style:none;}
 img{max-width:100%; display:block;}
@@ -2775,6 +2778,8 @@ footer{
 .sc-game:last-child{ margin-right:auto; }
 .sc-game{ border-right:none; background:rgba(255,255,255,.035); }
 .sc-game:hover{ background:rgba(255,255,255,.08); }
+.sc-game.sc-sk{ gap:6px; align-content:center; pointer-events:none; }
+.sc-game.sc-sk:hover{ background:rgba(255,255,255,.035); }
 
 /* tabs and buttons: skewed parallelograms, no outlines */
 .cat-tab{
@@ -3091,6 +3096,14 @@ body.home .newsletter{ border-bottom:none; }
   letter-spacing:.06em; text-transform:uppercase;
 }
 .articles-list .article-row p, .article-featured-body p{ font-family:var(--font-sub); }
+
+/* Articles loading placeholders */
+.al-sk{ pointer-events:none; }
+.article-featured.al-sk{ min-height:340px; }
+.article-featured.al-sk .article-featured-image{ min-height:340px; }
+.article-featured.al-sk .article-featured-body{ justify-content:center; }
+.al-sk .thumb.sk{ width:230px; height:130px; flex-shrink:0; }
+.al-sk .article-body{ flex:1; }
 
 /* ---------- footer social icons ---------- */
 .footer-bottom .socials{ gap:10px; }

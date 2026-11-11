@@ -42,6 +42,7 @@ function renderArticles(articles) {
 
     const container = document.getElementById("articles-list");
     container.innerHTML = "";
+    container.removeAttribute("aria-busy");
 
     if (!articles.length) {
         container.innerHTML = "<p>No articles found.</p>";
@@ -52,7 +53,7 @@ function renderArticles(articles) {
     var featuredHtml = '<a class="article-featured" href="article.html?slug='
         + encodeURIComponent(first.webLink) + '">'
         + '<div class="article-featured-image">'
-        + '<img src="' + (first.imageUrl || 'https://placehold.co/600x400') + '" alt="' + first.title + '">'
+        + '<img src="' + (first.imageUrl || 'og-image.png') + '" alt="' + first.title + '">'
         + '</div>'
         + '<div class="article-featured-body">'
         + '<span class="article-tag">' + first.tag + '</span>'
@@ -67,7 +68,7 @@ function renderArticles(articles) {
             + encodeURIComponent(article.webLink) + '">'
             + '<article class="article-row">'
             + '<div class="thumb">'
-            + '<img src="' + (article.imageUrl || 'https://placehold.co/220x140') + '" alt="' + article.title + '">'
+            + '<img src="' + (article.imageUrl || 'og-image.png') + '" alt="' + article.title + '">'
             + '</div>'
             + '<div class="article-body">'
             + '<span class="article-tag">' + article.tag + '</span>'

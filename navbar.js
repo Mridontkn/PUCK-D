@@ -14,6 +14,11 @@ async function loadComponent(id, file) {
     await loadComponent("navbar", "navbar.html");
     await loadComponent("footer", "footer.html");
 
+    // Reveal the page once the header is in and fonts are ready (don't wait long for fonts)
+    const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    Promise.race([fontsReady, new Promise(r => setTimeout(r, 800))])
+        .then(() => document.documentElement.classList.remove("is-loading"));
+
     // Mark the current page's nav link (works with or without ".html" in the URL)
     const clean = path => (path.split("?")[0].split("#")[0].split("/").pop() || "index").toLowerCase().replace(/\.html$/, "");
     const page = clean(location.pathname);
