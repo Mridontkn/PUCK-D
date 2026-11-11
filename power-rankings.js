@@ -128,6 +128,22 @@ function prLive(s) {
     };
 }
 
+/* ---------- team colours (primaries, dark navies lifted so they read on dark) ---------- */
+
+const PR_COLORS = {
+    ANA: "#F47A38", BOS: "#FFB81C", BUF: "#2E6FD8", CGY: "#D2001C", CAR: "#CE1126", CHI: "#CF0A2C",
+    COL: "#A6334F", CBJ: "#CE1126", DAL: "#00A06B", DET: "#CE1126", EDM: "#FF4C00", FLA: "#C8102E",
+    LAK: "#A2AAAD", MIN: "#2E8B57", MTL: "#AF1E2D", NSH: "#FFB81C", NJD: "#CE1126", NYI: "#F47D30",
+    NYR: "#2D5BD7", OTT: "#C52032", PHI: "#F74902", PIT: "#FCB514", SJS: "#00A3AD", SEA: "#99D9D9",
+    STL: "#3A6FD8", TBL: "#2F6BD8", TOR: "#3A6AD9", UTA: "#71AFE5", VAN: "#00A14B", VGK: "#B4975A",
+    WSH: "#C8102E", WPG: "#7BAFD4"
+};
+// Only values from the table above ever reach a style attribute.
+function prTc(live) {
+    const c = live && PR_COLORS[live.abbr];
+    return c ? `--tc:${c};` : "";
+}
+
 /* ---------- markup ---------- */
 
 function prName(team, live) {
@@ -180,7 +196,8 @@ function prPodium(team, i) {
     const live = team._live;
     const lead = i === 0;
     return `
-<li class="pr-card${lead ? " pr-card--lead" : ""}" style="--i:${i}">
+<li class="pr-card${lead ? " pr-card--lead" : ""}${live && PR_COLORS[live.abbr] ? " has-tc" : ""}" style="--i:${i};${prTc(live)}">
+    <span class="pr-big-rank" aria-hidden="true">${rank}</span>
     <div class="pr-card-shot">${prLogo(live, "pr-card-logo")}</div>
     <div class="pr-card-body">
         <div class="pr-card-top">
@@ -204,11 +221,11 @@ function prRow(team, i, maxPts) {
         ? `<span class="pr-abbr">${prEsc(live.abbr)}</span><span class="pr-tname">${prEsc(team.team)}</span>`
         : `<span class="pr-abbr pr-abbr--full">${prEsc(team.team)}</span>`;
     const logo = live && live.logo
-        ? `<img src="${prEsc(live.logo)}" alt="" width="26" height="26" loading="lazy" decoding="async">`
-        : `<span class="pr-logo-blank" aria-hidden="true"></span>`;
+        ? `<span class="pr-logo-tile"><img src="${prEsc(live.logo)}" alt="" width="34" height="34" loading="lazy" decoding="async"></span>`
+        : `<span class="pr-logo-tile pr-logo-tile--blank" aria-hidden="true"></span>`;
 
     return `
-<li class="pr-row is-${mv.kind}" style="--i:${i};--pct:${pct.toFixed(3)}">
+<li class="pr-row is-${mv.kind}${live && PR_COLORS[live.abbr] ? " has-tc" : ""}" style="--i:${i};--pct:${pct.toFixed(3)};${prTc(live)}">
     <span class="pr-num"><span class="pr-sr">Rank </span>${rank}</span>
     <span class="pr-team">${logo}${ident}</span>
     <span class="pr-c pr-c--move">${prMoveChip(mv)}</span>
@@ -234,8 +251,11 @@ function prMovers(data) {
     const steady = items.filter((x) => x.mv.kind === "same");
 
     const short = (x) => (x.t._live && x.t._live.common) || x.t.team;
-    const tile = (cls, label, num, team) => `
-        <div class="pr-mv${cls ? " pr-mv--" + cls : ""}">
+    const logoOf = (x) => x.t._live && x.t._live.logo
+        ? `<img class="pr-mv-logo" src="${prEsc(x.t._live.logo)}" alt="" width="34" height="34" loading="lazy" decoding="async">` : "";
+    const tile = (cls, label, num, team, logos = "", style = "") => `
+        <div class="pr-mv${cls ? " pr-mv--" + cls : ""}${style ? " has-tc" : ""}"${style ? ` style="${style}"` : ""}>
+            ${logos ? `<span class="pr-mv-logos">${logos}</span>` : ""}
             <span class="pr-mv-num">${num}</span>
             <span class="pr-mv-text">
                 <span class="stat-label">${label}</span>
@@ -245,12 +265,12 @@ function prMovers(data) {
     const tiles = [];
     if (ups.length) tiles.push(tile("up", "Biggest climb",
         `<span class="pr-mv-arrow" aria-hidden="true">▲</span>${ups[0].mv.n}`,
-        `${prEsc(short(ups[0]))} <em>#${Number(ups[0].t.rank)}</em>`));
+        `${prEsc(short(ups[0]))} <em>#${Number(ups[0].t.rank)}</em>`, logoOf(ups[0]), prTc(ups[0].t._live)));
     if (downs.length) tiles.push(tile("down", "Biggest slide",
         `<span class="pr-mv-arrow" aria-hidden="true">▼</span>${downs[0].mv.n}`,
-        `${prEsc(short(downs[0]))} <em>#${Number(downs[0].t.rank)}</em>`));
+        `${prEsc(short(downs[0]))} <em>#${Number(downs[0].t.rank)}</em>`, logoOf(downs[0]), prTc(downs[0].t._live)));
     if (news.length) tiles.push(tile("new", "New to the 16", news.length,
-        news.map((x) => prEsc(short(x))).join(", ")));
+        news.map((x) => prEsc(short(x))).join(", "), news.slice(0, 3).map(logoOf).join("")));
     tiles.push(tile("", "Holding steady", steady.length, `<em>of ${data.length}</em>`));
     return tiles.join("");
 }

@@ -296,3 +296,107 @@
   .pr-hero .wrap > *, .pr-movers{ animation:none !important; }
   .pr-bar{ transition:none; }
 }
+
+/* ============================================================
+   TEAM COLOUR + LOGO PASS — every team carries its own colour (--tc)
+   ============================================================ */
+
+/* ---- podium cards ---- */
+.pr-card{ isolation:isolate; overflow:hidden; }
+.pr-card.has-tc{
+  background:
+    radial-gradient(360px 240px at 12% 50%, color-mix(in srgb, var(--tc) 30%, transparent), transparent 72%),
+    linear-gradient(105deg, color-mix(in srgb, var(--tc) 16%, transparent) 0%, transparent 55%),
+    var(--sheen), var(--ink-raised);
+}
+.pr-card--lead.has-tc{
+  background:
+    radial-gradient(520px 360px at 22% 55%, color-mix(in srgb, var(--tc) 38%, transparent), transparent 70%),
+    linear-gradient(105deg, color-mix(in srgb, var(--tc) 20%, transparent) 0%, transparent 60%),
+    var(--sheen), var(--ink-raised);
+}
+/* a single team-colour band cutting across the card */
+.pr-card.has-tc::after{
+  content:''; position:absolute; z-index:-1; pointer-events:none;
+  top:-20%; bottom:-20%; right:16%; width:46px;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--tc) 55%, transparent), transparent 85%);
+  transform:skewX(var(--skew)); opacity:.5;
+}
+.pr-card--lead.has-tc::after{ width:90px; right:12%; }
+
+/* solid rank number in the team colour */
+.pr-big-rank{
+  position:absolute; top:14px; right:22px; z-index:1;
+  font-family:'Anton',sans-serif; line-height:.85;
+  font-size:clamp(46px, 5vw, 64px);
+  color:var(--tc, var(--ice));
+  text-shadow:0 6px 24px rgba(0,0,0,.35);
+}
+.pr-card--lead .pr-big-rank{ font-size:clamp(76px, 7.5vw, 112px); top:16px; right:28px; }
+
+/* bigger logos with a lift */
+.pr-card{ grid-template-columns:96px minmax(0,1fr); }
+.pr-card.pr-card--lead{ grid-template-columns:auto minmax(0,1fr); }
+.pr-card-logo{ width:96px; height:96px; filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)); }
+.pr-card--lead .pr-card-logo{ filter:drop-shadow(0 18px 40px rgba(0,0,0,.5)); }
+.pr-card-body{ position:relative; z-index:1; }
+/* only the rows beside the big rank number leave room for it */
+.pr-card-top, .pr-card-name{ padding-right:56px; }
+.pr-card--lead .pr-card-top, .pr-card--lead .pr-card-name{ padding-right:84px; }
+.pr-card-name{ overflow-wrap:normal; word-break:keep-all; }
+.pr-card--lead .pr-card-name{ font-size:clamp(36px, 3.6vw, 56px); }
+.pr-card--lead .pr-card-shot{ width:clamp(160px, 15vw, 215px); }
+.pr-card--lead .pr-stats{ gap:8px 28px; }
+.pr-card--lead .pr-stats dd{ font-size:clamp(28px, 2.6vw, 38px); }
+
+/* ---- board rows ---- */
+.pr-row{ height:58px; }
+.pr-row.has-tc{
+  background:linear-gradient(90deg, color-mix(in srgb, var(--tc) 14%, transparent) 0%, transparent 42%);
+}
+.pr-row.has-tc:nth-child(even){
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--tc) 14%, transparent) 0%, transparent 42%),
+    rgba(255,255,255,.018);
+}
+.pr-row.has-tc::before{ background:var(--tc); top:12px; bottom:12px; width:5px; }
+.pr-num{ font-size:22px; color:var(--ice); }
+.pr-team{ gap:12px; }
+.pr-logo-tile{
+  flex-shrink:0; display:grid; place-items:center;
+  width:44px; height:40px;
+  background:color-mix(in srgb, var(--tc, #ffffff) 22%, rgba(255,255,255,.04));
+  clip-path:polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+}
+.pr-logo-tile img{ width:32px !important; height:32px !important; filter:drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+.pr-logo-tile--blank{ background:rgba(255,255,255,.06); }
+.pr-abbr{ font-family:'Anton',sans-serif; font-weight:400; font-size:19px; letter-spacing:.02em; }
+.pr-tname{ font-size:13px; }
+.pr-bar{ background:linear-gradient(90deg, color-mix(in srgb, var(--tc, #EEF1F5) 60%, transparent), transparent) !important; }
+
+/* ---- movers ---- */
+.pr-mv.has-tc{
+  background:
+    linear-gradient(105deg, color-mix(in srgb, var(--tc) 22%, transparent) 0%, transparent 70%),
+    var(--sheen), var(--ink-raised);
+}
+.pr-mv-logos{ display:flex; flex-shrink:0; }
+.pr-mv-logo{ width:34px; height:34px; filter:drop-shadow(0 4px 10px rgba(0,0,0,.4)); }
+.pr-mv-logos .pr-mv-logo + .pr-mv-logo{ margin-left:-10px; }
+
+@media (max-width:640px){
+  .pr-card{ grid-template-columns:72px minmax(0,1fr); }
+  .pr-card.pr-card--lead{ grid-template-columns:110px minmax(0,1fr); }
+  .pr-card-logo{ width:72px; height:72px; }
+  .pr-card--lead .pr-card-shot{ width:110px; }
+  .pr-card-top, .pr-card-name, .pr-card--lead .pr-card-top, .pr-card--lead .pr-card-name{ padding-right:44px; }
+  .pr-card--lead .pr-card-shot{ width:110px; }
+  .pr-card--lead .pr-card-name{ font-size:34px; }
+  .pr-big-rank{ font-size:44px; right:16px; }
+  .pr-card--lead .pr-big-rank{ font-size:72px; }
+  .pr-row{ height:54px; }
+  .pr-logo-tile{ width:38px; height:34px; }
+  .pr-logo-tile img{ width:26px !important; height:26px !important; }
+  .pr-abbr{ font-size:17px; }
+  .pr-mv-logo{ width:28px; height:28px; }
+}
