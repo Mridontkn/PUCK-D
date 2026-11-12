@@ -39,15 +39,7 @@
     <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsMediaOrganization", "@id": "https://puckd.blog/#org", "name": "PUCK'D", "url": "https://puckd.blog/", "logo": {"@type": "ImageObject", "url": "https://puckd.blog/logo.png"}, "email": "puckdblog@gmail.com", "sameAs": ["https://x.com/puckd_", "https://www.youtube.com/@PUCKDYT"]}, {"@type": "WebSite", "@id": "https://puckd.blog/#website", "url": "https://puckd.blog/", "name": "PUCK'D", "description": "Independent NHL coverage: news, trades, prospects and opinion, plus live standings, scoring leaders and every goal from last night.", "publisher": {"@id": "https://puckd.blog/#org"}, "inLanguage": "en"}]}</script>
 </head>
 
-<body class="variant-a home">
-<script>
-/* Pick the layout before first paint: ?variant=a|b, else the saved choice (default Broadcast). */
-(function(){
-    var v = new URLSearchParams(location.search).get('variant');
-    try { v = v || localStorage.getItem('puckd-layout'); } catch(e) {}
-    if (v === 'a' || v === 'b') document.body.className = 'variant-' + v + ' home';
-})();
-</script>
+<body class="variant-b home">
 
     <!-- Shared Components -->
     <div id="ticker"></div>
@@ -131,7 +123,7 @@
                         <h2 class="section-title bc-title bc-title--sm">Recent News</h2>
                     </div>
 
-                    <div class="news-list pb-list" id="recentNewsList">
+                    <div class="news-list" id="recentNewsList">
                         <div class="news-item"><span class="sk sk-eyebrow"></span><span class="sk sk-text"></span></div>
                         <div class="news-item"><span class="sk sk-eyebrow"></span><span class="sk sk-text"></span></div>
                         <div class="news-item"><span class="sk sk-eyebrow"></span><span class="sk sk-text"></span></div>
@@ -239,11 +231,6 @@
     <!-- Shared Footer -->
     <div id="footer"></div>
 
-    <!-- Layout switcher -->
-    <div class="variant-selector" role="group" aria-label="Homepage layout">
-        <button class="variant-btn" data-variant="a">Broadcast</button>
-        <button class="variant-btn" data-variant="b">Press Box</button>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

@@ -396,3 +396,12 @@
 /* tiers separated by space, not divider lines */
 .pr-sub{ padding-top:22px; }
 .pr-list:first-of-type, .pr-sub:first-of-type{ padding-top:14px; }
+
+/* ---- phones: full team names on movers, tidy 2x2 stats on the #1 card ---- */
+@media (max-width:640px){
+  .pr-card--lead .pr-stats{ display:grid; grid-template-columns:repeat(2, max-content); gap:14px 34px; }
+}
+@media (max-width:520px){
+  .pr-movers{ grid-template-columns:1fr; }
+  .pr-mv-team{ white-space:normal; }
+}

@@ -28,7 +28,7 @@
         lastVisit: readLastVisit()
     };
 
-    const variant = () => (document.body.className.match(/variant-([ab])/) || [, 'a'])[1];
+    const variant = () => (document.body.className.match(/variant-([ab])/) || [, 'b'])[1];
 
     /* ---------- "NEW" since last visit ---------- */
 
@@ -171,7 +171,6 @@
         ${isNew(a) ? '<span class="new-badge">New</span>' : ''}
     </div>
     <div class="article-body">
-        ${n ? `<span class="card-num" aria-hidden="true">${String(n).padStart(2, '0')}</span>` : ''}
         <span class="tag">${escapeHtml(a.tag)}</span>
         <h3>${escapeHtml(a.title)}</h3>
         <p>${escapeHtml(a.dek)}</p>

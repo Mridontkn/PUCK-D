@@ -1604,10 +1604,11 @@ footer{padding:56px 0 36px;}
 }
 
 .article-hero-back{
-  display:inline-flex; align-items:center; gap:6px;
+  display:flex; width:fit-content; align-items:center; gap:6px;
   font-family:'IBM Plex Mono',monospace;
   font-size:11px; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--slate);
+  color:var(--text-2);
+  text-shadow:0 1px 8px rgba(0,0,0,.7);
   margin-bottom:28px;
   transition:color .2s;
 }
@@ -1648,12 +1649,13 @@ footer{padding:56px 0 36px;}
 }
 
 .article-hero-meta{
-  display:flex; align-items:center; gap:10px;
+  display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px;
   font-family:'IBM Plex Mono',monospace;
   font-size:12px; color:var(--slate);
   text-transform:uppercase; letter-spacing:.06em;
 }
 .article-hero-meta .meta-sep{ color:var(--line); }
+.article-hero-meta > *{ white-space:nowrap; }
 
 /* --- article body --- */
 .article-content{ background:var(--ink); position:relative; }
@@ -2596,9 +2598,7 @@ body.variant-b .hero-art.img-loaded img{
 }
 body.variant-b .hero.clickable:hover .hero-art.img-loaded img{ transform:scale(1.03); }
 
-/* card images wipe in from the left as each card scrolls into view */
-body.variant-b .article-list > .article-row .thumb img{ clip-path:inset(0 100% 0 0); transition:clip-path .45s var(--ease-in-out), transform .5s var(--ease-out), opacity .2s; }
-body.variant-b .article-list > .article-row.in .thumb.img-loaded img{ clip-path:inset(0 0 0 0); transition-delay:calc(var(--i) * 35ms), 0s, 0s; }
+/* card images fade in once loaded (no clip-path wipe: a fully clipped lazy image never starts loading in Chrome) */
 body.variant-b .article-list > .article-row .thumb{ overflow:hidden; aspect-ratio:16/9; }
 body.variant-b .article-list > .article-row:first-child .thumb{ aspect-ratio:auto; }
 body.variant-b .article-list > .article-row .thumb img{ position:absolute; inset:0; height:100%; object-position:50% 30%; }
@@ -3452,6 +3452,12 @@ body.home .newsletter{ border-bottom:none; }
   }
   .reveal{ opacity:1; animation:none !important; }
   .sk, .hero-art:not(.img-loaded){ animation:none !important; }
-  body.variant-b .article-list > .article-row .thumb img{ clip-path:none; }
   .st-bar, .ld-bar{ transform:none; }
+}
+
+/* phones: the headline covers most of the photo, so darken it evenly enough to read the back link and title */
+@media (max-width:640px){
+  .article-hero.has-image .article-hero-bg::after{
+    background:linear-gradient(to bottom, rgba(19,25,34,.45) 0%, rgba(19,25,34,.6) 35%, rgba(19,25,34,.85) 65%, var(--ink) 100%);
+  }
 }
