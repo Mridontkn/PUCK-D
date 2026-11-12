@@ -22,7 +22,7 @@ export function buildTags(article, slug) {
     const pageUrl = `${SITE}/article.html?slug=${encodeURIComponent(slug)}`;
     const title = `${article.title} | PUCK'D`;
     const desc = String(article.summary || "NHL news and analysis from PUCK'D.").slice(0, 300);
-    const image = /^https:\/\//.test(article.image_url || "") ? article.image_url : `${SITE}/og-image.png`;
+    const image = /^https:\/\//.test(article.image_url || "") ? article.image_url : `${SITE}/og-card.png`;
     const published = article.created_at ? new Date(article.created_at).toISOString() : null;
 
     const ld = {
@@ -66,6 +66,7 @@ export function buildTags(article, slug) {
     <meta name="twitter:title" content="${esc(article.title)}">
     <meta name="twitter:description" content="${esc(desc)}">
     <meta name="twitter:image" content="${esc(image)}">
+    <meta name="twitter:image:alt" content="${esc(article.title)}">
     <script type="application/ld+json">${safeJson(ld)}</script>
     <!-- seo:end -->`
     };
