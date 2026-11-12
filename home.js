@@ -331,6 +331,7 @@
                 fade();
                 window.addEventListener('resize', fade, { passive: true });
                 requestAnimationFrame(() => strip.classList.add('ready'));
+                startScoresCarousel(track);
             }
 
             clearTimeout(scoresTimer);
@@ -339,6 +340,25 @@
             console.warn('Scores unavailable', err);
             $('scoresStrip').hidden = true;
         }
+    }
+
+    // Phones: advance the scores strip one game every 12s (pauses briefly after a manual swipe).
+    function startScoresCarousel(track) {
+        const phone = window.matchMedia('(max-width: 640px)');
+        let pausedUntil = 0;
+        const pause = () => { pausedUntil = Date.now() + 12000; };
+        track.addEventListener('touchstart', pause, { passive: true });
+        track.addEventListener('wheel', pause, { passive: true });
+        setInterval(() => {
+            if (!phone.matches || document.hidden || Date.now() < pausedUntil) return;
+            const games = [...track.querySelectorAll('.sc-game')];
+            if (!games.length || track.scrollWidth <= track.clientWidth + 4) return;
+            const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+            const base = track.getBoundingClientRect().left;
+            const next = games.find(g => g.getBoundingClientRect().left - base > 4);
+            const left = atEnd || !next ? 0 : track.scrollLeft + (next.getBoundingClientRect().left - base);
+            track.scrollTo({ left, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+        }, 12000);
     }
 
     /* ---------- standings: divisions / wild card ---------- */

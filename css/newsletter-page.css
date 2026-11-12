@@ -153,10 +153,10 @@
 .nlp-issue-logo{
   flex:0 0 auto; display:grid; place-items:center;
   width:36px; height:36px;
-  font-family:'Anton',sans-serif; font-size:20px; line-height:1;
-  color:var(--ink); background:var(--ice);
+  background:var(--ink);
   clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
 }
+.nlp-issue-logo img{ width:24px; height:24px; object-fit:contain; display:block; }
 .nlp-issue-from{ display:flex; flex-direction:column; gap:2px; min-width:0; }
 .nlp-issue-from strong{ font-family:var(--font-sub); font-weight:700; font-size:14px; color:var(--ice); letter-spacing:.02em; }
 .nlp-issue-from span{ font-family:var(--font-sub); font-size:12px; color:var(--slate); }
