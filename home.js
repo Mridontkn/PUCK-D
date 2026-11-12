@@ -342,11 +342,11 @@
         }
     }
 
-    // Phones: advance the scores strip one game every 12s (pauses briefly after a manual swipe).
+    // Phones: advance the scores strip one game every 8s (pauses briefly after a manual swipe).
     function startScoresCarousel(track) {
         const phone = window.matchMedia('(max-width: 640px)');
         let pausedUntil = 0;
-        const pause = () => { pausedUntil = Date.now() + 12000; };
+        const pause = () => { pausedUntil = Date.now() + 8000; };
         track.addEventListener('touchstart', pause, { passive: true });
         track.addEventListener('wheel', pause, { passive: true });
         setInterval(() => {
@@ -358,7 +358,7 @@
             const next = games.find(g => g.getBoundingClientRect().left - base > 4);
             const left = atEnd || !next ? 0 : track.scrollLeft + (next.getBoundingClientRect().left - base);
             track.scrollTo({ left, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-        }, 12000);
+        }, 8000);
     }
 
     /* ---------- standings: divisions / wild card ---------- */
