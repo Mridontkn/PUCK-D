@@ -172,7 +172,7 @@ async function loadArticle(){
         var heroBg=document.getElementById('articleHeroBg');
         var heroSection=document.getElementById('articleHero');
         if(article.image_url){
-            heroBg.style.backgroundImage='url('+article.image_url+')';
+            heroBg.style.backgroundImage='url("'+imgSrc(article.image_url,1600)+'")';
             heroSection.classList.add('has-image');
         }
 
@@ -214,7 +214,7 @@ async function loadRelated(category,currentSlug){
     try{
         var result=await db
             .from('article')
-            .select('*')
+            .select('title,category,author,created_at,image_url,web_link')
             .neq('web_link',currentSlug)
             .order('created_at',{ascending:false})
             .limit(3);
@@ -224,7 +224,7 @@ async function loadRelated(category,currentSlug){
         var grid=document.getElementById('relatedGrid');
         grid.innerHTML=result.data.map(function(a){
             var img=a.image_url
-                ? '<img class="related-card-image" src="'+escapeHtml(a.image_url)+'" alt="'+escapeHtml(a.title)+'">'
+                ? '<img class="related-card-image" src="'+escapeHtml(imgSrc(a.image_url,600))+'" alt="'+escapeHtml(a.title)+'" loading="lazy" decoding="async">'
                 : '<div class="related-card-image related-card-no-image"></div>';
             return '<a class="related-card" href="article.html?slug='+encodeURIComponent(a.web_link)+'">'
                 +img

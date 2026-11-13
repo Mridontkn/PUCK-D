@@ -39,13 +39,40 @@ function estimateReadTime(html) {
     return `${Math.max(1, Math.round(words / 200))} MIN READ`;
 }
 
+// "3 MIN READ" from the stored read_minutes column ('' until it exists / is filled).
+function readTimeLabel(row) {
+    return row && row.read_minutes ? `${row.read_minutes} MIN READ` : '';
+}
+
+// Only the columns list views need. Never pull `context` (the full article
+// body) for lists: it was ~95% of every page's Supabase download.
+const ARTICLE_LIST_COLUMNS = 'id,title,summary,category,author,created_at,image_url,web_link';
+
+// Select article rows with read_minutes; if that column doesn't exist yet
+// (migration not run), retry without it so the site keeps working.
+async function selectArticleList(build) {
+    let res = await build(db.from('article').select(ARTICLE_LIST_COLUMNS + ',read_minutes'));
+    if (res.error && /read_minutes/.test(res.error.message || '')) {
+        res = await build(db.from('article').select(ARTICLE_LIST_COLUMNS));
+    }
+    return res;
+}
+
+// Serve Supabase Storage photos through Netlify's Image CDN: resized to the
+// display width, modern format, cached at Netlify, so Supabase serves each
+// original roughly once instead of on every page view. Local dev uses originals.
+const SUPABASE_PUBLIC_IMAGES = /^https:\/\/otnnyxtttsiypjskrshw\.supabase\.co\/storage\/v1\/object\/public\//;
+function imgSrc(url, width) {
+    if (!url || !SUPABASE_PUBLIC_IMAGES.test(url)) return url;
+    const host = location.hostname;
+    if (!host || host === 'localhost' || host === '127.0.0.1' || host.endsWith('.localhost')) return url;
+    return `/.netlify/images?url=${encodeURIComponent(url)}&w=${width}&q=75`;
+}
+
 // Pulls published articles from the Supabase "article" table and maps
 // them onto camelCase fields used across the site.
 async function loadArticlesFromSupabase() {
-    const { data, error } = await db
-        .from('article')
-        .select('*')
-        .order('created_at', { ascending: false });
+    const { data, error } = await selectArticleList(q => q.order('created_at', { ascending: false }));
 
     if (error) {
         console.error('Failed to load articles from Supabase', error);
@@ -58,7 +85,7 @@ async function loadArticlesFromSupabase() {
         title: row.title || '',
         dek: row.summary || '',
         author: row.author || '',
-        readTime: estimateReadTime(row.context),
+        readTime: readTimeLabel(row),
         date: formatRelativeDate(row.created_at),
         createdAt: row.created_at,
         thumb: (i % 3) + 1,
