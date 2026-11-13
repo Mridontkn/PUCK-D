@@ -1,18 +1,5 @@
 /* Shared helpers used on every public page (homepage logic lives in home.js). */
 
-// Admin link + layout switcher are hidden unless dev mode is on.
-// Turn on with ?dev=1, off with ?dev=0 (remembered in this browser).
-(function initDevMode() {
-    try {
-        const flag = new URLSearchParams(location.search).get('dev');
-        if (flag === '1') localStorage.setItem('puckd-dev', '1');
-        if (flag === '0') localStorage.removeItem('puckd-dev');
-        if (localStorage.getItem('puckd-dev') === '1') {
-            document.documentElement.classList.add('dev');
-        }
-    } catch (e) { /* storage blocked: stay in public mode */ }
-})();
-
 let TICKER = [];
 var _tickerActive = false;
 // `var` so other scripts (articles.js, home.js) can share loaded articles via window.articles.

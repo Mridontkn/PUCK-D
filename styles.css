@@ -247,20 +247,6 @@ nav.primary a:hover::after{width:100%;}
   color:var(--ice);
 }
 .icon-btn:hover{border-color:var(--accent); color:var(--accent);}
-.admin-link{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'IBM Plex Mono',monospace;
-  font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
-  padding:10px 16px;
-  color:var(--ice);
-  background:rgba(255,255,255,.06);
-  border:none;
-  text-decoration:none;
-  transition:background .2s, border-color .2s, color .2s;
-}
-.admin-link:hover{background:var(--ink); border-color:var(--accent); color:var(--accent);}
 .subscribe-btn{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
@@ -2324,9 +2310,6 @@ body.home .newsletter .wrap{
 /* `hidden` must win over component display rules (flex/inline-flex) */
 [hidden]{ display:none !important; }
 
-/* ---------- dev-only controls (?dev=1) ---------- */
-html:not(.dev) .dev-only{ display:none !important; }
-
 .sr-only{
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
@@ -3423,8 +3406,6 @@ body.home .newsletter{ border-bottom:none; }
 }
 #navbar .subscribe-btn:hover{ background-position:0 0; color:var(--ink); }
 
-#navbar .admin-link{ clip-path:polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); }
-#navbar .admin-link:hover{ background:rgba(255,255,255,.14); color:var(--ice); }
 
 /* mobile menu: a skewed tick slides in beside the hovered/current link */
 #navbar .mobile-menu a{
