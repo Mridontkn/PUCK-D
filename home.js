@@ -109,7 +109,8 @@
         $('heroEyebrow').textContent = hero.tag;
         $('heroByline').innerHTML =
             (hero.author ? `<span>By <b>${escapeHtml(hero.author)}</b></span><span class="dot-sep">·</span>` : '')
-            + `<span>${escapeHtml(hero.readTime)}</span><span class="dot-sep">·</span><span>${escapeHtml(hero.date)}</span>`;
+            + (hero.readTime ? `<span>${escapeHtml(hero.readTime)}</span><span class="dot-sep">·</span>` : '')
+            + `<span>${escapeHtml(hero.date)}</span>`;
         $('heroLink').href = link;
         $('heroCta').href = link;
         $('heroCta').hidden = false;
@@ -120,7 +121,7 @@
             img.addEventListener('load', () => art.classList.add('img-loaded'), { once: true });
             img.addEventListener('error', () => art.classList.add('no-image'), { once: true });
             img.alt = hero.title;
-            img.src = hero.imageUrl;
+            img.src = imgSrc(hero.imageUrl, 1400);
         } else {
             art.classList.add('no-image');
         }
@@ -166,7 +167,7 @@
 <a class="article-row" href="${formatArticleLink(a)}">
     <div class="thumb">
         ${a.imageUrl
-            ? `<img src="${escapeHtml(a.imageUrl)}" alt="" loading="lazy" decoding="async">`
+            ? `<img src="${escapeHtml(imgSrc(a.imageUrl, 800))}" alt="" loading="lazy" decoding="async">`
             : `<div class="thumb-fallback" aria-hidden="true"><span>PUCK<i>'</i>D</span></div>`}
         ${isNew(a) ? '<span class="new-badge">New</span>' : ''}
     </div>
@@ -176,8 +177,7 @@
         <p>${escapeHtml(a.dek)}</p>
         <div class="meta-row">
             ${a.author ? `<span>${escapeHtml(a.author)}</span><span class="dot-sep">·</span>` : ''}
-            <span>${escapeHtml(a.readTime)}</span>
-            <span class="dot-sep">·</span>
+            ${a.readTime ? `<span>${escapeHtml(a.readTime)}</span><span class="dot-sep">·</span>` : ''}
             <span>${escapeHtml(a.date)}</span>
         </div>
     </div>

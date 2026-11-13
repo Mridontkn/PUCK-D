@@ -135,14 +135,50 @@ function slugify(title){
   return `${base || 'article'}-${Date.now().toString(36)}`;
 }
 
+// Shrink photos before upload: max 1600px wide, WebP (JPEG if the browser
+// can't encode WebP). Keeps the original if it's already smaller, and leaves
+// GIFs alone so animations survive.
+async function shrinkImage(file){
+  if(!/^image\/(png|jpe?g|webp|avif|bmp)$/i.test(file.type)) return file;
+  try{
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, 1600 / bitmap.width);
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    if(bitmap.close) bitmap.close();
+    const toBlob = type => new Promise(res => canvas.toBlob(res, type, 0.82));
+    let blob = await toBlob('image/webp');
+    if(!blob || blob.type !== 'image/webp') blob = await toBlob('image/jpeg');
+    return blob && blob.size < file.size ? blob : file;
+  }catch(e){
+    console.warn('Could not shrink image, uploading original', e);
+    return file;
+  }
+}
+
+function readMinutes(html){
+  const words = (html || '').replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
 async function uploadHeroImage(file, slug){
-  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  const upload = await shrinkImage(file);
+  const ext = upload === file
+    ? (file.name.split('.').pop() || 'jpg').toLowerCase()
+    : (upload.type === 'image/webp' ? 'webp' : 'jpg');
   const path = `${slug}.${ext}`;
 
+  // File names are unique per upload, so browsers and CDNs may cache them for a year.
   const { error: uploadError } = await db
     .storage
     .from('article-images')
-    .upload(path, file, { upsert: true });
+    .upload(path, upload, {
+      upsert: true,
+      cacheControl: '31536000',
+      contentType: upload.type || file.type || undefined
+    });
 
   if(uploadError){
     throw new Error('Image upload failed: ' + uploadError.message);
@@ -178,17 +214,23 @@ publishBtn.addEventListener('click', async () => {
       imageUrl = await uploadHeroImage(heroFile, slug);
     }
 
-    const { error: insertError } = await db
-      .from('article')
-      .insert([{
-        title,
-        summary,
-        category,
-        author,
-        context: bodyHtml,
-        image_url: imageUrl,
-        created_at: new Date().toISOString()
-      }]);
+    const row = {
+      title,
+      summary,
+      category,
+      author,
+      context: bodyHtml,
+      image_url: imageUrl,
+      read_minutes: readMinutes(bodyHtml),
+      created_at: new Date().toISOString()
+    };
+    let { error: insertError } = await db.from('article').insert([row]);
+
+    // read_minutes column not added yet (see SUPABASE-EGRESS.md): publish without it.
+    if(insertError && /read_minutes/.test(insertError.message || '')){
+      delete row.read_minutes;
+      ({ error: insertError } = await db.from('article').insert([row]));
+    }
 
     if(insertError){
       throw new Error(insertError.message);

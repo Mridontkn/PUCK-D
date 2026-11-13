@@ -1,0 +1,5 @@
+# Let Netlify Image CDN (/.netlify/images) fetch article photos from Supabase
+# Storage, so photos are resized and cached at Netlify instead of being
+# downloaded from Supabase on every page view.
+[images]
+  remote_images = ['https://otnnyxtttsiypjskrshw\.supabase\.co/storage/v1/object/public/.*']
