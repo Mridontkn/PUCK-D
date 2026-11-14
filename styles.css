@@ -1666,6 +1666,9 @@ footer{padding:56px 0 36px;}
   color:var(--ice);
 }
 .article-prose p{ margin-bottom:24px; }
+/* Text pasted into the editor from Google Docs/Word carries inline
+   color/background (often black), which beats the stylesheet. Neutralise it. */
+.article-prose [style]{ color:inherit !important; background-color:transparent !important; }
 .article-prose > p:first-child::first-letter{
   float:left;
   font-family:'Anton',sans-serif;
