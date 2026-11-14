@@ -33,7 +33,10 @@ function getQuill(){
   if(!quill){
     quill = new Quill('#editor', {
       theme: 'snow',
-      placeholder: 'Write the article...'
+      placeholder: 'Write the article...',
+      // Whitelist formats so pasted text can't bring in color/background/font.
+      formats: ['bold','italic','underline','strike','link','header',
+                'list','blockquote','code-block','image']
     });
   }
   return quill;
