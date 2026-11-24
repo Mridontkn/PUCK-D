@@ -5,6 +5,7 @@
   const charCount = document.getElementById('charCount');
   const hatName = document.getElementById('hatColourName');
   const threadName = document.getElementById('threadColourName');
+  const shippingCountry = document.getElementById('shippingCountry');
   const canvas = document.getElementById('hatCanvas');
   const ctx = canvas.getContext('2d');
   const state = { text: textInput.value, hat: '#ffffff', thread: '#c92732', font: 'college', hatName: 'White', threadName: 'Red' };
@@ -67,16 +68,28 @@
 
     button.disabled = true;
     button.textContent = 'CONNECTING TO SECURE CHECKOUT…';
-    message.textContent = 'Preparing your secure Stripe checkout. Shipping is added separately.';
+    const selectedCountry = shippingCountry ? shippingCountry.value : '';
+    if (!['CA', 'US'].includes(selectedCountry)) {
+      message.textContent = 'Choose Canada or the United States for shipping.';
+      button.disabled = false;
+      button.textContent = 'CHECK OUT WITH STRIPE';
+      return;
+    }
+    message.textContent = selectedCountry === 'CA'
+      ? 'Preparing checkout · C$10.00 shipping to Canada.'
+      : 'Preparing checkout · C$5.70 shipping to the United States.';
     try {
-      const result = await fetch('/.netlify/functions/create-checkout', {
+      const testMode = new URLSearchParams(window.location.search).get('stripe_test') === '1';
+      const checkoutFunction = testMode ? 'create-checkout-test' : 'create-checkout';
+      const result = await fetch(`/.netlify/functions/${checkoutFunction}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           designText,
           hatColour: state.hatName,
           threadColour: state.threadName,
-          fontStyle: state.font
+          fontStyle: state.font,
+          shippingCountry: shippingCountry ? shippingCountry.value : ''
         })
       });
       const data = await result.json().catch(() => ({}));
