@@ -3,3 +3,7 @@
 # downloaded from Supabase on every page view.
 [images]
   remote_images = ['https://otnnyxtttsiypjskrshw\.supabase\.co/storage/v1/object/public/.*']
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

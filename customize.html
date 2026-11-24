@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Your Hat | PUCK'D</title>
+  <meta name="description" content="Preview PUCK'D city hats in your choice of city and colour.">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <meta name="theme-color" content="#131922">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/shop.css">
+</head>
+<body>
+  <div id="ticker"></div>
+  <div id="navbar"></div>
+  <main class="customizer-wrap">
+    <a class="back-shop" href="shop.html">← BACK TO SHOP</a>
+    <div class="customizer-heading">
+      <div>
+        <p class="shop-kicker">PUCK'D CUSTOM LAB</p>
+        <h1>CHOOSE YOUR CITY</h1>
+        <p>Pick a city and hat colour to preview that exact variation.</p>
+      </div>
+      <span class="shop-status">PREVIEW MODE</span>
+    </div>
+    <div class="customizer-grid">
+      <section class="preview-panel" aria-label="Hat preview">
+        <div class="preview-stage">
+          <img id="hatPreview" class="hat-preview" alt="" hidden>
+          <div id="previewFallback" class="preview-fallback">
+            <div class="fallback-cap">
+              <div class="fallback-crown"></div>
+              <div class="fallback-brim"></div>
+              <div class="fallback-text" id="fallbackText">CALGARY</div>
+            </div>
+            <small>VARIANT PHOTO PREVIEW</small>
+          </div>
+        </div>
+        <p class="preview-caption" id="previewStatus" role="status"></p>
+      </section>
+      <section class="controls-panel" aria-label="Hat options">
+        <div class="control-group">
+          <label for="citySelect">CITY</label>
+          <select id="citySelect"></select>
+        </div>
+        <div class="control-group">
+          <label for="hatColourSelect">HAT COLOUR</label>
+          <select id="hatColourSelect"></select>
+        </div>
+        <div class="customizer-price">
+          <div>
+            <small>PROPOSED RETAIL PRICE</small>
+            <strong>$39.99 CAD</strong>
+          </div>
+          <span>Item price only in test mode</span>
+        </div>
+        <p class="test-mode-note">TEST MODE ONLY — no real payment is collected. Shipping, tax and order fulfilment are not configured.</p>
+        <button class="add-design-button" id="startCheckout" type="button">CONTINUE TO STRIPE TEST CHECKOUT</button>
+        <p class="payment-status" id="paymentStatus" role="status" aria-live="polite"></p>
+        <button class="add-design-button" id="saveDesign" type="button">SAVE HAT PREVIEW</button>
+        <p class="not-live-note" id="saveMessage" role="status">Saving stores your selected city and colour in this browser only.</p>
+      </section>
+    </div>
+  </main>
+  <div id="footer"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="script.js"></script>
+  <script src="navbar.js"></script>
+  <script src="js/customizer.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "puckd-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PUCK'D static site Netlify Functions dependencies",
+  "dependencies": {
+    "stripe": "^20.0.0"
+  }
+}

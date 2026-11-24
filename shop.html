@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUCK'D Shop | Custom City Hats</title>
+  <meta name="description" content="Choose a PUCK'D city hat from 31 cities and 11 hat colours.">
+  <link rel="canonical" href="https://puckd.blog/shop.html">
+  <link rel="icon" type="image/png" href="/logo.png"><meta name="theme-color" content="#131922">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="css/shop.css">
+</head>
+<body>
+  <div id="ticker"></div><div id="navbar"></div>
+  <main class="shop-wrap">
+    <section class="shop-hero">
+      <p class="shop-kicker">THE PUCK'D SHOP</p>
+      <h1>YOUR CITY. <span>YOUR HAT.</span></h1>
+      <p>Choose one of 31 cities and 11 hat colours, then preview that exact variation.</p>
+      <a class="shop-cta" href="customize.html">CHOOSE YOUR CITY <span aria-hidden="true">→</span></a>
+    </section>
+    <section class="shop-section">
+      <div class="shop-section-head"><div><p class="shop-kicker">FIRST DROP</p><h2>PUCK'D CITY HATS</h2></div><span class="shop-status">TEST MODE ONLY</span></div>
+      <div class="shop-product-grid">
+        <article class="shop-product-card">
+          <a class="shop-product-image" href="customize.html" aria-label="Preview PUCK'D city hats">
+            <img src="assets/shop/previews/calgary-navy.png" alt="Calgary hat in navy" onerror="this.style.display='none';this.nextElementSibling.hidden=false">
+            <div class="mockup-placeholder" hidden><div class="mock-cap"><span></span></div><small>ADD VARIANT PREVIEW PHOTOS</small></div>
+            <span class="shop-image-tag">31 CITIES · 11 COLOURS</span>
+          </a>
+          <div class="shop-product-info"><div><h3>PUCK'D City Hat</h3><p>Yupoong 6007 Flat Bill Cap · City embroidery</p></div><strong>$39.99 CAD</strong></div>
+          <a class="shop-card-link" href="customize.html">Preview city hats <span>→</span></a>
+        </article>
+        <aside class="shop-info-card"><p class="shop-kicker">HOW IT WORKS</p><h3>Choose your variation.</h3><ol><li><b>01</b><span>Choose one of 31 cities.</span></li><li><b>02</b><span>Pick one of 11 hat colours.</span></li><li><b>03</b><span>Preview the matching product photo.</span></li><li><b>04</b><span>Try Stripe Checkout in test mode.</span></li></ol><p class="shop-note">Test mode only: no real payments, shipping, taxes or order fulfilment are enabled.</p></aside>
+      </div>
+    </section>
+  </main>
+  <div id="footer"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase.js"></script><script src="script.js"></script><script src="navbar.js"></script><script src="js/shop.js"></script>
+</body></html>
