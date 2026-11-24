@@ -30,11 +30,6 @@ exports.handler = async (event) => {
   if (!secretKey || !secretKey.startsWith('sk_live_')) {
     return response(503, { error: 'Live Stripe is not configured. Add your live secret key in Netlify environment variables.' });
   }
-  const shippingRaw = process.env.PUCKD_SHIPPING_CAD;
-  const shippingAmount = Number(shippingRaw);
-  if (!shippingRaw || !Number.isFinite(shippingAmount) || shippingAmount < 0 || shippingAmount > 100) {
-    return response(503, { error: 'Shipping is not configured. Set PUCKD_SHIPPING_CAD in Netlify (CAD dollars, flat rate for Canada).' });
-  }
 
   let body;
   try { body = JSON.parse(event.body || '{}'); }
@@ -44,6 +39,12 @@ exports.handler = async (event) => {
   const hatColour = String(body.hatColour || '');
   const threadColour = String(body.threadColour || '');
   const fontStyle = String(body.fontStyle || '');
+  const shippingCountry = String(body.shippingCountry || '');
+  const shippingByCountry = { CA: 1000, US: 570 };
+  const shippingAmountCents = shippingByCountry[shippingCountry];
+  if (!Number.isInteger(shippingAmountCents)) {
+    return response(400, { error: 'Choose Canada or the United States for shipping.' });
+  }
   if (!designText || designText.length > 14 || !/^[A-Z0-9 '&.-]+$/.test(designText)) {
     return response(400, { error: 'Enter 1–14 supported characters for the embroidery.' });
   }
@@ -57,8 +58,9 @@ exports.handler = async (event) => {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       submit_type: 'pay',
+      allow_promotion_codes: true,
       billing_address_collection: 'auto',
-      shipping_address_collection: { allowed_countries: ['CA'] },
+      shipping_address_collection: { allowed_countries: [shippingCountry] },
       line_items: [{
         quantity: 1,
         price_data: {
@@ -73,12 +75,8 @@ exports.handler = async (event) => {
       shipping_options: [{
         shipping_rate_data: {
           type: 'fixed_amount',
-          display_name: 'Shipping (Canada)',
-          fixed_amount: { amount: Math.round(shippingAmount * 100), currency: CURRENCY },
-          delivery_estimate: {
-            minimum: { unit: 'business_day', value: 5 },
-            maximum: { unit: 'business_day', value: 12 }
-          }
+          display_name: shippingCountry === 'CA' ? 'Shipping (Canada)' : 'Shipping (United States)',
+          fixed_amount: { amount: shippingAmountCents, currency: CURRENCY }
         }
       }],
       phone_number_collection: { enabled: true },
@@ -90,6 +88,7 @@ exports.handler = async (event) => {
         hat_colour: hatColour,
         thread_colour: threadColour,
         font_style: fontStyle,
+        shipping_country_selected: shippingCountry,
         quantity: '1'
       }
     });
