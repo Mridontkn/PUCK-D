@@ -1,0 +1,14 @@
+{
+  "_comment": "Colour name (exactly as js/customizer.js has it) -> Printful variant id for the store's region. Copy to printful-variants.json (gitignored) and fill every one of the 11.",
+  "Black": 0,
+  "Navy": 0,
+  "Cranberry": 0,
+  "Spruce green": 0,
+  "Dark grey": 0,
+  "Green Camo": 0,
+  "Khaki": 0,
+  "Stone": 0,
+  "Pink": 0,
+  "Light blue": 0,
+  "White": 0
+}

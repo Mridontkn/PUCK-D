@@ -45,29 +45,60 @@
     checkoutButton.textContent = "CHECK OUT WITH STRIPE TEST MODE";
   }
 
+  // Per-city photos live at assets/shop/previews/<city-slug>-<colour-slug>.webp — the
+  // path is built from the selection, so a combination with a photo shows that photo.
+  // The old single sample stays as the one fallback step: a missing file shows the
+  // sample hat, and if that is missing too the illustration, never a broken image.
+  const SAMPLE_PHOTO = "assets/shop/hat-preview.png";
+  let currentPath = "";
+
+  function slug(text) {
+    return String(text)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function photoFor(city, colourName) {
+    return `assets/shop/previews/${slug(city)}-${slug(colourName)}.webp`;
+  }
+
   function updatePreview() {
     const city = citySelect.value;
     const colour = colours.find((option) => option.name === colourSelect.value);
     if (!colour) return;
 
-    const hasPhoto = preview.complete && preview.naturalWidth > 0;
-    preview.alt = "PUCK'D sample city hat";
-    preview.hidden = !hasPhoto;
-    fallback.hidden = hasPhoto;
     fallbackText.textContent = city.toUpperCase();
     fallback.style.setProperty("--hat-colour", colour.hex);
-    previewStatus.textContent = `Showing one sample hat image. Selected: ${city} in ${colour.name}; the photo does not change by variation.`;
+    preview.alt = `PUCK'D ${city} hat in ${colour.name}`;
+    previewStatus.textContent = `Showing ${city} in ${colour.name}.`;
+
+    const path = photoFor(city, colour.name);
+    if (path !== currentPath) {
+      currentPath = path;
+      preview.dataset.fallbackStep = "";
+      preview.hidden = false;
+      preview.src = path;
+    }
   }
 
   preview.addEventListener("load", () => {
     preview.hidden = false;
     fallback.hidden = true;
-    previewStatus.textContent = `Showing one sample hat image. Selected: ${citySelect.value} in ${colourSelect.value}; the photo does not change by variation.`;
   });
   preview.addEventListener("error", () => {
+    const step = preview.dataset.fallbackStep || "";
+    if (step === "") {
+      // No photo for this city × colour yet: show the sample rather than nothing.
+      preview.dataset.fallbackStep = "sample";
+      currentPath = SAMPLE_PHOTO;
+      preview.src = SAMPLE_PHOTO;
+      previewStatus.textContent = `No photo for ${citySelect.value} in ${colourSelect.value} yet; showing the sample hat.`;
+      return;
+    }
     preview.hidden = true;
     fallback.hidden = false;
-    previewStatus.textContent = "Sample hat photo not added yet; showing the hat illustration instead.";
+    previewStatus.textContent = "Hat photo unavailable; showing the hat illustration instead.";
   });
   citySelect.addEventListener("change", updatePreview);
   colourSelect.addEventListener("change", updatePreview);
@@ -134,6 +165,6 @@
   if (checkoutResult === "cancelled") {
     paymentStatus.textContent = "Checkout was cancelled; you were not charged.";
   }
-  preview.src = "assets/shop/hat-preview.png";
+  preview.src = SAMPLE_PHOTO;
   updatePreview();
 })();

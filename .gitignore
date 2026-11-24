@@ -1,0 +1,5 @@
+# generated, deterministic from scripts/lockups.py
+scripts/lockups/out/
+# the real token map holds account-specific variant ids
+scripts/printful-variants.json
+.env
