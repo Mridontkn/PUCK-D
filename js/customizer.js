@@ -35,11 +35,6 @@
 
   if (!citySelect || !colourSelect || !countrySelect || !checkoutButton) return;
 
-  const slugify = (value) => value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-
   cities.forEach((city) => citySelect.add(new Option(city, city)));
   colours.forEach((colour) => colourSelect.add(new Option(colour.name, colour.name)));
   citySelect.value = "Calgary";
@@ -55,29 +50,24 @@
     const colour = colours.find((option) => option.name === colourSelect.value);
     if (!colour) return;
 
-    const imagePath = `assets/shop/previews/${slugify(city)}-${slugify(colour.name)}.png`;
-    preview.alt = `${city} hat in ${colour.name}`;
-    preview.dataset.expectedPath = imagePath;
-    preview.hidden = true;
-    fallback.hidden = false;
+    const hasPhoto = preview.complete && preview.naturalWidth > 0;
+    preview.alt = "PUCK'D sample city hat";
+    preview.hidden = !hasPhoto;
+    fallback.hidden = hasPhoto;
     fallbackText.textContent = city.toUpperCase();
     fallback.style.setProperty("--hat-colour", colour.hex);
-    previewStatus.textContent = `Loading ${city} in ${colour.name}...`;
-    preview.src = imagePath;
+    previewStatus.textContent = `Showing one sample hat image. Selected: ${city} in ${colour.name}; the photo does not change by variation.`;
   }
 
-  const isCurrentImage = () => preview.currentSrc.endsWith(preview.dataset.expectedPath || "");
   preview.addEventListener("load", () => {
-    if (!isCurrentImage()) return;
     preview.hidden = false;
     fallback.hidden = true;
-    previewStatus.textContent = `Previewing ${citySelect.value} in ${colourSelect.value}.`;
+    previewStatus.textContent = `Showing one sample hat image. Selected: ${citySelect.value} in ${colourSelect.value}; the photo does not change by variation.`;
   });
   preview.addEventListener("error", () => {
-    if (!isCurrentImage()) return;
     preview.hidden = true;
     fallback.hidden = false;
-    previewStatus.textContent = `Photo not added yet: ${preview.dataset.expectedPath}`;
+    previewStatus.textContent = "Sample hat photo not added yet; showing the hat illustration instead.";
   });
   citySelect.addEventListener("change", updatePreview);
   colourSelect.addEventListener("change", updatePreview);
@@ -86,7 +76,7 @@
     const savedDesign = {
       city: citySelect.value,
       colour: colourSelect.value,
-      image: preview.dataset.expectedPath
+      image: preview.getAttribute("src")
     };
     try {
       localStorage.setItem("puckdHatPreview", JSON.stringify(savedDesign));
@@ -144,5 +134,6 @@
   if (checkoutResult === "cancelled") {
     paymentStatus.textContent = "Checkout was cancelled; you were not charged.";
   }
+  preview.src = "assets/shop/hat-preview.png";
   updatePreview();
 })();

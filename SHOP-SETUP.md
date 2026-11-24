@@ -14,7 +14,7 @@ It preserves the existing articles, ticker, Supabase client and other pages.
 - `netlify/functions/stripe-webhook.js` — verifies live payments and records paid orders
 - `netlify/functions/stripe-webhook-test.js` — verifies test events without recording live orders
 - `supabase/shop-schema.sql` — starter tables for products, creators and orders
-- `assets/shop/previews/` — location for all 341 city/colour preview photos
+- `assets/shop/hat-preview.png` — single sample hat photo shown for now
 
 ## File changed
 - `navbar.html` — adds Shop links to desktop and mobile navigation
@@ -34,15 +34,10 @@ Configure Stripe webhooks to call `/.netlify/functions/stripe-webhook` for live 
 
 For local test checkout, run with Netlify Dev and set `STRIPE_TEST_SECRET_KEY`; the test endpoint permits localhost origins and redirects back to the local site. Never expose a live secret key in browser code or commit any Stripe credentials.
 
-## Add the 341 variant preview photos
-Add one image for each city and colour combination to `assets/shop/previews/`. Use PNG files named `<city-slug>-<colour-slug>.png`; for example:
+## Add one sample hat photo
+For now, add one sample image at `assets/shop/hat-preview.png`. Both the shop card and designer use the same image. City and colour selections are still sent to Stripe, but the display photo stays the same and is not a precise preview of the selected variation. If the photo is missing, the designer shows a hat illustration.
 
-- `anaheim-black.png`
-- `calgary-navy.png`
-- `washington-dc-light-blue.png`
-- `st-louis-spruce-green.png`
-
-Convert city and colour names to lowercase and replace spaces or punctuation with hyphens. The designer uses the selected city and colour to load the matching image. Each photo should show the finished city lettering and hat colour; no lettering is added on top of the photo. Until a photo is added, the preview shows a colour-matched placeholder and the expected filename.
+The 341 individual city/colour photos can be added later if you want the preview to change for every variation.
 
 The 31 cities are Anaheim, Boston, Buffalo, Calgary, Raleigh, Chicago, Colorado, Columbus, Dallas, Detroit, Edmonton, Miami, LA, Minneapolis, Montreal, Nashville, New Jersey, New York, Ottawa, Philadelphia, Pittsburgh, San Jose, St. Louis, Tampa, Toronto, Salt Lake City, Vancouver, Las Vegas, Washington DC, Winnipeg and Seattle.
 
