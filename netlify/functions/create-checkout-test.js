@@ -6,9 +6,34 @@ const ALLOWED_ORIGINS = new Set([
   'https://puckd.blog',
   'https://www.puckd.blog'
 ]);
-const ALLOWED_HATS = new Set(['White', 'Navy', 'Black', 'Red', 'Royal']);
-const ALLOWED_THREADS = new Set(['Red', 'Black', 'White', 'Gold', 'Blue']);
-const ALLOWED_FONTS = new Set(['college', 'block', 'serif']);
+const ALLOWED_CITIES = new Set([
+  'Anaheim', 'Boston', 'Buffalo', 'Calgary', 'Raleigh', 'Chicago', 'Colorado',
+  'Columbus', 'Dallas', 'Detroit', 'Edmonton', 'Miami', 'LA', 'Minneapolis',
+  'Montreal', 'Nashville', 'New Jersey', 'New York', 'Ottawa', 'Philadelphia',
+  'Pittsburgh', 'San Jose', 'St. Louis', 'Tampa', 'Toronto', 'Salt Lake City',
+  'Vancouver', 'Las Vegas', 'Washington DC', 'Winnipeg', 'Seattle'
+]);
+const ALLOWED_HAT_COLOURS = new Set([
+  'Black', 'Navy', 'Cranberry', 'Spruce green', 'Dark grey', 'Green Camo',
+  'Khaki', 'Stone', 'Pink', 'Light blue', 'White'
+]);
+
+function isLocalTestOrigin(origin) {
+  try {
+    const url = new URL(origin);
+    return url.protocol === 'http:' &&
+      ['localhost', '127.0.0.1'].includes(url.hostname) &&
+      (!url.pathname || url.pathname === '/') &&
+      !url.search &&
+      !url.hash;
+  } catch {
+    return false;
+  }
+}
+
+function isAllowedTestOrigin(origin) {
+  return ALLOWED_ORIGINS.has(origin) || isLocalTestOrigin(origin);
+}
 
 function response(statusCode, payload) {
   return {
@@ -22,7 +47,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return response(405, { error: 'Method not allowed.' });
 
   const origin = event.headers?.origin || event.headers?.Origin;
-  if (!origin || !ALLOWED_ORIGINS.has(origin)) {
+  if (!origin || !isAllowedTestOrigin(origin)) {
     return response(403, { error: 'This checkout request did not come from PUCK\'D.' });
   }
 
@@ -34,27 +59,27 @@ exports.handler = async (event) => {
   let body;
   try { body = JSON.parse(event.body || '{}'); }
   catch { return response(400, { error: 'Invalid request body.' }); }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return response(400, { error: 'Choose a city and hat colour.' });
+  }
 
-  const designText = String(body.designText || '').trim().toUpperCase();
-  const hatColour = String(body.hatColour || '');
-  const threadColour = String(body.threadColour || '');
-  const fontStyle = String(body.fontStyle || '');
-  const shippingCountry = String(body.shippingCountry || '');
+  const city = typeof body.city === 'string' ? body.city : '';
+  const hatColour = typeof body.hatColour === 'string' ? body.hatColour : '';
+  const shippingCountry = typeof body.shippingCountry === 'string' ? body.shippingCountry : '';
   const shippingByCountry = { CA: 1000, US: 570 };
   const shippingAmountCents = shippingByCountry[shippingCountry];
   if (!Number.isInteger(shippingAmountCents)) {
     return response(400, { error: 'Choose Canada or the United States for shipping.' });
   }
-  if (!designText || designText.length > 14 || !/^[A-Z0-9 '&.-]+$/.test(designText)) {
-    return response(400, { error: 'Enter 1–14 supported characters for the embroidery.' });
-  }
-  if (!ALLOWED_HATS.has(hatColour) || !ALLOWED_THREADS.has(threadColour) || !ALLOWED_FONTS.has(fontStyle)) {
-    return response(400, { error: 'The selected hat options are not valid.' });
+  if (!ALLOWED_CITIES.has(city) || !ALLOWED_HAT_COLOURS.has(hatColour)) {
+    return response(400, { error: 'Choose a valid city and hat colour.' });
   }
 
   try {
     const stripe = new Stripe(secretKey);
-    const siteUrl = (process.env.SITE_URL || 'https://puckd.blog').replace(/\/$/, '');
+    const siteUrl = isLocalTestOrigin(origin)
+      ? origin
+      : (process.env.SITE_URL || 'https://puckd.blog').replace(/\/$/, '');
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       submit_type: 'pay',
@@ -67,8 +92,8 @@ exports.handler = async (event) => {
           currency: CURRENCY,
           unit_amount: PRICE_CENTS,
           product_data: {
-            name: "PUCK'D Custom Yupoong 6007 Hat",
-            description: `${designText} embroidery · ${hatColour} hat · ${threadColour} thread`
+            name: `PUCK'D City Hat — ${city}`,
+            description: `${city} embroidery · ${hatColour} hat`
           }
         }
       }],
@@ -83,11 +108,12 @@ exports.handler = async (event) => {
       success_url: `${siteUrl}/order-success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/customize.html?checkout=cancelled`,
       metadata: {
-        product_slug: 'custom-snapback',
-        design_text: designText,
+        product_slug: 'city-hat',
+        design_text: city.toUpperCase(),
+        city,
         hat_colour: hatColour,
-        thread_colour: threadColour,
-        font_style: fontStyle,
+        thread_colour: '',
+        font_style: 'city-variant',
         shipping_country_selected: shippingCountry,
         quantity: '1'
       }

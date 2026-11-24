@@ -9,22 +9,30 @@ It preserves the existing articles, ticker, Supabase client and other pages.
 - `css/shop.css` — isolated shop styles
 - `js/shop.js` — shop page behaviour
 - `js/customizer.js` — city/colour selection, variant-photo preview and browser-local save
-- `netlify/functions/create-checkout-session.js` — server-side Stripe test Checkout Session creation
+- `netlify/functions/create-checkout.js` — live Stripe Checkout Session creation
+- `netlify/functions/create-checkout-test.js` — test Stripe Checkout Session creation
+- `netlify/functions/stripe-webhook.js` — verifies live payments and records paid orders
+- `netlify/functions/stripe-webhook-test.js` — verifies test events without recording live orders
 - `supabase/shop-schema.sql` — starter tables for products, creators and orders
 - `assets/shop/previews/` — location for all 341 city/colour preview photos
 
 ## File changed
 - `navbar.html` — adds Shop links to desktop and mobile navigation
 
-## Stripe Checkout: test mode only
-The hat designer includes a Stripe-hosted test checkout for the selected city and colour. It always charges the test-mode amount of CAD $39.99 and the server rejects Stripe live keys. Test mode does not collect shipping, calculate tax, record an order or submit fulfillment. The success redirect is not proof of payment and must not be used to fulfill orders.
+## Stripe Checkout
+The designer offers the selected city and hat colour through Stripe Checkout. The server validates selections and sets the price to CAD $39.99. Checkout adds fixed shipping of C$10.00 for Canada or C$5.70 for the United States.
 
-To enable test checkout:
-1. Add `STRIPE_SECRET_KEY` as a Netlify environment variable using a Stripe **test** secret key (`sk_test_...`).
-2. Set `SITE_URL` to the site origin, such as `https://puckd.blog` (or `http://localhost:8888` when using `netlify dev`).
-3. Run locally with Netlify Dev or deploy the functions to Netlify. The checkout function is `netlify/functions/create-checkout-session.js`.
+The normal checkout button uses the live endpoint. For test payments, open the designer with `?stripe_test=1`; the test endpoint accepts Stripe test keys only. Use Stripe's test card details in test mode. Test payments are not saved to the live orders table.
 
-Do not put Stripe keys in browser JavaScript or commit them to the repository. Never use a live secret key with this test-only checkout.
+Configure these Netlify environment variables:
+
+- Live: `STRIPE_SECRET_KEY` (`sk_live_...`), `STRIPE_WEBHOOK_SECRET`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
+- Test: `STRIPE_TEST_SECRET_KEY` (`sk_test_...`) and `STRIPE_TEST_WEBHOOK_SECRET`.
+- Both modes: `SITE_URL`, set to the canonical site origin.
+
+Configure Stripe webhooks to call `/.netlify/functions/stripe-webhook` for live events and `/.netlify/functions/stripe-webhook-test` for test events. The live handler verifies Stripe signatures and stores completed paid orders in Supabase; the test handler only verifies/logs test events. A return to the success page is not proof that payment or order recording completed.
+
+For local test checkout, run with Netlify Dev and set `STRIPE_TEST_SECRET_KEY`; the test endpoint permits localhost origins and redirects back to the local site. Never expose a live secret key in browser code or commit any Stripe credentials.
 
 ## Add the 341 variant preview photos
 Add one image for each city and colour combination to `assets/shop/previews/`. Use PNG files named `<city-slug>-<colour-slug>.png`; for example:
@@ -52,12 +60,11 @@ Review `supabase/shop-schema.sql`, then run it in Supabase SQL Editor. It create
 
 Never put a Supabase service-role key, Stripe secret key, Printful API token or webhook secret in browser JavaScript or in the public repository.
 
-## Before accepting live orders
-We still need to implement and test:
-1. Stripe live-mode configuration and webhook signature verification with paid-order recording.
-2. Server-side creator-code validation and commission ledger.
-3. Shipping calculation/collection based on the actual Printful destination quote.
-4. Printful fulfillment submission and handling of custom embroidery files.
-5. Refund, tax, privacy and customer support flows.
+## Before fulfilling and scaling live orders
+Verify the production Stripe and Supabase environment variables, complete an end-to-end live test order, and confirm the webhook records it correctly. Still needed before automated fulfillment:
+1. Server-side creator-code validation and commission ledger.
+2. Confirm shipping rates against actual Printful destination quotes.
+3. Printful fulfillment submission for the selected city/colour product photos.
+4. Refund, tax, privacy and customer support flows.
 
-Do not accept live orders until those steps are complete and a real end-to-end test order has succeeded.
+Do not treat the success redirect as order confirmation; use the verified webhook and recorded paid order as the source of truth.

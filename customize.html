@@ -49,13 +49,21 @@
         </div>
         <div class="customizer-price">
           <div>
-            <small>PROPOSED RETAIL PRICE</small>
+            <small>HAT PRICE</small>
             <strong>$39.99 CAD</strong>
           </div>
-          <span>Item price only in test mode</span>
+          <span>Shipping added at checkout</span>
         </div>
-        <p class="test-mode-note">TEST MODE ONLY — no real payment is collected. Shipping, tax and order fulfilment are not configured.</p>
-        <button class="add-design-button" id="startCheckout" type="button">CONTINUE TO STRIPE TEST CHECKOUT</button>
+        <div class="control-group">
+          <label for="shippingCountry">SHIP TO</label>
+          <select id="shippingCountry">
+            <option value="">Choose a country</option>
+            <option value="CA">Canada · C$10.00 shipping</option>
+            <option value="US">United States · C$5.70 shipping</option>
+          </select>
+        </div>
+        <p class="test-mode-note" id="stripeModeNotice">Checkout is processed securely by Stripe. Test mode is available by adding <code>?stripe_test=1</code> to this page.</p>
+        <button class="add-design-button" id="startCheckout" type="button">CHECK OUT WITH STRIPE</button>
         <p class="payment-status" id="paymentStatus" role="status" aria-live="polite"></p>
         <button class="add-design-button" id="saveDesign" type="button">SAVE HAT PREVIEW</button>
         <p class="not-live-note" id="saveMessage" role="status">Saving stores your selected city and colour in this browser only.</p>
