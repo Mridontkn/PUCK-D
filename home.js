@@ -733,6 +733,12 @@
     const isFinal = g => g.gameState === 'OFF' || g.gameState === 'FINAL';
     const isLive = g => g.gameState === 'LIVE' || g.gameState === 'CRIT';
     const nhlClip = url => (typeof url === 'string' && /^https:\/\/(www\.)?nhl\.com\//.test(url)) ? url : '';
+    const nhlGameCenter = game => {
+        const path = game.gameCenterLink;
+        return typeof path === 'string' && path.startsWith('/gamecenter/') && !path.startsWith('//')
+            ? `https://www.nhl.com${path}`
+            : '';
+    };
 
     // A night's scorers stay up until the first game of the next day goes final.
     // Then it switches to that day: finished games plus games in progress (live).
@@ -858,7 +864,7 @@
                     ${team(h, !aWin, 'home')}
                 </header>
                 ${list.length ? `<ol class="ng-goals">${list.map(goal => {
-                    const clip = nhlClip(goal.highlightClipSharingUrl);
+                    const clip = nhlClip(goal.highlightClipSharingUrl) || nhlGameCenter(g);
                     const logo = logoFor(goal.teamAbbrev);
                     return `<li class="ng-goal">
                         <span class="ng-time">${periodLabel(goal)} ${escapeHtml(goal.timeInPeriod || '')}</span>
